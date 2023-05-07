@@ -13,7 +13,7 @@ if env("DJANGO_DEBUG") == "1":
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1", "leoandjen.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "leoandjen.com", "www.leoandjen.com"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -89,7 +89,10 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STATIC_URL = "static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+if env("DJANGO_DEBUG") == "1":
+    STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+else:
+    STATIC_ROOT = "/home/cophead567/apps/leoandjen_static"
 
 # Add individual app static folders here.
 # STATICFILES_DIRS = [
