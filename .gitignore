@@ -1,2 +1,5 @@
 .env
 .idea*
+debug.txt
+static/*
+*.pyc
