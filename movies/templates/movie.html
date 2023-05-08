@@ -1,0 +1,53 @@
+{% extends "index.html" %}
+{% block content %}
+{%load static%}
+<div class="row">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/movies">Home</a></li>
+      </ol>
+    </nav>
+</div>
+<div class="row">
+  <div class="col-sm-4" style="background-color:gray;">
+    <img src="https://image.tmdb.org/t/p/w500{{poster_path}}"
+             class="card-img-top"
+             alt="poster for {{title}} ({{year}})">
+  </div>
+  <div class="col-sm-8">
+    <h1>{{title}} ({{year}})</h1>
+    <h4><i>{{tagline}}</i></h4>
+    <h6>Runtime: {{runtime}} min</h6>
+    <h6>Director: {{directors|safe}}</h6>
+    {%if rating%}
+      <h6>Letterboxd: {{rating}}</h6>
+    {%endif%}
+    <p>{{overview}}</p>
+    {%if movie.comments%}
+      <p>Additional: {{movie.comments}}</p>
+    {%endif%}
+    <p>
+    {%for format in movie.formats.all%}
+      <img src="{%static "img"%}/{{format.name}}.png" style="width:48px;">
+    {%endfor%}
+    </p>
+    <p>
+    {%for genre in genres_list%}
+      <a href="/movies/genre/{{genre}}"><button type="button" class="btn btn-info">{{genre}}</button></a>
+    {%endfor%}
+    </p>
+    <div class="row">
+      {%for character in character_list%}
+      <div class="col-4">
+        <img src="https://image.tmdb.org/t/p/w500{{character.profile_path}}"
+             class="card-img-top"
+             alt="Actor {{actor.actor_name}}">
+        <h6>{{character.character_name}}</h6>
+        <p><a href="/movies/actor/{{character.themoviedb_actor_id}}">{{character.actor_name}}</a></p>
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+</div>
+
+{%endblock%}

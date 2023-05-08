@@ -1,0 +1,18 @@
+<div class="jumbotron jumbotron-fluid">
+  <div class="container text-center">
+    <h1 class="display-4">Collections</h1>
+    <div class="row">
+    {%for collection in collections%}
+      <div class="col-sm">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">{{collection.name}}</h4>
+            <p class="card-text font-italic">{{collection.description}}</p>
+            <a href="/movies/collection/{{collection.id}}" class="card-link">Explore the Collection</a>
+          </div>
+        </div>
+      </div>
+    {%endfor%}
+    </div>
+  </div>
+</div>

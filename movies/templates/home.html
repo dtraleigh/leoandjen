@@ -1,0 +1,99 @@
+{%extends "index.html"%}
+{%block content%}
+{%load static%}
+{%include "collections.html"%}
+{%if search == None%}
+    <div class="row">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">Recently Added</li>
+        </nav>
+    </div>
+    <div class="row">
+      {%for movie in movie_recent_list%}
+        <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-4">
+          <div class="card">
+            <a href="/movies/movie/{{movie.themoviedb_id}}">
+            <img src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}"
+                 class="card-img-top"
+                 alt="poster for {{movie.title}} ({{movie.primary_release_year}})">
+            </a>
+            <div class="card-body custom-card-body">
+              <h6 class="card-title d-inline-block text-truncate">
+                {{movie.title}}
+              </h6>
+              <p class="year">({{movie.primary_release_year}})</p>
+            </div>
+            <div class="card-body formats">
+              {%for format in movie.formats.all%}
+          <img src="{%static "img"%}/{{format.name}}.png" style="width:25px;">
+              {%endfor%}
+            </div>
+          </div>
+        </div>
+      {%endfor%}
+    </div>
+{%endif%}
+<div class="row">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/movies">Home</a></li>
+        {%if search%}
+        <li class="breadcrumb-item" aria-current="page">Search results for:
+          <span class="font-weight-bold">{{search}}</span></li>
+        {%elif breadcrumb%}
+        <li class="breadcrumb-item" aria-current="page">
+          <span class="font-weight-bold">{{breadcrumb}}</span></li>
+        {%endif%}
+      </ol>
+    </nav>
+    <div class="col">
+        {%if search%}
+        <div class="float-right">
+          <a href="?sort={{sort}}&search={{search}}">{{sort_label}}</a><span class="badge">{{sort_arrow}}</span>
+        </div>
+        {%elif not sort%}
+        <div class="float-right">
+          <p>{{sort_label}}</p>
+        </div>
+        {%else%}
+        <div class="float-right">
+          <a href="?sort={{sort}}">{{sort_label}}</a><span class="badge">{{sort_arrow}}</span>
+        </div>
+        {%endif%}
+    </div>
+</div>
+<div class="row">
+  {%for movie in movie_list%}
+    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-4">
+      <div class="card">
+        <a href="/movies/movie/{{movie.themoviedb_id}}">
+        <img src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}"
+             class="card-img-top"
+             alt="poster for {{movie.title}} ({{movie.primary_release_year}})">
+        </a>
+        <div class="card-body custom-card-body">
+          <h6 class="card-title d-inline-block text-truncate">
+            {{movie.title}}
+          </h6>
+          <p class="year">({{movie.primary_release_year}})</p>
+        </div>
+        <div class="card-body formats">
+          {%for format in movie.formats.all%}
+          <img src="{%static "img"%}/{{format.name}}.png" style="width:25px;">
+          {%endfor%}
+        </div>
+      </div>
+    </div>
+  {%endfor%}
+</div>
+{%for director in director_list%}
+<div class="row">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/movies/director/{{director.themoviedb_id}}">{{director.name}}</a></li>
+    </ol>
+  </nav>
+</div>
+{%endfor%}
+{%endblock%}

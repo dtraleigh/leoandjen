@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "movies",
 ]
 
 MIDDLEWARE = [
@@ -94,7 +95,7 @@ if env("DJANGO_DEBUG") == "1":
 else:
     STATIC_ROOT = "/home/cophead567/apps/leoandjen_static"
 
-# Add individual app static folders here.
+# Add individual app static folders here if needed.
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, "movies/static"),
 # ]
