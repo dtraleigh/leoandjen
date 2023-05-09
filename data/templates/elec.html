@@ -1,0 +1,98 @@
+{% extends "data_base.html" %}
+{% block content %}
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    {%if years_range%}
+      <h1 class="h2">Electricity for {{years_range}}</h1>
+    {%else%}
+      <h1 class="h2">Electricity</h1>
+    {%endif%}
+    <form action="?" method="get">
+      <label for="years_input">Years: </label>
+      <input id="years_input" type="text" name="years" placeholder="Ex: 2019-2021" value="{{years_range}}">
+      <input type="submit" value="Submit">
+      <p>Keywords: "all", "year+"</p>
+    </form>
+  </div>
+
+  {%if warning%}
+  <div class="alert alert-warning" role="alert">
+    {{warning}}
+  </div>
+  {%endif%}
+
+  <canvas class="my-4" id="chart" width="900" height="380"></canvas>
+
+  <div class="alert alert-primary" role="alert">
+    Data through {{most_recent.service_end_date}}
+  </div>
+
+  <h3>Yearly Totals</h3>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+      <tr>
+        <th>Dates</th>
+        <th>Solar Savings</th>
+        <th>Grid Energy Consumed</th>
+        <th>Solar Produced</th>
+        <th>Solar Sent to Grid</th>
+        <th>House Energy Consumed</th>
+      </tr>
+      </thead>
+      <tbody>
+      {%for yearly_dataset in yearly_datasets reversed%}
+      <tr>
+        <td>{{yearly_dataset.create_solar_savings_table_data.0}}</td>
+        <td>{{yearly_dataset.create_solar_savings_table_data.1}}</td>
+        <td>{{yearly_dataset.get_readings_kwh_total}}</td>
+        <td>{{yearly_dataset.get_solar_produced_total}}</td>
+        <td>{{yearly_dataset.get_solar_sent_to_grid_total}}</td>
+        <td>{{yearly_dataset.get_total_house_consumed}}</td>
+      </tr>
+      {%endfor%}
+      <tr style="border: solid;">
+        <td>TOTAL</td>
+        <td>{{solar_savings_total}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Monthly Data</h3>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Kilowatt hours used (Grid)</th>
+          <th>Solar Produced</th>
+          <th>Solar Sent to Grid</th>
+          <th>Total House Consumption</th>
+          <th>Daily Usage</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for yearly_dataset in yearly_datasets reversed%}
+          {%for month in yearly_dataset.data_points reversed%}
+          <tr>
+            <td>{{month.month_str|safe}} {{yearly_dataset.year}}</td>
+            <td>{{month.grid_energy_consumed}}</td>
+            <td>{{month.solar_produced}}</td>
+            <td>{{month.solar_sent_to_grid}}</td>
+            <td>{{month.value|safe}}</td>
+            <td>{{month.daily_consumption}}</td>
+          </tr>
+          {%endfor%}
+        {%endfor%}
+      </tbody>
+    </table>
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>LeoandJen Data</title>
+    {% load static %}
+    <link rel="shortcut icon" type="image/png" href="{% static "img/data_favicon.png" %}">
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static "bootstrap4.0.0/bootstrap.min.css"%}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static "css/data_dashboard.css"%}" rel="stylesheet">
+  </head>
+
+  <body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/data">Leo and Jen</a>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        {%include "sidebar.html"%}
+
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{% static "js/jquery3.2.1/jquery-3.2.1.slim.min.js"%}"></script>
+    <script src="{% static "js/popper1.16.1/popper.min.js"%}"></script>
+    <script src="{% static "bootstrap4.0.0/bootstrap.min.js"%}"></script>
+
+    <!-- Icons -->
+    <script src="{% static "feather-icons4.29.0/feather.min.js"%}"></script>
+    <script>
+      feather.replace()
+    </script>
+
+    <!-- Graphs -->
+    <script src="{% static "js/chart.js3.7.1/chart.min.js"%}"></script>
+    <script src="{% static "js/moment2.29.4/moment@^2.js"%}"></script>
+    <script src="{% static "js/moment2.29.4/chartjs-adapter-moment@^1.js"%}"></script>
+    <script type="text/javascript">
+      var chart_data = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+      datasets: [
+        {%for yearly_dataset in yearly_datasets%}
+        {
+          label: '{{yearly_dataset.year}}',
+          fill: false,
+          type: '{{yearly_dataset.chart_type}}',
+          borderColor: '{{yearly_dataset.color}}',
+          borderWidth: '{{yearly_dataset.borderWidth}}',
+          tension: 0.2,
+          data: [{%for datapoint in yearly_dataset.data_points%}{{datapoint.value|safe}}{%if not forloop.last%},{%endif%}{%endfor%}]
+        },
+        {%if yearly_dataset.title == "Electricity"%}
+          {{yearly_dataset.get_solar_bar_chart_dataset|safe}},
+        {%endif%}
+        {%endfor%}
+        {
+          label: '{{avg_line.label}}',
+          fill: false,
+          type: "line",
+          borderColor: '{{avg_line.color}}',
+          borderWidth: '{{avg_line.borderWidth}}',
+          tension: 0.2,
+          data: [{%for datapoint in avg_line.data_points%}{{datapoint.value|safe}}{%if not forloop.last%},{%endif%}{%endfor%}]
+        }
+      ]
+    }
+    </script>
+    <script src="{% static "js/myChart.js"%}"></script>
+  </body>
+</html>
+
