@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "movies",
+    "capitals",
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.media",
             ],
         },
     },
@@ -92,8 +94,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STATIC_URL = "static/"
 if env("DJANGO_DEBUG") == "1":
     STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+    MEDIA_URL = "uploads/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "static/uploads/")
 else:
     STATIC_ROOT = "/home/cophead567/apps/leoandjen_static"
+    MEDIA_URL = "https://leoandjen.com/static/uploads/"
+    MEDIA_ROOT = "/home/cophead567/apps/leoandjen_static/uploads/"
 
 # Add individual app static folders here if needed.
 # STATICFILES_DIRS = [
@@ -101,32 +107,33 @@ else:
 # ]
 
 ADMINS = (
-    ('Leo', 'leo@dtraleigh.com'),
+    ("Leo", "leo@dtraleigh.com"),
 )
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': "[%(asctime)s] p%(process)s {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s','%m-%d %H:%M:%S'"
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[%(asctime)s] p%(process)s {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s',"
+                      "'%m-%d %H:%M:%S'"
         },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': 'debug.txt',
+        "simple": {
+            "format": "%(levelname)s %(message)s"
         },
     },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': True,
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": "debug.txt",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True,
         },
     },
 }

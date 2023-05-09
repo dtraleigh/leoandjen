@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        {% load static %}
+        <link rel="shortcut icon" type="image/png" href="{% static "img/capitals_favicon.png" %}">
+
+        <title>Leo and Jen - Capitals Journey</title>
+
+        <style>
+          #alert {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            background-color: #ddd;
+            color: #333;
+            padding: 5px;
+            font-weight: bold;
+          }
+            {%for capital in all_capitals%}
+            #photos{{capital.id}} {
+               line-height: 0;
+               -webkit-column-count: 2;
+               -webkit-column-gap:   0px;
+               -moz-column-count:    2;
+               -moz-column-gap:      0px;
+               column-count:         2;
+               column-gap:           0px;
+            }
+            #photos{{capital.id}} img {
+              width: 100% !important;
+              height: auto !important;
+            }
+            @media (max-width: 1200px) {
+              #photos{{capital.id}} {
+              -moz-column-count:    2;
+              -webkit-column-count: 2;
+              column-count:         2;
+              }
+            }
+            @media (max-width: 1000px) {
+              #photos{{capital.id}} {
+              -moz-column-count:    2;
+              -webkit-column-count: 2;
+              column-count:         2;
+              }
+            }
+            @media (max-width: 800px) {
+              #photos{{capital.id}} {
+              -moz-column-count:    2;
+              -webkit-column-count: 2;
+              column-count:         2;
+              }
+            }
+            @media (max-width: 400px) {
+              #photos{{capital.id}} {
+              -moz-column-count:    1;
+              -webkit-column-count: 1;
+              column-count:         1;
+              }
+            }
+        {%endfor%}
+        </style>
+        <link href="{% static "css/bootstrap.min.css"%}" rel="stylesheet">
+        <link href="{% static "css/ie10-viewport-bug-workaround.css"%}" rel="stylesheet">
+        <link href="{% static "PhotoSwipe-4.1.3/dist/photoswipe.css"%}" rel="stylesheet">
+        <link href="{% static "PhotoSwipe-4.1.3/dist/default-skin/default-skin.css"%}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static "fontawesome-5.6.3/css/all.css" %}">
+        <link href="{% static "css/capitals-custom.css"%}" rel="stylesheet">
+
+		{% include "capitals_leaflet_head.html" %}
+
+	</head>
+<body>
+
+	<a name="top"></a>
+	<nav class="navbar navbar-default">
+		<div class="container">
+			<p class="navbar-text">Leo and Jen - Capitals Journey</p>
+			<div id="navbar" class="navbar-collapse collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				<li><a href="/capitals">Home</a></li>
+				<li><a href="/capitals/map">Map</a></li>
+			  </ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</nav>
+
+	{% block content %}{% endblock %}
+
+	{% include "capitals_leaflet_foot.html" %}
+
+    <!-- PhotoSwipe -->
+    <script src="{% static "PhotoSwipe-4.1.3/dist/photoswipe.min.js"%}"></script>
+    <script src="{% static "PhotoSwipe-4.1.3/dist/photoswipe-ui-default.min.js"%}"></script>
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element, as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
+        <!-- don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+          </div>
+
+        </div>
+
+</div>
+	<script src="{% static "js/photo_swipe_custom.js"%}"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+.my-gallery figcaption {
+     display: none;
+}
+ .statistics ul{
+     margin-bottom:20px;
+     overflow:hidden;
+     border-top:1px solid #ccc;
+}
+ .statistics li{
+     float:left;
+     display:inline;
+     font-size:0.8em;
+}
+ .statistics #double li {
+     width:50%;
+}
+ .statistics #triple li {
+     width:33.333%;
+}
+ .statistics #quad li {
+     width:25%;
+}
+ .statistics #six li {
+     width:16.666%;
+}
+ .flag-img{
+     width:100%;
+}
+ .capital-title{
+     float: left;
+     position: inherit;
+     margin-left: 15px;
+}
+ .country-flag-img{
+     width: 50px;
+     float: left;
+}
+ .panel-body{
+     background: url('../img/handmadepaper.png');
+}
+ #top-section{
+     margin-bottom:50px;
+}
+ #content{
+     max-width: 960px;
+     text-align: left;
+     margin: 0px auto;
+    /*auto centers the container */
+     padding: 3.84615384615385%;
+    /* 25/650 */
+}
+/*CSS3 multiple columns.*/
+/* Get em size for colums: 184/16 */
+ .columns{
+     -moz-column-width: 11.5em;
+    /* Firefox */
+     -webkit-column-width: 11.5em;
+    /* webkit, Safari, Chrome */
+     column-width: 11.5em;
+}
+/*remove standard list and bullet formatting from ul*/
+ .columns ul{
+     margin: 0;
+     padding: 0;
+     list-style-type: none;
+}
+/* correct webkit/chrome uneven margin on the first column*/
+ .columns ul li:first-child{
+     margin-top:0px;
+}
+ #btn-custom1{
+     width:170px;
+     border-radius: 0;
+}
+.inactiveLink {
+   pointer-events: none;
+   cursor: default;
+}
+ .map_full {
+    height: 100%;
+    margin: 0;
+}
+ .map_embed {
+    height: 400px;
+    margin: 0;
+}
+ .info {
+     padding: 6px 8px;
+     font: 14px/16px Arial, Helvetica, sans-serif;
+     background: white;
+     background: rgba(255,255,255,0.8);
+     box-shadow: 0 0 15px rgba(0,0,0,0.2);
+     border-radius: 5px;
+}
+ .info h4 {
+     margin: 0 0 5px;
+     color: #777;
+}
+ .legend {
+     text-align: left;
+     line-height: 18px;
+     color: #555;
+}
+ .legend i {
+     width: 18px;
+     height: 18px;
+     float: left;
+     margin-right: 8px;
+     opacity: 0.7;
+}
+
+iframe {
+    height: 450px;
+    width: 100%;
+}
+.pagination{
+    width: 100%;
+}
+.step-links{
+  display:table;
+  margin:0 auto;
+  font-size: 2.5em;
+}
