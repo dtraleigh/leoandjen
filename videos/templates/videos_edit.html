@@ -1,0 +1,156 @@
+{% extends "videos_base.html" %}
+
+{% block content %}
+{% load static %}
+{% load widget_tweaks %}
+{{ edit_form.media }}
+
+<!-- Start Video Upload section -->
+{% if messages %}
+<div class="alert alert-success" role="alert">
+    {% for message in messages %}
+    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<h2><a href="#video_form_section">Upload a New Video</a></h2>
+<div class="row well well-lg" id="video_form_section">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <p><a href="https://www.latlong.net/" target="_blank">Latitude/Longtiude Help</a></p>
+        <form class="form-horizontal" action="{% if from %}?next={{ from }}{% endif %}" method="post" enctype="multipart/form-data">
+            <div class="well">
+                {% csrf_token %}
+                {%if edit_form.non_field_errors%}
+                <div class="alert alert-danger" role="alert">
+                    {{ edit_form.non_field_errors }}
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    {%if edit_form.tags.errors%}
+                    <div class="alert alert-danger" role="alert">
+                        {{ edit_form.tags.errors }}
+                    </div>
+                    {% endif %}
+                    <div class="fieldWrapper">
+                        {{ edit_form.tags.errors }}
+                        <label class="col-sm-2 control-label" for="{{ edit_form.tags.id_for_label }}">Tags</label>
+                        <div class="col-sm-6">
+                            {{ edit_form.tags|add_class:"form-control multi-selects" }}
+                        </div>
+                    </div>
+                    <a href="#"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+                </div>
+                <div class="form-group">
+                    {%if edit_form.name.errors%}
+                    <div class="alert alert-danger" role="alert">
+                        {{ edit_form.name.errors }}
+                    </div>
+                    {% endif %}
+                    <label class="col-sm-2 control-label" for="{{ edit_form.name.id_for_label }}">Name</label>
+                    <div class="col-sm-6">
+                        {{ edit_form.name|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {%if edit_form.date_shot.errors%}
+                    <div class="alert alert-danger" role="alert">
+                        {{ edit_form.date_shot.errors }}
+                    </div>
+                    {% endif %}
+                    <label class="col-sm-2 control-label" for="{{ edit_form.date_shot.id_for_label }}">Date
+                        Taken</label>
+                    <div class="col-sm-6">
+                        {{ edit_form.date_shot }}
+                    </div>
+                </div><!--
+                <div class="form-group">
+                    {%if edit_form.description.errors%}
+                    <div class="alert alert-danger" role="alert">
+                        {{ edit_form.description.errors }}
+                    </div>
+                    {% endif %}
+                    <label class="col-sm-2 control-label" for="{{ edit_form.description.id_for_label }}">Description</label>
+                    <div class="col-sm-6">
+                        {{ edit_form.description|add_class:"form-control" }}
+                    </div>
+                </div>-->
+                <div class="form-group">
+                    {%if edit_form.rich_description.errors%}
+                    <div class="alert alert-danger" role="alert">
+                        {{ edit_form.rich_description.errors }}
+                    </div>
+                    {% endif %}
+                    <label class="col-sm-2 control-label" for="{{ edit_form.rich_description.id_for_label }}">Description</label>
+                    <div class="col-sm-6">
+                        {{ edit_form.rich_description|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {%if edit_form.lat.errors%}
+                    <div class="alert alert-danger" role="alert">
+                        {{ edit_form.lat.errors }}
+                    </div>
+                    {% endif %}
+                    <label class="col-sm-2 control-label" for="{{ edit_form.lat.id_for_label }}">Latitude</label>
+                    <div class="col-sm-6">
+                        {{ edit_form.lat }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {%if edit_form.lon.errors%}
+                    <div class="alert alert-danger" role="alert">
+                        {{ edit_form.lon.errors }}
+                    </div>
+                    {% endif %}
+                    <label class="col-sm-2 control-label" for="{{ edit_form.lon.id_for_label }}">Longitude</label>
+                    <div class="col-sm-6">
+                        {{ edit_form.lon }}
+                    </div>
+                </div>
+                <div class="row" id="qloc-row">
+                {%for qloc in quick_locations%}
+                    <button type="button" id="{{qloc.html_id}}" class="btn btn-default">{{qloc.label}}</button>
+                {%endfor%}
+                </div>
+                <div class="form-group">
+                    {%if edit_form.poster.errors%}
+                    <div class="alert alert-danger" role="alert">
+                        {{ edit_form.poster.errors }}
+                    </div>
+                    {% endif %}
+                    <label class="col-sm-2 control-label" for="{{ edit_form.poster.id_for_label }}">Poster</label>
+                    <div class="col-sm-6">
+                        {{ edit_form.poster }}
+                    </div>
+                </div>
+            </div>
+            <input class="btn btn-primary btn-lg" type="submit" name="save_shot"
+                   value="Save"/>
+            <input class="btn btn-primary btn-lg" type="submit" name="save_video_and_main"
+                   value="Save and Back to Main"/>
+            <button type="submit" class="btn btn-lg btn-default" name="cancel-button">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<!-- End shot edit form -->
+
+<script>
+$(document).ready(function(){
+{%for qloc in quick_locations%}
+        $("#{{qloc.html_id}}").click(function() {
+          $("#id_lon").val({{qloc.lon}});
+          $("#id_lat").val({{qloc.lat}});
+        });
+{%endfor%}
+{%for qloc in quick_locations%}
+        $("#{{qloc.html_id}}_vr").click(function() {
+          $("#id_lon_vr").val({{qloc.lon}});
+          $("#id_lat_vr").val({{qloc.lat}});
+        });
+{%endfor%}
+});
+</script>
+
+{%endblock content%}

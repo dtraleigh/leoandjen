@@ -23,9 +23,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "widget_tweaks",
+    # "corsheaders",
+    "ckeditor",
     "movies",
     "capitals",
     "data",
+    "videos",
 ]
 
 MIDDLEWARE = [

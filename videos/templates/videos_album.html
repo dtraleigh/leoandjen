@@ -1,0 +1,35 @@
+{% extends "videos_base.html" %}
+
+  {% block content %}
+  {% load static %}
+
+	<h1>{{album.name}}</h1>
+  <p class="text-right"><span class="label label-info">Sorted by Most Recent Date Taken.</span></p>
+  <div class="row">
+    {%for shot in album_videos%}
+    <div class="col-sm-6 col-xs-12">
+      <div class="well well-lg">
+          {%if shot.get_cname == "Video"%}
+            <a href="/videos/album/{{album.id}}/video/{{shot.id}}">
+              <div class="album-poster" style="background-image:url({{ MEDIA_URL }}/{{shot.poster}});"></div>
+            </a>
+          {%elif shot.get_cname == "ExternalVideo"%}
+            <a href="/videos/album/{{album.id}}/external/{{shot.id}}">
+              <div class="album-poster" style="background-image:url({{ MEDIA_URL }}/{{shot.poster}});"></div>
+            </a>
+          {%endif%}
+        <h4>{{shot.name}}</h4>
+        {% autoescape off %}
+        <p>{{shot.description}}</p>
+        <p><strong>Date Taken:</strong> {{shot.date_shot}}</p>
+        {%endautoescape%}
+      </div>
+    </div>
+  {%if forloop.counter|divisibleby:2%}
+  </div>
+  <div class="row">
+  {%endif%}
+  {%endfor%}
+  </div>
+
+{%endblock content%}

@@ -1,0 +1,47 @@
+{% extends "videos_base.html" %}
+
+  {% block content %}
+  {% load static %}
+
+  <div class="row well well-lg">
+    {% if messages %}
+    <div class="alert alert-success" role="alert">
+          {% for message in messages %}
+          <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+          {% endfor %}
+    </div>
+    {% endif %}
+    <div class="col-sm-6 col-xs-12">
+      <h2>Video Tags</h2>
+      {%for tag in tag_list%}
+        <a class="btn btn-primary btn-lg btn-margin" href="/videos/tag/{{tag.name}}" role="button">{{tag.name}}</a>
+      {%endfor%}
+    </div>
+    <div class="col-sm-6 col-xs-12">
+      <h2>Newly added</h2><p class="text-right"><span class="label label-info">Sorted by Most Recently shot.</span></p>
+        {%for shot in most_recent%}
+          <a href="/videos/recent/video/{{shot.id}}">
+            <img class="album-poster-recent" src="{{ MEDIA_URL }}{{shot.poster}}">
+          </a>
+        {%endfor%}
+    </div>
+  </div>
+
+  <h2>Current Video Albums</h2>
+	{%for album in albums%}
+  <div class="row well well-lg">
+		<div class="col-md-4 col-sm-4 col-xs-12">
+      <a href="/videos/album/{{album.id}}"><img src="{{ MEDIA_URL }}/{{album.poster}}" class="img-responsive center-block" /></a>
+    </div>
+    <div class="col-md-8 col-sm-8 col-xs-12">
+      <a href="/videos/album/{{album.id}}"><h2>{{album.name}}</h2></a>
+      {% autoescape off %}
+      <p>{{album.description}}</p>
+      {%endautoescape%}
+    </div>
+  </div>
+  {%empty%}
+  	<p>No albums created.</p>
+  {%endfor%}
+
+{%endblock content%}

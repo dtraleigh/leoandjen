@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Video Map</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+      }
+      .leaflet-container {
+        height: 100%;
+      }
+    </style>
+	{% load static %}
+	<link href="{% static "css/video-custom.css"%}" rel="stylesheet">
+    <link href="{% static "bootstrap3.3.7/bootstrap.min.css" %}" rel="stylesheet">
+
+    {% include "videos_leaflet_head.html" %}
+
+    </head>
+    <body>
+
+    {% include "nav.html" %}
+
+    <div id="map" class="map_full"></div>
+    <script type="text/javascript">
+        var customLat = (function () { return; })();
+        var customLon = (function () { return; })();
+    </script>
+    {% include "videos_leaflet_foot.html" %}
+
+    </body>
+</html>

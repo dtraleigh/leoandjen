@@ -1,0 +1,21 @@
+{% extends "videos_base.html" %}
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+
+<div class="login-wrapper">
+  {%if next%}
+  <form action="/videos?next={{next}}" class="form-signin" method="post" >
+  {%else%}
+  <form action="/videos/" class="form-signin" method="post">
+  {%endif%}
+    {% csrf_token %}
+    <h2 class="form-signin-heading">{{message}}</h2>
+    <input type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="" />
+    <input type="password" class="form-control" name="password" placeholder="Password" required=""/>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+  </form>
+</div>
+
+{%endblock content%}

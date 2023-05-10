@@ -8,4 +8,5 @@ urlpatterns = [
     path("movies/", include("movies.urls")),
     path("capitals/", include("capitals.urls")),
     path("data/", include("data.urls")),
+    path("videos/", include("videos.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

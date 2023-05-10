@@ -1,0 +1,84 @@
+body {
+  padding-top: 65px;
+}
+.map_full {
+    height: 100%;
+    margin: 0;
+}
+.map_embed {
+    height: 400px;
+    margin: 0;
+}
+.login-wrapper {
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+.form-signin {
+  max-width: 380px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 30px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="text"] {
+  margin-bottom: -1px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 20px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.album-poster{
+  position: relative;
+  width:  100%;
+  height: 200px;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.album-poster-recent{
+  float: left;
+  width: 50%;
+  height: 160.34px;
+  padding: 10px;
+}
+.btn-margin{
+  margin:5px;
+}
+#login-as{
+  color: white;
+  margin: 15px;
+}
+.multi-selects{
+    height:200px !important;
+}
+#qloc-row{
+    padding:0px 0 20px 190px;
+}
+@media (max-width: 768px) {
+  .album-poster-recent{
+    width: 100%;
+    height: auto;
+  }
+}

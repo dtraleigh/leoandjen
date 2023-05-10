@@ -1,0 +1,71 @@
+{% extends "videos_base.html" %}
+
+  {% block content %}
+  {% load static %}
+
+  <ol class="breadcrumb">
+    {%if album_view%}
+      <li>Album</li>
+      <li><a href="/videos/albums/{{albums.id}}">{{album.name}}</a></li>
+    {%elif tag_view%}
+      <li>Tag</li>
+      <li><a href="/videos/tag/{{the_tag.name}}">{{the_tag.name}}</a></li>
+    {%elif recent_view%}
+      <li>Recent</li>
+    {%endif%}
+    <li class="active">{{video.name}}</li>
+  </ol>
+
+  <div class="row">
+    <div class="row well well-lg">
+      <div class="col-md-6 col-sm-8 col-xs-12">
+        {%if video.get_cname == "Video"%}
+        <!-- Start HTML5 video player -->
+        <div class="embed-responsive embed-responsive-16by9">
+          <video id="my-video" class="video-js embed-responsive-item" controls preload="auto" width="640" height="264"
+          poster="{{ MEDIA_URL }}/{{video.poster}}" data-setup="{}">
+            <source src="{{ MEDIA_URL }}{{video.video_file}}" type='video/mp4'>
+            <p class="vjs-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a web browser that
+              <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+          </video>
+        </div>
+        <!-- End HTML5 Video player -->
+        {%elif video.get_cname == "ExternalVideo"%}
+        <!-- put embed code here -->
+          {% autoescape off %}
+            {{video.embed_code}}
+          {% endautoescape %}
+        <!-- end embed code -->
+        {%endif%}
+      </div>
+      <div class="col-md-6 col-sm-4 col-xs-12">
+        <h3>{{video.name}}</h3>
+        {% autoescape off %}
+        {%if user.is_staff == True%}
+          {%if video.get_cname == "Video"%}
+            <a href="/videos/edit/video/{{video.id}}">Edit</a>
+          {%endif%}
+        {%endif%}
+        <p>{{video.rich_description}}</p>
+        {%endautoescape%}
+        <p>Date Taken: <strong>{{video.date_shot}}</strong></p>
+        <strong>Tags</strong>
+        <p>
+        {%for tag in video_tags%}
+          <a class="btn btn-default" href="/videos/tag/{{tag.name}}" role="button">{{tag.name}}</a>
+        {%endfor%}
+        </p>
+        <p><strong>Navigate</strong><p>
+          <div id="map" class="map_embed"></div>
+            <script type="text/javascript">
+                var customLat = {{video.lat}}
+                var customLon = {{video.lon}}
+            </script>
+
+      </div>
+    </div>
+  </div>
+
+{%endblock content%}
