@@ -4,7 +4,7 @@ from capitals.models import Capital, Country, Photo
 
 
 class PhotoAdmin(admin.ModelAdmin):
-    list_display = ("name", "photo_file", "photo_width", "photo_height", "is_capitol")
+    list_display = ("name", "photo_file")
 
 
 class CapitalAdmin(admin.ModelAdmin):

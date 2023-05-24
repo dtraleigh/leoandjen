@@ -72,7 +72,7 @@ def get_leaflet_footer_vars():
 def home(request):
     # All visited capitals
     all_capitals = Capital.objects.all()
-    all_photos = Photo.objects.filter(is_capitol=False)
+    all_photos = Photo.objects.all()
 
     # Pagination
     paginator = Paginator(all_capitals, 5)
@@ -120,7 +120,7 @@ def map_page(request):
 
 def capital_page(request, cap_name):
     capital = Capital.objects.get(name=cap_name)
-    all_cap_photos = Photo.objects.filter(is_capitol=False, capital=capital)
+    all_cap_photos = Photo.objects.filter(capital=capital)
 
     # Needed for photo CSS in index. Improve later
     all_capitals = Capital.objects.all()
