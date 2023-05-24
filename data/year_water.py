@@ -1,7 +1,8 @@
 from datetime import datetime
 
-from data.models import Water
 from django.db.models import Q
+
+from data.models import Water
 
 
 class WaterYear:
@@ -23,6 +24,7 @@ class WaterYear:
 
     def get_data_points(self):
         from data.functions import month_strings_abbr
+
         # Create a list of dictionaries like
         # [{'month_number': '1', 'month_str': 'Jan', 'value': 956}, .....
         # Improve get_data_points by returning the value = daily usage for each day in this year

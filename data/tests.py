@@ -2,10 +2,10 @@ from datetime import datetime
 
 from django.test import TestCase
 
+from data.functions import (convert_years_string_to_years_list,
+                            get_car_miles_all_ytd_avg, get_car_miles_prev_ytd,
+                            get_car_miles_ytd_total)
 from data.models import CarMiles
-from data.functions import convert_years_string_to_years_list, get_car_miles_ytd_total, \
-    get_car_miles_prev_ytd, get_car_miles_all_ytd_avg
-
 from data.test_data.create_test_data import *
 from data.year_elec import ElecYear
 from data.year_vehicle_miles import VehicleMilesTraveledYear
@@ -41,8 +41,9 @@ class DataSimpleTestCase(TestCase):
 
     def test_model_get_money_saved_by_solar1(self):
         # Case 1: More use, no credits. If we use more than we send
-        from data.models import Electricity
         from decimal import Decimal
+
+        from data.models import Electricity
         bill1 = Electricity.objects.create(bill_date=datetime(2000, 2, 10),
                                            service_start_date=datetime(2000, 1, 11),
                                            service_end_date=datetime(2000, 2, 8),
@@ -62,8 +63,9 @@ class DataSimpleTestCase(TestCase):
 
     def test_model_get_money_saved_by_solar2(self):
         # Case 2: More use, small credits. If we use more than we send but we have some credits
-        from data.models import Electricity
         from decimal import Decimal
+
+        from data.models import Electricity
         bill1 = Electricity.objects.create(bill_date=datetime(2000, 2, 10),
                                            service_start_date=datetime(2000, 1, 11),
                                            service_end_date=datetime(2000, 2, 8),
@@ -83,8 +85,9 @@ class DataSimpleTestCase(TestCase):
 
     def test_model_get_money_saved_by_solar3(self):
         # Case 3: More use, big credits. If we use more than we send but we have lots of credits
-        from data.models import Electricity
         from decimal import Decimal
+
+        from data.models import Electricity
         bill1 = Electricity.objects.create(bill_date=datetime(2000, 2, 10),
                                            service_start_date=datetime(2000, 1, 11),
                                            service_end_date=datetime(2000, 2, 8),
@@ -104,8 +107,9 @@ class DataSimpleTestCase(TestCase):
 
     def test_model_get_money_saved_by_solar4(self):
         # Case 4: less use, no credits. If we use less than we send, no credits
-        from data.models import Electricity
         from decimal import Decimal
+
+        from data.models import Electricity
         bill1 = Electricity.objects.create(bill_date=datetime(2000, 2, 10),
                                            service_start_date=datetime(2000, 1, 11),
                                            service_end_date=datetime(2000, 2, 8),
@@ -125,8 +129,9 @@ class DataSimpleTestCase(TestCase):
 
     def test_model_get_money_saved_by_solar5(self):
         # Case 5: less use, existing credits. If we use less than we send and have credits
-        from data.models import Electricity
         from decimal import Decimal
+
+        from data.models import Electricity
         bill1 = Electricity.objects.create(bill_date=datetime(2000, 2, 10),
                                            service_start_date=datetime(2000, 1, 11),
                                            service_end_date=datetime(2000, 2, 8),
@@ -146,8 +151,9 @@ class DataSimpleTestCase(TestCase):
 
     def test_model_get_money_saved_by_solar6(self):
         # Case 6: Use exactly the same amount as credit
-        from data.models import Electricity
         from decimal import Decimal
+
+        from data.models import Electricity
         bill1 = Electricity.objects.create(bill_date=datetime(2000, 2, 10),
                                            service_start_date=datetime(2000, 1, 11),
                                            service_end_date=datetime(2000, 2, 8),

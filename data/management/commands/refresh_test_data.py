@@ -1,7 +1,9 @@
-from django.core.management.base import BaseCommand
-from data.models import *
-from django.core import serializers
 import datetime
+
+from django.core import serializers
+from django.core.management.base import BaseCommand
+
+from data.models import *
 
 
 class Command(BaseCommand):

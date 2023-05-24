@@ -1,7 +1,9 @@
-from django.core.management.base import BaseCommand
-from data.models import SolarEnergy
-import requests
 from datetime import datetime, timedelta
+
+import requests
+from django.core.management.base import BaseCommand
+
+from data.models import SolarEnergy
 
 
 def get_site_production(token, start_date, end_date):

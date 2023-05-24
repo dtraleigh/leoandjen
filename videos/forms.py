@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
-from videos.models import Video, Album, ExternalVideo
+
+from videos.models import Album, ExternalVideo, Video
 
 
 class NewVideoForm(ModelForm):

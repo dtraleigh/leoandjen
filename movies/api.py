@@ -2,7 +2,7 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-from movies.models import *
+from movies.models import APIUser
 
 
 def query_url_with_retries(url):

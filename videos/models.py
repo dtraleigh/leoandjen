@@ -1,8 +1,9 @@
+from ckeditor.fields import RichTextField
 from django.db import models
 from django.urls import reverse
-from ckeditor.fields import RichTextField
 
-from videos.validators import validate_poster_extension, validate_video_extension
+from videos.validators import (validate_poster_extension,
+                               validate_video_extension)
 
 
 class Video(models.Model):

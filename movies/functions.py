@@ -1,12 +1,12 @@
-import requests
 import json
-from bs4 import BeautifulSoup
 import random
 
-from movies.models import Movie, Director, Character
+import requests
+from bs4 import BeautifulSoup
+from django.db.models import Max, Q
+
 from movies.api import query_tmdb_movie_credits
-from django.db.models import Max
-from django.db.models import Q
+from movies.models import Character, Director, Movie
 
 
 def get_page_content(link):

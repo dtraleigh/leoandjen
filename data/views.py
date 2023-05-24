@@ -1,17 +1,15 @@
 import csv
+import logging
+from datetime import datetime
 
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from data.models import *
-import logging
-from datetime import datetime
-
 from data.functions import *
-
-from data.year_vehicle_miles import VehicleMilesTraveledYear
+from data.models import *
 from data.year_elec import ElecYear
 from data.year_gas import GasYear
+from data.year_vehicle_miles import VehicleMilesTraveledYear
 from data.year_water import WaterYear
 
 logger = logging.getLogger("django")

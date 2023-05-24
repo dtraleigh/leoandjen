@@ -1,4 +1,5 @@
 from django.urls import path
+
 from capitals import views
 
 app_name = "capitals"
