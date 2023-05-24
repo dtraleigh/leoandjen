@@ -148,11 +148,10 @@ class Capital(models.Model):
 
 class Photo(models.Model):
     name = models.CharField(max_length=200)
-    photo_file = models.FileField(upload_to="photos/")
+    photo_file = models.ImageField(upload_to="photos/")
     capital = models.ForeignKey(Capital, on_delete=models.CASCADE, null=True)
-    photo_width = models.IntegerField(default=1000)
-    photo_height = models.IntegerField(default=664)
-    is_capitol = models.BooleanField(default=False)
+    # photo_width = models.IntegerField(default=1000)
+    # photo_height = models.IntegerField(default=664)
 
     def __str__(self):
         return f"{self.name}"
@@ -160,7 +159,7 @@ class Photo(models.Model):
 
 class Country(models.Model):
     name = models.CharField(max_length=200)
-    flag = models.FileField(upload_to="flags/")
+    flag = models.ImageField(upload_to="flags/")
 
     class Meta:
         verbose_name_plural = "Countries"
