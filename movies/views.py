@@ -1,16 +1,15 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.shortcuts import redirect
-from django.core.paginator import Paginator
-from django.contrib import messages
+from django.shortcuts import redirect, render
 
 from movies.add_movie import add_movie_from_form
-from movies.models import Movie
-from movies.functions import *
 from movies.api import *
 from movies.forms import AddMovieForm
+from movies.functions import *
+from movies.models import Movie, Collection
 
 
 def home(request):

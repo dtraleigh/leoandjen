@@ -1,5 +1,5 @@
-from data.models import CarMiles
 from data.functions import *
+from data.models import CarMiles
 
 
 class VehicleMilesTraveledYear:

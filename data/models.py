@@ -1,7 +1,8 @@
 import decimal
-from decimal import Decimal
-from django.db import models
 from datetime import timedelta
+from decimal import Decimal
+
+from django.db import models
 
 
 class Water(models.Model):

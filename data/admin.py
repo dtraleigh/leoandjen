@@ -1,5 +1,6 @@
 from django.contrib import admin
-from data.models import *
+
+from data.models import Water, SolarEnergy, Electricity, Gas, CarMiles
 
 
 class WaterAdmin(admin.ModelAdmin):

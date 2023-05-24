@@ -1,5 +1,6 @@
 from django.contrib import admin
-from capitals.models import Photo, Capital, Country
+
+from capitals.models import Capital, Country, Photo
 
 
 class PhotoAdmin(admin.ModelAdmin):

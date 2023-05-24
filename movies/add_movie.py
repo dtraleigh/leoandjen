@@ -1,6 +1,6 @@
-from movies.api import query_tmdb_by_imdb_id, query_tmdb
-from movies.functions import update_directors, update_characters
-from movies.models import Movie, Format
+from movies.api import query_tmdb, query_tmdb_by_imdb_id
+from movies.functions import update_characters, update_directors
+from movies.models import Format, Movie
 
 
 def add_movie_from_form(imdb_id, is_tv_movie, letterboxd_slug, formats, sort_title):

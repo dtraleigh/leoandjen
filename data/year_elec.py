@@ -1,10 +1,10 @@
-from datetime import datetime
 from calendar import monthrange
-
+from datetime import datetime
 from decimal import Decimal
 
-from data.models import Electricity, SolarEnergy
 from django.db.models import Q
+
+from data.models import Electricity, SolarEnergy
 
 
 class ElecYear:
@@ -28,6 +28,7 @@ class ElecYear:
 
     def get_data_points(self):
         from data.functions import month_strings_abbr
+
         # Create a list of dictionaries like
         # [{'month_number': '1', 'month_str': 'Jan', 'value': 956}, .....
         # Improve get_data_points by returning the value = daily usage for each day in this year

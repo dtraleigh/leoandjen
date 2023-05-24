@@ -1,5 +1,7 @@
 from django.contrib import admin
-from movies.models import *
+
+from movies.models import (APIUser, Character, Collection, Director, Format,
+                           Movie)
 
 
 class MovieAdmin(admin.ModelAdmin):

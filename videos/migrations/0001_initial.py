@@ -2,6 +2,7 @@
 
 import ckeditor.fields
 from django.db import migrations, models
+
 import videos.validators
 
 

@@ -2,10 +2,10 @@ import sys
 
 from django.core.management.base import BaseCommand
 
-from movies.models import *
-from movies.functions import *
-from movies.api import *
-from movies.add_movie import add_movie
+from movies.api import query_tmdb, query_tmdb_by_imdb_id
+from movies.functions import (nice_director_string, update_characters,
+                              update_directors)
+from movies.models import Format, Movie
 
 # keeping around but adding movies using the UI is now the preferred method.
 
