@@ -18,7 +18,7 @@ The movies we own and a tool to search them - https://www.leoandjen.com/movies/
 A password-protected website for our home videos - https://www.leoandjen.com/videos/
 
 To-dos:
-- Previously, the 4 apps were in individual projects. This repo combins the 4 apps into one project.
+- Previously, the 4 apps were in individual projects. This repo combines the 4 apps into one project.
 - Need to refactor and organize all the html templates
 - Need to consolidate all JS and CSS static files
 - Test apps with updated versions of services such as Boostrap, JQuery, and photoswipe
