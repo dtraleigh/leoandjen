@@ -1,58 +1,66 @@
 <div class=row>
-  {%if not no_prev%}
-  <div class="col-md-6 col-sm-6 col-xs-6">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Earlier Video</h3>
-      </div>
-      <div class="panel-body">
-        {%if album_view%}
-            {%if prev_video.get_cname == "Video"%}
-              <a href="/videos/album/{{album.id}}/video/{{prev_video.id}}" class="thumbnail">
-            {%elif prev_video.get_cname == "ExternalVideo"%}
-              <a href="/videos/album/{{album.id}}/external/{{prev_video.id}}" class="thumbnail">
-            {%endif%}
-        {%elif tag_view%}
-            {%if prev_video.get_cname == "Video"%}
-              <a href="/videos/tag/{{the_tag.name}}/video/{{prev_video.id}}" class="thumbnail">
-            {%elif prev_video.get_cname == "ExternalVideo"%}
-              <a href="/videos/tag/{{the_tag.name}}/external/{{prev_video.id}}" class="thumbnail">
-            {%endif%}
-        {%elif recent_view%}
-            <a href="/videos/recent/video/{{prev_video.id}}" class="thumbnail">
-        {%endif%}
-          <img src="{{MEDIA_URL}}/{{prev_video.poster}}" alt="...">
-        </a>
-      </div>
-    </div>
-  </div>
-  {%endif%}
-  {%if not no_next%}
-  <div class="col-md-6 col-sm-6 col-xs-6">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Later Video</h3>
-      </div>
-      <div class="panel-body">
-        {%if album_view%}
-            {%if next_video.get_cname == "Video"%}
-              <a href="/videos/album/{{album.id}}/video/{{next_video.id}}" class="thumbnail">
-            {%elif next_video.get_cname == "ExternalVideo"%}
-              <a href="/videos/album/{{album.id}}/external/{{next_video.id}}" class="thumbnail">
-            {%endif%}
-        {%elif tag_view%}
-            {%if next_video.get_cname == "Video"%}
-              <a href="/videos/tag/{{the_tag.name}}/video/{{next_video.id}}" class="thumbnail">
-            {%elif next_video.get_cname == "ExternalVideo"%}
-              <a href="/videos/tag/{{the_tag.name}}/external/{{next_video.id}}" class="thumbnail">
-            {%endif%}
-        {%elif recent_view%}
-            <a href="/videos/recent/video/{{next_video.id}}" class="thumbnail">
-        {%endif%}
-          <img src="{{ MEDIA_URL }}/{{next_video.poster}}" alt="...">
-        </a>
-      </div>
-    </div>
-  </div>
-  {%endif%}
-</div>
+  {% if not no_prev %}
+    <div class="col-md-6 col-sm-6 col-xs-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Earlier Video</h3>
+        </div>
+        <div class="panel-body">
+          {% if album_view %}
+            {% if prev_video.get_cname == "Video" %}
+              <a href="/videos/album/{{ album.id }}/video/{{ prev_video.id }}"
+                 class="thumbnail">
+              {% elif prev_video.get_cname == "ExternalVideo" %}
+                <a href="/videos/album/{{ album.id }}/external/{{ prev_video.id }}"
+                   class="thumbnail">
+                {% endif %}
+              {% elif tag_view %}
+                {% if prev_video.get_cname == "Video" %}
+                  <a href="/videos/tag/{{ the_tag.name }}/video/{{ prev_video.id }}"
+                     class="thumbnail">
+                  {% elif prev_video.get_cname == "ExternalVideo" %}
+                    <a href="/videos/tag/{{ the_tag.name }}/external/{{ prev_video.id }}"
+                       class="thumbnail">
+                    {% endif %}
+                  {% elif recent_view %}
+                    <a href="/videos/recent/video/{{ prev_video.id }}" class="thumbnail">
+                    {% endif %}
+                    <img src="{{ MEDIA_URL }}/{{ prev_video.poster }}" alt="...">
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          {% if not no_next %}
+            <div class="col-md-6 col-sm-6 col-xs-6">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Later Video</h3>
+                </div>
+                <div class="panel-body">
+                  {% if album_view %}
+                    {% if next_video.get_cname == "Video" %}
+                      <a href="/videos/album/{{ album.id }}/video/{{ next_video.id }}"
+                         class="thumbnail">
+                      {% elif next_video.get_cname == "ExternalVideo" %}
+                        <a href="/videos/album/{{ album.id }}/external/{{ next_video.id }}"
+                           class="thumbnail">
+                        {% endif %}
+                      {% elif tag_view %}
+                        {% if next_video.get_cname == "Video" %}
+                          <a href="/videos/tag/{{ the_tag.name }}/video/{{ next_video.id }}"
+                             class="thumbnail">
+                          {% elif next_video.get_cname == "ExternalVideo" %}
+                            <a href="/videos/tag/{{ the_tag.name }}/external/{{ next_video.id }}"
+                               class="thumbnail">
+                            {% endif %}
+                          {% elif recent_view %}
+                            <a href="/videos/recent/video/{{ next_video.id }}" class="thumbnail">
+                            {% endif %}
+                            <img src="{{ MEDIA_URL }}/{{ next_video.poster }}" alt="...">
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                </div>

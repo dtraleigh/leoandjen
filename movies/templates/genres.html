@@ -1,60 +1,63 @@
 {% extends "index.html" %}
 {% block content %}
-{%load static%}
-<div class="row">
+  {% load static %}
+  <div class="row">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/movies">Home</a></li>
+        <li class="breadcrumb-item">
+          <a href="/movies">Home</a>
+        </li>
       </ol>
     </nav>
-</div>
-<div class="row">
-  <p>
-    <a href="?physical=true" class="btn btn-secondary" role="button">Physical Only</a>
-    <a href="?streaming=true" class="btn btn-secondary" role="button">Streaming Only</a>
-  </p>
-</div>
-<div class="row">
-  <p>
-{%for genre in all_genres%}
-    <a href="#{{genre}}" class="btn btn-primary genre_button" role="button">{{genre}}</a>
-{%endfor%}
-  </p>
-</div>
-
-{%for genre in all_genres%}
-<div class="row">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a name="{{genre}}">{{genre}}</a> | <a href="#top">Back to top</a></li>
-    </ol>
-  </nav>
-</div>
-<div class="row">
-  {%for movie in movie_list%}
-    {%if movie.0 == genre%}
-    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-4">
-      <div class="card">
-        <a href="/movies/movie/{{movie.1.themoviedb_id}}">
-        <img src="https://image.tmdb.org/t/p/w500{{movie.1.poster_path}}"
-             class="card-img-top"
-             alt="poster for {{movie.1.title}} ({{movie.1.primary_release_year}})">
-        </a>
-        <div class="card-body custom-card-body">
-          <h6 class="card-title d-inline-block text-truncate">
-            {{movie.1.title}}
-          </h6>
-          <p class="year">({{movie.1.primary_release_year}})</p>
-        </div>
-        <div class="card-body formats">
-          {%for format in movie.1.formats.all%}
-          <img src="{%static "img"%}/{{format.name}}.png" style="width:25px;">
-          {%endfor%}
-        </div>
-      </div>
+  </div>
+  <div class="row">
+    <p>
+      <a href="?physical=true" class="btn btn-secondary" role="button">Physical Only</a>
+      <a href="?streaming=true" class="btn btn-secondary" role="button">Streaming Only</a>
+    </p>
+  </div>
+  <div class="row">
+    <p>
+      {% for genre in all_genres %}
+        <a href="#{{ genre }}"
+           class="btn btn-primary genre_button"
+           role="button">{{ genre }}</a>
+      {% endfor %}
+    </p>
+  </div>
+  {% for genre in all_genres %}
+    <div class="row">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a name="{{ genre }}">{{ genre }}</a> | <a href="#top">Back to top</a>
+          </li>
+        </ol>
+      </nav>
     </div>
-    {%endif%}
-  {%endfor%}
-</div>
-{%endfor%}
-{%endblock%}
+    <div class="row">
+      {% for movie in movie_list %}
+        {% if movie.0 == genre %}
+          <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-4">
+            <div class="card">
+              <a href="/movies/movie/{{ movie.1.themoviedb_id }}">
+                <img src="https://image.tmdb.org/t/p/w500{{ movie.1.poster_path }}"
+                     class="card-img-top"
+                     alt="poster for {{ movie.1.title }} ({{ movie.1.primary_release_year }})">
+              </a>
+              <div class="card-body custom-card-body">
+                <h6 class="card-title d-inline-block text-truncate">{{ movie.1.title }}</h6>
+                <p class="year">({{ movie.1.primary_release_year }})</p>
+              </div>
+              <div class="card-body formats">
+                {% for format in movie.1.formats.all %}
+                  <img src="{% static "img" %}/{{ format.name }}.png" style="width:25px;">
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endfor %}
+{% endblock %}

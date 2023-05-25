@@ -1,40 +1,59 @@
 <div class="row">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            {%if capital.us_state%}
-                <a name="{{capital.us_state}}"></a>
-            {%else%}
-                <a name="{{capital.id}}"></a>
-            {%endif%}
-            <img src="{{ MEDIA_URL }}{{capital.country.flag}}" class="country-flag-img">
-        <h1 class="panel-title capital-title">{{capital.name}}</h1>
-            <p class="text-right"><a href="#top">Back to top</a></p>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {% if capital.us_state %}
+        <a name="{{ capital.us_state }}"></a>
+      {% else %}
+        <a name="{{ capital.id }}"></a>
+      {% endif %}
+      <img src="{{ MEDIA_URL }}{{ capital.country.flag }}"
+           class="country-flag-img">
+      <h1 class="panel-title capital-title">{{ capital.name }}</h1>
+      <p class="text-right">
+        <a href="#top">Back to top</a>
+      </p>
+    </div>
+    <div class="panel-body">
+      <div class="col-sm-4 col-xs-12">
+        <img src="{{ MEDIA_URL }}{{ capital.flag }}" class="flag-img">
+        <small>{{ capital.flag_caption }}</small>
+        <h3>Date Visited: {{ capital.date_visited }}</h3>
+        <p>{{ capital.description }}</p>
+        {% if capital.photo_album_url %}
+          <p>
+            More photos in our <a href="{{ capital.photo_album_url }}">Photo Album</a>.
+          </p>
+        {% endif %}
+        <p>
+          <a href="https://www.google.com/maps/@{{ capital.lat }},{{ capital.lon }},12z"
+             target='_blank'
+             class="btn btn-primary btn-lg active"
+             role="button">Map it</a>
+        </p>
       </div>
-        <div class="panel-body">
-            <div class="col-sm-4 col-xs-12">
-                <img src="{{ MEDIA_URL }}{{capital.flag}}" class="flag-img">
-                <small>{{capital.flag_caption}}</small>
-                <h3>Date Visited: {{capital.date_visited}}</h3>
-                <p>{{capital.description}}</p>
-                {%if capital.photo_album_url%}
-                <p>More photos in our <a href="{{capital.photo_album_url}}">Photo Album</a>.</p>
-                {%endif%}
-                <p><a href="https://www.google.com/maps/@{{capital.lat}},{{capital.lon}},12z" target='_blank' class="btn btn-primary btn-lg active" role="button">Map it</a></p>
-            </div>
-            <div class="col-sm-8 col-xs-12">
-                <div id="photos{{capital.id}}" class="my-gallery" itemscope itemtype="https://schema.org/ImageGallery">
-                    {%for photo in all_photos%}
-                        {%if photo.capital == capital%}
-                            <figure itemprop="associatedMedia" itemscope itemtype="https://schema.org/ImageObject">
-                          <a href="{{ MEDIA_URL }}{{photo.photo_file}}" itemprop="contentUrl" data-size="{{photo.photo_file.width}}x{{photo.photo_file.height}}">
-                              <img src="{{ MEDIA_URL }}{{photo.photo_file}}" itemprop="thumbnail" alt="Image description" />
-                          </a>
-                            <figcaption itemprop="caption description">{{capital.name}} - {{capital.date_visited}}</figcaption>
-                            </figure>
-                        {%endif%}
-                    {%endfor%}
-                </div>
-            </div>
+      <div class="col-sm-8 col-xs-12">
+        <div id="photos{{ capital.id }}"
+             class="my-gallery"
+             itemscope
+             itemtype="https://schema.org/ImageGallery">
+          {% for photo in all_photos %}
+            {% if photo.capital == capital %}
+              <figure itemprop="associatedMedia"
+                      itemscope
+                      itemtype="https://schema.org/ImageObject">
+                <a href="{{ MEDIA_URL }}{{ photo.photo_file }}"
+                   itemprop="contentUrl"
+                   data-size="{{ photo.photo_file.width }}x{{ photo.photo_file.height }}">
+                  <img src="{{ MEDIA_URL }}{{ photo.photo_file }}"
+                       itemprop="thumbnail"
+                       alt="Image description" />
+                </a>
+                <figcaption itemprop="caption description">{{ capital.name }} - {{ capital.date_visited }}</figcaption>
+              </figure>
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
     </div>
+  </div>
 </div>

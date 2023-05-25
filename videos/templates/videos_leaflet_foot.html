@@ -1,7 +1,7 @@
-    <!-- Javascript for leaflet map -->
-    {% load static %}
-    <script type="text/javascript">
+<!-- Javascript for leaflet map -->
+{% load static %}
+<script type="text/javascript">
         var video_map_data = {{video_map_data|safe}}
         var external_map_data = {{external_map_data|safe}}
-    </script>
-    <script src="{% static "js/videos_leaflet_map_custom.js"%}"></script>
+</script>
+<script src="{% static "js/videos_leaflet_map_custom.js"%}"></script>

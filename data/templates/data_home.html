@@ -1,102 +1,128 @@
 {% extends "data_base.html" %}
 {% block content %}
-<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-  <h2>Overview</h2>
-  <div class="table-responsive">
-    <table class="table table-striped table-sm">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th><a href="/data/water">Water (Gallons)</a></th>
-          <th><a href="/data/gas">Gas (Therms) </a></th>
-          <th><a href="/data/electricity">Electricity (kWh)</a></th>
-          <th><a href="/data/car_miles">VMT (miles)</a></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Trending*</td>
-          {%if water_data.overall_trend == "down"%}
-            <td><span data-feather="arrow-down-right"></span></td>
-          {%elif water_data.overall_trend == "up"%}
-            <td><span data-feather="arrow-up-right"></span></td>
-          {%else%}
-            <td></td>
-          {%endif%}
-          {%if gas_data.overall_trend == "down"%}
-            <td><span data-feather="arrow-down-right"></span></td>
-          {%elif gas_data.overall_trend == "up"%}
-            <td><span data-feather="arrow-up-right"></span></td>
-          {%else%}
-            <td></td>
-          {%endif%}
-          {%if elec_data.overall_trend == "down"%}
-            <td><span data-feather="arrow-down-right"></span></td>
-          {%elif elec_data.overall_trend == "up"%}
-            <td><span data-feather="arrow-up-right"></span></td>
-          {%else%}
-            <td></td>
-          {%endif%}
-          {%if vmt_data.overall_trend == "down"%}
-            <td><span data-feather="arrow-down-right"></span></td>
-          {%elif vmt_data.overall_trend == "up"%}
-            <td><span data-feather="arrow-up-right"></span></td>
-          {%else%}
-            <td></td>
-          {%endif%}
-        </tr>
-        <tr>
-          <td>YTD Range</td>
-          <td>{{water_data.ytd_range}}</td>
-          <td>{{gas_data.ytd_range}}</td>
-          <td>{{elec_data.ytd_range}}</td>
-          <td>{{vmt_data.ytd_range}}</td>
-        </tr>
-        <tr>
-          <td>YTD</td>
-          <td>{{water_data.ytd_total}}</td>
-          <td>{{gas_data.ytd_total}}</td>
-          <td>{{elec_data.ytd_total}}</td>
-          <td>{{vmt_data.ytd_total}}</td>
-        </tr>
-        <tr>
-          <td>Prev YTD</td>
-          <td>{{water_data.prev_ytd}}</td>
-          <td>{{gas_data.prev_ytd}}</td>
-          <td>{{elec_data.prev_ytd}}</td>
-          <td>{{vmt_data.prev_ytd}}</td>
-        </tr>
-        <tr>
-          <td>Prev YTD (all avg.)</td>
-          <td>{{water_data.all_ytd_avg}}</td>
-          <td>{{gas_data.all_ytd_avg}}</td>
-          <td>{{elec_data.all_ytd_avg}}</td>
-          <td>{{vmt_data.all_ytd_avg}}</td>
-        </tr>
-      </tbody>
-    </table>
-    <p>*Trending is the direction against the current year's YTD value against all historical averages. "Prev YTD (all avg.)"</p>
-  </div>
-  <h3>Top Solar Production Days</h3>
-  <div class="col col-xl-4">
-    <table class="table table-striped table-sm">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Date</th>
-          <th>Watts Produced</th>
-        </tr>
-      </thead>
-      <tbody>
-        {%for solar_data in top_solar_data%}
-        <tr>
-          <td>{{forloop.counter}}</td>
-          <td>{{solar_data.date_of_production}}</td>
-          <td>{{solar_data.production}}</td>
-        </tr>
-        {%endfor%}
-      </tbody>
-    </table>
-  </div>
-</main>
+  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <h2>Overview</h2>
+    <div class="table-responsive">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>
+              <a href="/data/water">Water (Gallons)</a>
+            </th>
+            <th>
+              <a href="/data/gas">Gas (Therms)</a>
+            </th>
+            <th>
+              <a href="/data/electricity">Electricity (kWh)</a>
+            </th>
+            <th>
+              <a href="/data/car_miles">VMT (miles)</a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Trending*</td>
+            {% if water_data.overall_trend == "down" %}
+              <td>
+                <span data-feather="arrow-down-right"></span>
+              </td>
+            {% elif water_data.overall_trend == "up" %}
+              <td>
+                <span data-feather="arrow-up-right"></span>
+              </td>
+            {% else %}
+              <td></td>
+            {% endif %}
+            {% if gas_data.overall_trend == "down" %}
+              <td>
+                <span data-feather="arrow-down-right"></span>
+              </td>
+            {% elif gas_data.overall_trend == "up" %}
+              <td>
+                <span data-feather="arrow-up-right"></span>
+              </td>
+            {% else %}
+              <td></td>
+            {% endif %}
+            {% if elec_data.overall_trend == "down" %}
+              <td>
+                <span data-feather="arrow-down-right"></span>
+              </td>
+            {% elif elec_data.overall_trend == "up" %}
+              <td>
+                <span data-feather="arrow-up-right"></span>
+              </td>
+            {% else %}
+              <td></td>
+            {% endif %}
+            {% if vmt_data.overall_trend == "down" %}
+              <td>
+                <span data-feather="arrow-down-right"></span>
+              </td>
+            {% elif vmt_data.overall_trend == "up" %}
+              <td>
+                <span data-feather="arrow-up-right"></span>
+              </td>
+            {% else %}
+              <td></td>
+            {% endif %}
+          </tr>
+          <tr>
+            <td>YTD Range</td>
+            <td>{{ water_data.ytd_range }}</td>
+            <td>{{ gas_data.ytd_range }}</td>
+            <td>{{ elec_data.ytd_range }}</td>
+            <td>{{ vmt_data.ytd_range }}</td>
+          </tr>
+          <tr>
+            <td>YTD</td>
+            <td>{{ water_data.ytd_total }}</td>
+            <td>{{ gas_data.ytd_total }}</td>
+            <td>{{ elec_data.ytd_total }}</td>
+            <td>{{ vmt_data.ytd_total }}</td>
+          </tr>
+          <tr>
+            <td>Prev YTD</td>
+            <td>{{ water_data.prev_ytd }}</td>
+            <td>{{ gas_data.prev_ytd }}</td>
+            <td>{{ elec_data.prev_ytd }}</td>
+            <td>{{ vmt_data.prev_ytd }}</td>
+          </tr>
+          <tr>
+            <td>Prev YTD (all avg.)</td>
+            <td>{{ water_data.all_ytd_avg }}</td>
+            <td>{{ gas_data.all_ytd_avg }}</td>
+            <td>{{ elec_data.all_ytd_avg }}</td>
+            <td>{{ vmt_data.all_ytd_avg }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        *Trending is the direction against the current year's YTD value against all historical averages. "Prev YTD (all avg.)"
+      </p>
+    </div>
+    <h3>Top Solar Production Days</h3>
+    <div class="col col-xl-4">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Watts Produced</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for solar_data in top_solar_data %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ solar_data.date_of_production }}</td>
+              <td>{{ solar_data.production }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
 {% endblock %}
