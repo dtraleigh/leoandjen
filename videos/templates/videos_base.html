@@ -1,22 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-	{% load static %}
-	{% include "videos_head.html" %}
-	<body>
-
-	{% if show_nav %}
-    	{% include "nav.html" %}
-	{% endif %}
-
-		<div class="container">
-
-    	{% block content %}{% endblock %}
-
-	    <div class="footer">
-	    </div>
-  </div> <!-- /container -->
-  <script src="{% static "video.js7.10.2/video.min.js" %}"></script>
-  <script>
+  {% load static %}
+  {% include "videos_head.html" %}
+  <body>
+    {% if show_nav %}
+      {% include "nav.html" %}
+    {% endif %}
+    <div class="container">
+      {% block content %}{% endblock %}
+      <div class="footer"></div>
+    </div>
+    <!-- /container -->
+    <script src="{% static "video.js7.10.2/video.min.js" %}"></script>
+    <script>
   var now = new Date();
   var currentyear = now.getFullYear();
   $(function() {
@@ -26,8 +22,7 @@
       yearRange: ("1980:" + currentyear),
     });
   });
-  </script>
-
-	{% include "videos_leaflet_foot.html" %}
-</body>
+    </script>
+    {% include "videos_leaflet_foot.html" %}
+  </body>
 </html>

@@ -1,51 +1,53 @@
-{%extends "index.html"%}
-{%block content%}
-<div class="row">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/movies">Home</a></li>
-    </ol>
-  </nav>
-</div>
-<div class="jumbotron jumbotron-fluid">
-  <div class="container">
-      {%if messages%}
+{% extends "index.html" %}
+{% block content %}
+  <div class="row">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="/movies">Home</a>
+        </li>
+      </ol>
+    </nav>
+  </div>
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      {% if messages %}
         <div class="alert alert-success" role="alert">
-            {%for message in messages%}
-            <p{%if message.tags%} class="{{message.tags}}"{%endif%}>{{message}}</p>
-            {%endfor%}
+          {% for message in messages %}
+            <p {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+          {% endfor %}
         </div>
       {% endif %}
       <form action="/movies/add-movie/" method="post">
-        {%csrf_token%}
-        {{form.non_field_errors}}
+        {% csrf_token %}
+        {{ form.non_field_errors }}
         <div class="fieldWrapper">
-            {{form.imdb_id.errors}}
-            <label for="{{form.imdb_id.id_for_label}}">IMDB ID:</label>
-            {{form.imdb_id}}
+          {{ form.imdb_id.errors }}
+          <label for="{{ form.imdb_id.id_for_label }}">IMDB ID:</label>
+          {{ form.imdb_id }}
         </div>
         <div class="fieldWrapper">
-            {{form.is_tv_movie.errors}}
-            <label for="{{form.is_tv_movie.id_for_label}}">TV Movie?:</label>
-            {{form.is_tv_movie}}
+          {{ form.is_tv_movie.errors }}
+          <label for="{{ form.is_tv_movie.id_for_label }}">TV Movie?:</label>
+          {{ form.is_tv_movie }}
         </div>
         <div class="fieldWrapper">
-            {{form.letterboxd_slug.errors}}
-            <label for="{{form.letterboxd_slug.id_for_label}}">Letterboxd slug:</label>
-            {{form.letterboxd_slug}}
+          {{ form.letterboxd_slug.errors }}
+          <label for="{{ form.letterboxd_slug.id_for_label }}">Letterboxd slug:</label>
+          {{ form.letterboxd_slug }}
         </div>
         <div class="fieldWrapper">
-            {{form.sort_title.errors}}
-            <label for="{{form.sort_title.id_for_label}}">Sort Title:</label>
-            {{form.sort_title}}
+          {{ form.sort_title.errors }}
+          <label for="{{ form.sort_title.id_for_label }}">Sort Title:</label>
+          {{ form.sort_title }}
         </div>
         <div class="fieldWrapper">
-            {{form.formats.errors}}
-            <label for="{{form.formats.id_for_label}}">Formats:</label>
-            {{form.formats}}
+          {{ form.formats.errors }}
+          <label for="{{ form.formats.id_for_label }}">Formats:</label>
+          {{ form.formats }}
         </div>
         <input type="submit" value="Submit">
       </form>
+    </div>
   </div>
-</div>
-{%endblock%}
+{% endblock %}

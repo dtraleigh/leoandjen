@@ -1,48 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <title>LeoandJen Data</title>
     {% load static %}
     <link rel="shortcut icon" type="image/png" href="{% static "img/data_favicon.png" %}">
-
     <!-- Bootstrap core CSS -->
-    <link href="{% static "bootstrap4.0.0/bootstrap.min.css"%}" rel="stylesheet">
-
+    <link href="{% static "bootstrap4.0.0/bootstrap.min.css" %}" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="{% static "css/data_dashboard.css"%}" rel="stylesheet">
+    <link href="{% static "css/data_dashboard.css" %}" rel="stylesheet">
   </head>
-
   <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/data">Leo and Jen</a>
     </nav>
-
     <div class="container-fluid">
       <div class="row">
-        {%include "sidebar.html"%}
-
+        {% include "sidebar.html" %}
         {% block content %}{% endblock %}
       </div>
     </div>
-
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{% static "js/jquery3.2.1/jquery-3.2.1.slim.min.js"%}"></script>
     <script src="{% static "js/popper1.16.1/popper.min.js"%}"></script>
     <script src="{% static "bootstrap4.0.0/bootstrap.min.js"%}"></script>
-
     <!-- Icons -->
     <script src="{% static "feather-icons4.29.0/feather.min.js"%}"></script>
-    <script>
-      feather.replace()
-    </script>
-
+    <script>feather.replace()</script>
     <!-- Graphs -->
     <script src="{% static "js/chart.js3.7.1/chart.min.js"%}"></script>
     <script src="{% static "js/moment2.29.4/moment@^2.js"%}"></script>
@@ -80,4 +70,3 @@
     <script src="{% static "js/myChart.js"%}"></script>
   </body>
 </html>
-

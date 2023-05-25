@@ -1,22 +1,26 @@
-{%load static%}
-  <section class="jumbotron text-center">
-    <div class="jumbotron-background">
-      <img src="{%static "img/posters.jpg"%}" class="blur ">
-    </div>
-    <div class="container">
-      <h1 class="jumbotron-heading"><a name="top">Our Movies</a></h1>
-      <form class="search form-inline justify-content-center" method="GET" action="/movies" >
-        <input class="search_input form-control mr-sm-3" type="search" name="search">
-        <button class="search_button btn btn-light" type="submit"> Search </button>
-      </form>
-      <p>
-        <a href="/movies/4k" class="btn btn-dark filter_button">4K</a>
-        <a href="/movies/BD" class="btn btn-dark filter_button">Blu-Ray</a>
-        <a href="/movies/streaming" class="btn btn-dark filter_button">Streaming</a>
-        <a href="/movies/plex" class="btn btn-dark filter_button">Plex</a>
-        <a href="/movies/genres" class="btn btn-dark filter_button">Genres</a>
-        <a href="/movies/years" class="btn btn-dark filter_button">Years</a>
-        <a href="/movies/rand_movie" class="btn btn-dark filter_button">Random</a>
-      </p>
-    </div>
-  </section>
+{% load static %}
+<section class="jumbotron text-center">
+  <div class="jumbotron-background">
+    <img src="{% static "img/posters.jpg" %}" class="blur ">
+  </div>
+  <div class="container">
+    <h1 class="jumbotron-heading">
+      <a name="top">Our Movies</a>
+    </h1>
+    <form class="search form-inline justify-content-center"
+          method="GET"
+          action="/movies">
+      <input class="search_input form-control mr-sm-3" type="search" name="search">
+      <button class="search_button btn btn-light" type="submit">Search</button>
+    </form>
+    <p>
+      <a href="/movies/4k" class="btn btn-dark filter_button">4K</a>
+      <a href="/movies/BD" class="btn btn-dark filter_button">Blu-Ray</a>
+      <a href="/movies/streaming" class="btn btn-dark filter_button">Streaming</a>
+      <a href="/movies/plex" class="btn btn-dark filter_button">Plex</a>
+      <a href="/movies/genres" class="btn btn-dark filter_button">Genres</a>
+      <a href="/movies/years" class="btn btn-dark filter_button">Years</a>
+      <a href="/movies/rand_movie" class="btn btn-dark filter_button">Random</a>
+    </p>
+  </div>
+</section>
