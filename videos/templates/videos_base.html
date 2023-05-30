@@ -13,15 +13,27 @@
     <!-- /container -->
     <script src="{% static "video.js7.10.2/video.min.js" %}"></script>
     <script>
-  var now = new Date();
-  var currentyear = now.getFullYear();
-  $(function() {
-    $(".datepicker").datepicker({
-      changeMonth: true,
-      changeYear: true,
-      yearRange: ("1980:" + currentyear),
-    });
-  });
+       window.SILVERMINE_VIDEOJS_CHROMECAST_CONFIG = {
+          preloadWebComponents: true,
+       };
+    </script>
+    <script src="{% static "videojs-chromecast/silvermine-videojs-chromecast.min.js" %}"></script>
+    <script src="{% static "js/jquery1.11.3/jquery.min.js" %}"></script>
+    <script src="{% static "js/jquery-ui1.12.1/jquery-ui.min.js" %}"></script>
+    <script src="{% static "bootstrap3.3.7/bootstrap.min.js" %}"></script>
+    <script>
+      var player = videojs(document.getElementById('my-video'));
+      player.chromecast(); // initializes the Chromecast plugin
+
+      var now = new Date();
+      var currentyear = now.getFullYear();
+      $(function() {
+        $(".datepicker").datepicker({
+          changeMonth: true,
+          changeYear: true,
+          yearRange: ("1980:" + currentyear),
+        });
+      });
     </script>
     {% include "videos_leaflet_foot.html" %}
   </body>
