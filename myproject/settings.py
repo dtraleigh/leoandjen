@@ -106,6 +106,13 @@ else:
     MEDIA_URL = "https://leoandjen.com/static/uploads/"
     MEDIA_ROOT = "/home/cophead567/apps/leoandjen_static/uploads/"
 
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME")
+    AWS_QUERYSTRING_EXPIRE = 300
+
 # Add individual app static folders here if needed.
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, "movies/static"),

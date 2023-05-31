@@ -150,11 +150,13 @@ class Photo(models.Model):
     name = models.CharField(max_length=200)
     photo_file = models.ImageField(upload_to="photos/")
     capital = models.ForeignKey(Capital, on_delete=models.CASCADE, null=True)
-    # photo_width = models.IntegerField(default=1000)
-    # photo_height = models.IntegerField(default=664)
 
     def __str__(self):
         return f"{self.name}"
+
+    def delete(self):
+        self.photo_file.delete()
+        super().delete()
 
 
 class Country(models.Model):
@@ -166,3 +168,7 @@ class Country(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    def delete(self):
+        self.flag.delete()
+        super().delete()
