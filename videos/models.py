@@ -34,6 +34,11 @@ class Video(models.Model):
     def get_absolute_url(self):
         return reverse("recent_shot", args=["video", self.id])
 
+    def delete(self):
+        self.video_file.delete()
+        self.poster.delete()
+        super().delete()
+
 
 class ExternalVideo(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, verbose_name="Date added")
@@ -53,6 +58,10 @@ class ExternalVideo(models.Model):
 
     def __str__(self):
         return f"{self.name}, taken on {self.date_shot}"
+
+    def delete(self):
+        self.poster.delete()
+        super().delete()
 
     def get_cname(self):
         return self.__class__.__name__
@@ -77,6 +86,10 @@ class Album(models.Model):
 
     def __str__(self):
         return self.name
+
+    def delete(self):
+        self.poster.delete()
+        super().delete()
 
     def get_absolute_url(self):
         return reverse("album_view", args=[self.id])
