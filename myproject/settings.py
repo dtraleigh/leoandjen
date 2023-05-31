@@ -104,7 +104,7 @@ if env("DJANGO_DEBUG") == "1":
 else:
     STATIC_ROOT = "/home/cophead567/apps/leoandjen_static"
     MEDIA_URL = "https://leoandjen.com/static/uploads/"
-    MEDIA_ROOT = "/home/cophead567/apps/leoandjen_static/uploads/"
+    MEDIA_ROOT = "/uploads/"
 
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
