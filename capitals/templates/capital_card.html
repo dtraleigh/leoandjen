@@ -6,7 +6,7 @@
       {% else %}
         <a name="{{ capital.id }}"></a>
       {% endif %}
-      <img src="{{ MEDIA_URL }}{{ capital.country.flag }}"
+      <img src="{{ capital.country.flag.url }}"
            class="country-flag-img">
       <h1 class="panel-title capital-title">{{ capital.name }}</h1>
       <p class="text-right">
@@ -15,7 +15,7 @@
     </div>
     <div class="panel-body">
       <div class="col-sm-4 col-xs-12">
-        <img src="{{ MEDIA_URL }}{{ capital.flag }}" class="flag-img">
+        <img src="{{ capital.flag.url }}" class="flag-img">
         <small>{{ capital.flag_caption }}</small>
         <h3>Date Visited: {{ capital.date_visited }}</h3>
         <p>{{ capital.description }}</p>
@@ -41,10 +41,10 @@
               <figure itemprop="associatedMedia"
                       itemscope
                       itemtype="https://schema.org/ImageObject">
-                <a href="{{ MEDIA_URL }}{{ photo.photo_file }}"
+                <a href="{{ photo.photo_file.url }}"
                    itemprop="contentUrl"
                    data-size="{{ photo.photo_file.width }}x{{ photo.photo_file.height }}">
-                  <img src="{{ MEDIA_URL }}{{ photo.photo_file }}"
+                  <img src="{{ photo.photo_file.url }}"
                        itemprop="thumbnail"
                        alt="Image description" />
                 </a>
