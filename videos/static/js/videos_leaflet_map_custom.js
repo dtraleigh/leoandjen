@@ -1,11 +1,11 @@
 // leaflet map
-if (customLat == undefined) {
+if (customLat == null) {
     var setViewLat = 35.7785733;
 } else {
     var setViewLat = customLat;
 }
 
-if (customLon == undefined) {
+if (customLon == null) {
     var setViewLon = -78.6395438;
 } else {
     var setViewLon = customLon;
@@ -27,7 +27,7 @@ var markerClusters = L.markerClusterGroup();
 
 // Add video to markerClusters
 for (var i = 0; i < video_map_data.length; ++i){
-  var popup = video_map_data[i].fields.name + " [<a href=\"/map/video/" + video_map_data[i].pk + "\">🎥</a>]";
+  var popup = video_map_data[i].fields.name + " [<a href=\"/videos/map/video/" + video_map_data[i].pk + "\">🎥</a>]";
 
   var m = L.marker([video_map_data[i].fields.lat, video_map_data[i].fields.lon])
                   .bindPopup(popup);
@@ -37,7 +37,7 @@ for (var i = 0; i < video_map_data.length; ++i){
 
 // Add externals to markerClusters
 for (var i = 0; i < external_map_data.length; ++i){
-  var popup = external_map_data[i].fields.name + " [<a href=\"/map/external/" + external_map_data[i].pk + "\">🎥</a>]";
+  var popup = external_map_data[i].fields.name + " [<a href=\"/videos/map/external/" + external_map_data[i].pk + "\">🎥</a>]";
 
   var m = L.marker([external_map_data[i].fields.lat, external_map_data[i].fields.lon])
                   .bindPopup(popup);

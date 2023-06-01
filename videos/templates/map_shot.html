@@ -1,6 +1,15 @@
 {% extends "videos_base.html" %}
+{% block additional_css %}
+{% load static %}
+  <link href="{% static "video.js7.10.2/video-js.css" %}" rel="stylesheet">
+  <link href="{% static "videojs-chromecast/silvermine-videojs-chromecast.css" %}" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static "leaflet1.6.0/leaflet.css" %}" />
+  <link rel="stylesheet" href="{% static "markercluster/MarkerCluster.css" %}" />
+  <link rel="stylesheet" href="{% static "markercluster/MarkerCluster.Default.css" %}" />
+{% endblock additional_css %}
+
 {% block content %}
-  {% load static %}
   <ol class="breadcrumb">
     {% if album_view %}
       <li>Album</li>
@@ -29,9 +38,9 @@
                    preload="auto"
                    width="640"
                    height="264"
-                   poster="{{ MEDIA_URL }}/{{ video.poster }}"
+                   poster="{{ video.poster.url }}"
                    data-setup="{}">
-              <source src="{{ MEDIA_URL }}{{ video.video_file }}" type='video/mp4'>
+              <source src="{{ video.video_file.url }}" type='video/mp4'>
               <p class="vjs-no-js">
                 To view this video please enable JavaScript, and consider upgrading to a web browser that
                 <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
@@ -78,3 +87,29 @@
         </div>
       </div>
     {% endblock content %}
+
+{% block additional_js %}
+  	<script src="{% static "video.js7.10.2/video.min.js" %}"></script>
+    <script>
+       window.SILVERMINE_VIDEOJS_CHROMECAST_CONFIG = {
+          preloadWebComponents: true,
+       };
+    </script>
+    <script src="{% static "videojs-chromecast/silvermine-videojs-chromecast.min.js" %}"></script>
+  <script>
+    var player = videojs(document.getElementById('my-video'));
+    player.chromecast();
+  </script>
+  <script>
+    var customLat = {{ video.lat }}
+    var customLon = {{ video.lon }}
+  </script>
+  <script type="text/javascript">
+    var video_map_data = {{video_map_data|safe}}
+	var external_map_data = {{external_map_data|safe}}
+  </script>
+  <script src="{% static "leaflet1.6.0/leaflet.js"%}"></script>
+  <script src="{% static "markercluster/leaflet.markercluster.js"%}"></script>
+  <script src="{% static "js/videos_leaflet_map_custom.js"%}"></script>
+{% endblock additional_js %}
+

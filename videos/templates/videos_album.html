@@ -12,12 +12,12 @@
           {% if shot.get_cname == "Video" %}
             <a href="/videos/album/{{ album.id }}/video/{{ shot.id }}">
               <div class="album-poster"
-                   style="background-image:url({{ MEDIA_URL }}/{{ shot.poster }})"></div>
+                   style="background-image:url({{ shot.poster.url }})"></div>
             </a>
           {% elif shot.get_cname == "ExternalVideo" %}
             <a href="/videos/album/{{ album.id }}/external/{{ shot.id }}">
               <div class="album-poster"
-                   style="background-image:url({{ MEDIA_URL }}/{{ shot.poster }})"></div>
+                   style="background-image:url({{ shot.poster.url }})"></div>
             </a>
           {% endif %}
           <h4>{{ shot.name }}</h4>

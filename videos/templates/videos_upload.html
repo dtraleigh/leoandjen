@@ -1,6 +1,5 @@
 {% extends "videos_base.html" %}
 {% block content %}
-  {% load static %}
   {% load widget_tweaks %}
   {{ upload_form.media }}
   <!-- Start Video Upload section -->
@@ -141,20 +140,33 @@
     </div>
   </div>
   <!-- End Video Upload section -->
-  <script>
-$(document).ready(function(){
-{%for qloc in quick_locations%}
+{% endblock content %}
+{% block post_js %}
+    <script>
+      var now = new Date();
+      var currentyear = now.getFullYear();
+      $(function() {
+        $(".datepicker").datepicker({
+          changeMonth: true,
+          changeYear: true,
+          yearRange: ("1980:" + currentyear),
+        });
+      });
+    </script>
+    <script>
+      $(document).ready(function(){
+      {%for qloc in quick_locations%}
         $("#{{qloc.html_id}}").click(function() {
           $("#id_lon").val({{qloc.lon}});
           $("#id_lat").val({{qloc.lat}});
         });
-{%endfor%}
-});
-  </script>
-  <script>
-    $(document).ready(function () {
-    $(".nav li").removeClass("active");
-    $('#upload').addClass('active');
-});
-  </script>
-{% endblock content %}
+      {%endfor%}
+      });
+    </script>
+    <script>
+      $(document).ready(function () {
+        $(".nav li").removeClass("active");
+        $('#upload').addClass('active');
+      });
+    </script>
+{% endblock post_js %}

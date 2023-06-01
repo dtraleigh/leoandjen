@@ -24,7 +24,7 @@
       </p>
       {% for shot in most_recent %}
         <a href="/videos/recent/video/{{ shot.id }}">
-          <img class="album-poster-recent" src="{{ MEDIA_URL }}{{ shot.poster }}">
+          <img class="album-poster-recent" src="{{ shot.poster.url }}">
         </a>
       {% endfor %}
     </div>
@@ -34,7 +34,7 @@
     <div class="row well well-lg">
       <div class="col-md-4 col-sm-4 col-xs-12">
         <a href="/videos/album/{{ album.id }}">
-          <img src="{{ MEDIA_URL }}/{{ album.poster }}"
+          <img src="{{ album.poster.url }}"
                class="img-responsive center-block" />
         </a>
       </div>
