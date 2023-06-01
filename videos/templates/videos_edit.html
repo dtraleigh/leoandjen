@@ -116,20 +116,22 @@
     </div>
   </div>
   <!-- End shot edit form -->
-  <script>
-$(document).ready(function(){
-{%for qloc in quick_locations%}
-        $("#{{qloc.html_id}}").click(function() {
-          $("#id_lon").val({{qloc.lon}});
-          $("#id_lat").val({{qloc.lat}});
-        });
-{%endfor%}
-{%for qloc in quick_locations%}
-        $("#{{qloc.html_id}}_vr").click(function() {
-          $("#id_lon_vr").val({{qloc.lon}});
-          $("#id_lat_vr").val({{qloc.lat}});
-        });
-{%endfor%}
-});
-  </script>
 {% endblock content %}
+{% block post_js %}
+  <script>
+  $(document).ready(function(){
+  {%for qloc in quick_locations%}
+          $("#{{qloc.html_id}}").click(function() {
+            $("#id_lon").val({{qloc.lon}});
+            $("#id_lat").val({{qloc.lat}});
+          });
+  {%endfor%}
+  {%for qloc in quick_locations%}
+          $("#{{qloc.html_id}}_vr").click(function() {
+            $("#id_lon_vr").val({{qloc.lon}});
+            $("#id_lat_vr").val({{qloc.lat}});
+          });
+  {%endfor%}
+  });
+  </script>
+{% endblock post_js %}
