@@ -25,7 +25,7 @@
                   {% elif recent_view %}
                     <a href="/videos/recent/video/{{ prev_video.id }}" class="thumbnail">
                     {% endif %}
-                    <img src="{{ MEDIA_URL }}/{{ prev_video.poster }}" alt="...">
+                    <img src="{{ prev_video.poster.url }}" alt="...">
                   </a>
                 </div>
               </div>
@@ -57,7 +57,7 @@
                           {% elif recent_view %}
                             <a href="/videos/recent/video/{{ next_video.id }}" class="thumbnail">
                             {% endif %}
-                            <img src="{{ MEDIA_URL }}/{{ next_video.poster }}" alt="...">
+                            <img src="{{ next_video.poster.url }}" alt="...">
                           </a>
                         </div>
                       </div>

@@ -15,7 +15,7 @@
               <a href="/videos/tag/{{ the_tag.name }}/external/{{ video.id }}">
               {% endif %}
               <div class="album-poster"
-                   style="background-image:url({{ MEDIA_URL }}/{{ video.poster }})"></div>
+                   style="background-image:url({{ video.poster.url }})"></div>
             </a>
             <h4>{{ video.name }}</h4>
             {% autoescape off %}
