@@ -1,0 +1,11 @@
+    <script>
+      window.SILVERMINE_VIDEOJS_CHROMECAST_CONFIG = {
+        preloadWebComponents: true,
+      };
+    </script>
+    {% load static %}
+    <script src="{% static "videojs-chromecast/silvermine-videojs-chromecast.min.js" %}"></script>
+    <script>
+      var player = videojs(document.getElementById('my-video'));
+      player.chromecast();
+    </script>

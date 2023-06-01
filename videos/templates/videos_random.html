@@ -71,16 +71,7 @@
 
 {% block pre_js %}
   	<script src="{% static "video.js7.10.2/video.min.js" %}"></script>
-    <script>
-       window.SILVERMINE_VIDEOJS_CHROMECAST_CONFIG = {
-          preloadWebComponents: true,
-       };
-    </script>
-    <script src="{% static "videojs-chromecast/silvermine-videojs-chromecast.min.js" %}"></script>
-  <script>
-    var player = videojs(document.getElementById('my-video'));
-    player.chromecast();
-  </script>
+    {% include "chromecast.html" %}
   <script>
     var customLat = {{ video.lat }}
     var customLon = {{ video.lon }}
