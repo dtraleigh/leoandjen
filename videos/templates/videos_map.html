@@ -1,38 +1,44 @@
-{% extends "videos_base.html" %}
-{% block additional_css %}
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-    }
-    .leaflet-container {
-      height: 100%;
-    }
-  </style>
-  {% load static %}
-  <link rel="stylesheet" href="{% static "leaflet1.6.0/leaflet.css" %}" />
-  <link rel="stylesheet" href="{% static "markercluster/MarkerCluster.css" %}" />
-  <link rel="stylesheet" href="{% static "markercluster/MarkerCluster.Default.css" %}" />
-{% endblock additional_css%}
-{% block content %}
-  <div id="map" class="map_full"></div>
-{% endblock content%}
-{% block post_js %}
-  <script>
-    var customLat = (function () { return; })();
-    var customLon = (function () { return; })();
-  </script>
-  <script>
-    var video_map_data = {{video_map_data|safe}}
-    var external_map_data = {{external_map_data|safe}}
-  </script>
-  <script>
-    $(document).ready(function () {
-      $(".nav li").removeClass("active");
-      $('#nav-map').addClass('active');
-    });
-  </script>
-  <script src="{% static "leaflet1.6.0/leaflet.js"%}"></script>
-  <script src="{% static "markercluster/leaflet.markercluster.js"%}"></script>
-  <script src="{% static "js/videos_leaflet_map_custom.js"%}"></script>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Video Map</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+      }
+      .leaflet-container {
+        height: 100%;
+      }
+    </style>
+    {% load static %}
+    <link href="{% static "css/video-custom.css" %}" rel="stylesheet">
+    <link href="{% static "bootstrap3.3.7/bootstrap.min.css" %}" rel="stylesheet">
+    {% include "videos_leaflet_head.html" %}
+  </head>
+  <body>
+    {% include "nav.html" %}
+    <div id="map" class="map_full"></div>
+    <script type="text/javascript">
+        var customLat = (function () { return; })();
+        var customLon = (function () { return; })();
+    </script>
+    <script type="text/javascript">
+        var video_map_data = {{video_map_data|safe}}
+        var external_map_data = {{external_map_data|safe}}
+    </script>
+    <script src="{% static "js/videos_leaflet_map_custom.js"%}"></script>
+    <script src="/static/js/jquery1.11.3/jquery.min.js"></script>
+    <script src="/static/js/jquery-ui1.12.1/jquery-ui.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $(".nav li").removeClass("active");
+        $('#nav-map').addClass('active');
+      });
+    </script>
+  </body>
+</html>
