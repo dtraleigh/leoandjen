@@ -103,8 +103,7 @@ if env("DJANGO_DEBUG") == "1":
     MEDIA_ROOT = os.path.join(BASE_DIR, "static/uploads/")
 else:
     STATIC_ROOT = "/home/cophead567/apps/leoandjen_static"
-    # MEDIA_ROOT = BASE_DIR / "uploads"
-    MEDIA_ROOT = "/home/cophead567/apps/leoandjen_static/uploads/"
+    MEDIA_ROOT = BASE_DIR / "uploads"
     MEDIA_URL = "/uploads/"
 
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"

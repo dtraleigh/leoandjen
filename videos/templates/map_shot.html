@@ -88,28 +88,20 @@
       </div>
     {% endblock content %}
 
-{% block additional_js %}
+{% block pre_js %}
   	<script src="{% static "video.js7.10.2/video.min.js" %}"></script>
-    <script>
-       window.SILVERMINE_VIDEOJS_CHROMECAST_CONFIG = {
-          preloadWebComponents: true,
-       };
-    </script>
-    <script src="{% static "videojs-chromecast/silvermine-videojs-chromecast.min.js" %}"></script>
-  <script>
-    var player = videojs(document.getElementById('my-video'));
-    player.chromecast();
-  </script>
+    {% include "chromecast.html" %}
   <script>
     var customLat = {{ video.lat }}
     var customLon = {{ video.lon }}
   </script>
-  <script type="text/javascript">
+  <script>
     var video_map_data = {{video_map_data|safe}}
 	var external_map_data = {{external_map_data|safe}}
   </script>
+{% endblock pre_js %}
+{% block post_js %}
   <script src="{% static "leaflet1.6.0/leaflet.js"%}"></script>
   <script src="{% static "markercluster/leaflet.markercluster.js"%}"></script>
   <script src="{% static "js/videos_leaflet_map_custom.js"%}"></script>
-{% endblock additional_js %}
-
+{% endblock post_js %}
