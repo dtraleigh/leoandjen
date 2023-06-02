@@ -130,16 +130,6 @@ class Capital(models.Model):
         return f"{self.name}"
 
     @property
-    def get_us_capital_visited_order_position(self):
-        # With all the US capitals ordered by -date_visited, return the placement of this capital. Return it as a string
-        us_capitals_by_date_visited = \
-            [cap for cap in Capital.objects.exclude(us_state="").order_by("date_visited")]
-        try:
-            return str(us_capitals_by_date_visited.index(self) + 1)
-        except ValueError:
-            return None
-
-    @property
     def is_us_capital(self):
         if self.us_state == "":
             return False

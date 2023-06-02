@@ -15,6 +15,10 @@ else:
 
 ALLOWED_HOSTS = ["127.0.0.1", "leoandjen.com", "www.leoandjen.com"]
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -24,7 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "widget_tweaks",
-    # "corsheaders",
+    "debug_toolbar",
     "ckeditor",
     "movies",
     "capitals",
@@ -33,6 +37,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

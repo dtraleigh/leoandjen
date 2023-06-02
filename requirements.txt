@@ -10,6 +10,7 @@ colorama==0.4.6
 cssbeautifier==1.14.7
 Django==4.1.8
 django-ckeditor==6.5.1
+django-debug-toolbar==4.1.0
 django-environ==0.10.0
 django-extensions==3.2.1
 django-js-asset==2.0.0
@@ -39,4 +40,5 @@ tomli==2.0.1
 tqdm==4.65.0
 tzdata==2023.3
 urllib3==1.26.16
+us==2.0.2
 uWSGI==2.0.21
