@@ -117,6 +117,9 @@ else:
     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
     AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME")
     AWS_QUERYSTRING_EXPIRE = 300
+    AWS_S3_CUSTOM_DOMAIN = "d2iokg5xf8f841.cloudfront.net"
+    AWS_CLOUDFRONT_KEY = env.str("AWS_CLOUDFRONT_KEY", multiline=True).encode("ascii").strip()
+    AWS_CLOUDFRONT_KEY_ID = env.str("AWS_CLOUDFRONT_KEY_ID").strip()
 
 # Add individual app static folders here if needed.
 # STATICFILES_DIRS = [
