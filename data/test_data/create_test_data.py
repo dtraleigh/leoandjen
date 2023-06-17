@@ -12,6 +12,12 @@ def create_test_data_water():
             obj.save()
 
 
+def create_test_data_elec_rates():
+    with open("data/test_data/test_data_ElectricRateSchedule.json") as jsonfile:
+        for obj in serializers.deserialize("json", jsonfile):
+            obj.save()
+
+
 def create_test_data_elec():
     with open("data/test_data/test_data_Electricity.json") as jsonfile:
         for obj in serializers.deserialize("json", jsonfile):
