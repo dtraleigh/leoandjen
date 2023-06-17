@@ -1,5 +1,5 @@
 import decimal
-from datetime import timedelta
+from datetime import timedelta, datetime
 from decimal import Decimal
 
 from django.db import models
@@ -56,6 +56,29 @@ class SolarEnergy(models.Model):
         return f"{self.date_of_production} ({self.id})"
 
 
+class ElectricRateSchedule(models.Model):
+    submit_date = models.DateField(auto_now_add=True)
+    comments = models.CharField(max_length=200)
+    schedule_start_date = models.DateField()
+    schedule_end_date = models.DateField()
+    energy_charge_per_kwh = models.DecimalField(max_digits=9,
+                                                decimal_places=8,
+                                                blank=True, null=True,
+                                                verbose_name="Energy Charge per kWh")
+    storm_recover_cost_per_kwh = models.DecimalField(max_digits=9,
+                                                     decimal_places=8,
+                                                     blank=True, null=True,
+                                                     verbose_name="Storm Recovery Cost per kWh")
+
+    class Meta:
+        verbose_name_plural = "Electricity Rate Schedules"
+        ordering = ["schedule_start_date"]
+
+    def __str__(self):
+        return f"Schedule id: {self.id} ({self.schedule_start_date.month}-{self.schedule_start_date.year} to " \
+               f"{self.schedule_end_date.month}-{self.schedule_end_date.year})"
+
+
 class Electricity(models.Model):
     submit_date = models.DateField(auto_now_add=True)
     bill_date = models.DateField(blank=True, null=True)
@@ -64,16 +87,6 @@ class Electricity(models.Model):
     kWh_usage = models.IntegerField("Grid Energy Consumed")
     solar_amt_sent_to_grid = models.IntegerField("Solar Sent to Grid")
     net_metering_credit = models.IntegerField("Net Metering Balance", default=0)
-    energy_charge_per_kwh = models.DecimalField(max_digits=9,
-                                                decimal_places=8,
-                                                blank=True, null=True,
-                                                verbose_name="Energy Charge per kWh",
-                                                default=Decimal("0.11815"))
-    storm_recover_cost_per_kwh = models.DecimalField(max_digits=9,
-                                                     decimal_places=8,
-                                                     blank=True, null=True,
-                                                     verbose_name="Storm Recovery Cost per kWh",
-                                                     default=Decimal("0.00219"))
 
     class Meta:
         verbose_name_plural = "Electricity"
@@ -127,22 +140,36 @@ class Electricity(models.Model):
 
     @property
     def get_money_saved_by_solar(self):
+        from data.functions import get_days_energy_charge_per_kwh, get_days_storm_recover_cost_per_kwh
         # Returns as a Decimal rounded to 2 DP
         decimal.getcontext().rounding = decimal.ROUND_HALF_UP
 
         credited_solar = self.get_bill_before_this_one.net_metering_credit + self.solar_amt_sent_to_grid
-        billed_kWh = self.kWh_usage - credited_solar
-        if billed_kWh < 0:
-            this_bills_kWh_saved = self.kWh_usage
+        billed_kwh = self.kWh_usage - credited_solar
+        if billed_kwh < 0:
+            this_bills_kwh_saved = self.kWh_usage
         else:
-            this_bills_kWh_saved = credited_solar
+            this_bills_kwh_saved = credited_solar
 
-        try:
-            savings = (this_bills_kWh_saved * self.energy_charge_per_kwh) + \
-                  (this_bills_kWh_saved * self.storm_recover_cost_per_kwh)
-            return savings.quantize(Decimal("1.00"))
-        except TypeError:
-            return Decimal("0.00")
+        this_bills_kwh_saved_per_day = this_bills_kwh_saved / self.get_number_of_days.days
+
+        # try:
+        savings = Decimal("0.00")
+
+        increment_date = self.service_start_date
+        while increment_date != self.service_end_date + timedelta(days=1):
+            savings += Decimal(this_bills_kwh_saved_per_day) * \
+                       get_days_energy_charge_per_kwh(increment_date.month, increment_date.day, increment_date.year)
+            savings += Decimal(this_bills_kwh_saved_per_day) * \
+                       get_days_storm_recover_cost_per_kwh(increment_date.month, increment_date.day,
+                                                           increment_date.year)
+            increment_date += timedelta(days=1)
+
+        # savings = (this_bills_kwh_saved * self.energy_charge_per_kwh) + \
+        #           (this_bills_kwh_saved * self.storm_recover_cost_per_kwh)
+        return savings.quantize(Decimal("1.00"))
+        # except TypeError:
+        #     return Decimal("0.00")
 
 
 class Gas(models.Model):

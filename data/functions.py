@@ -424,3 +424,17 @@ def get_car_miles_all_ytd_avg(custom_most_recent=None):
             data.latest("reading_date").odometer_reading - data.earliest("reading_date").odometer_reading)
 
     return round(get_average(prev_years_values))
+
+
+def get_days_energy_charge_per_kwh(month, day, year):
+    dt_obj = datetime(year, month, day)
+    rate_schedule = ElectricRateSchedule.objects.get(schedule_start_date__lte=dt_obj, schedule_end_date__gte=dt_obj)
+
+    return rate_schedule.energy_charge_per_kwh
+
+
+def get_days_storm_recover_cost_per_kwh(month, day, year):
+    dt_obj = datetime(year, month, day)
+    rate_schedule = ElectricRateSchedule.objects.get(schedule_start_date__lte=dt_obj, schedule_end_date__gte=dt_obj)
+
+    return rate_schedule.storm_recover_cost_per_kwh

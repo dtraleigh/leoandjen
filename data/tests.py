@@ -17,6 +17,7 @@ class DataSimpleTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         create_test_data_water()
+        create_test_data_elec_rates()
         create_test_data_elec()
         create_test_data_gas()
         create_test_data_vmt()
@@ -24,8 +25,8 @@ class DataSimpleTestCase(TestCase):
     def test_clean_year_range_request(self):
         from data.functions import clean_year_range_request
         self.assertEqual(clean_year_range_request(None, "Electricity"), "2021-2023")
-        self.assertEqual(clean_year_range_request("all", "Electricity"), "2021-2023")
-        self.assertEqual(clean_year_range_request("ALL", "Electricity"), "2021-2023")
+        self.assertEqual(clean_year_range_request("all", "Electricity"), "2015-2023")
+        self.assertEqual(clean_year_range_request("ALL", "Electricity"), "2015-2023")
         self.assertEqual(clean_year_range_request("2022", "Electricity"), "2022")
         self.assertEqual(clean_year_range_request("2000", "Electricity"), "2000")
         self.assertEqual(clean_year_range_request("all", "CarMiles"), "2020-2023")
@@ -44,13 +45,15 @@ class DataSimpleTestCase(TestCase):
         from decimal import Decimal
 
         from data.models import Electricity
-        bill1 = Electricity.objects.create(bill_date=datetime(2000, 2, 10),
+        bill1 = Electricity.objects.create(id=10000,
+                                           bill_date=datetime(2000, 2, 10),
                                            service_start_date=datetime(2000, 1, 11),
                                            service_end_date=datetime(2000, 2, 8),
                                            kWh_usage=333,
                                            solar_amt_sent_to_grid=222,
                                            net_metering_credit=0)
-        bill2 = Electricity.objects.create(bill_date=datetime(2000, 3, 13),
+        bill2 = Electricity.objects.create(id=10001,
+                                           bill_date=datetime(2000, 3, 13),
                                            service_start_date=datetime(2000, 2, 9),
                                            service_end_date=datetime(2000, 3, 9),
                                            kWh_usage=100,
@@ -66,13 +69,15 @@ class DataSimpleTestCase(TestCase):
         from decimal import Decimal
 
         from data.models import Electricity
-        bill1 = Electricity.objects.create(bill_date=datetime(2000, 2, 10),
+        bill1 = Electricity.objects.create(id=10002,
+                                           bill_date=datetime(2000, 2, 10),
                                            service_start_date=datetime(2000, 1, 11),
                                            service_end_date=datetime(2000, 2, 8),
                                            kWh_usage=333,
                                            solar_amt_sent_to_grid=222,
                                            net_metering_credit=20)
-        bill2 = Electricity.objects.create(bill_date=datetime(2000, 3, 13),
+        bill2 = Electricity.objects.create(id=10003,
+                                           bill_date=datetime(2000, 3, 13),
                                            service_start_date=datetime(2000, 2, 9),
                                            service_end_date=datetime(2000, 3, 9),
                                            kWh_usage=100,
@@ -88,13 +93,15 @@ class DataSimpleTestCase(TestCase):
         from decimal import Decimal
 
         from data.models import Electricity
-        bill1 = Electricity.objects.create(bill_date=datetime(2000, 2, 10),
+        bill1 = Electricity.objects.create(id=10004,
+                                           bill_date=datetime(2000, 2, 10),
                                            service_start_date=datetime(2000, 1, 11),
                                            service_end_date=datetime(2000, 2, 8),
                                            kWh_usage=333,
                                            solar_amt_sent_to_grid=222,
                                            net_metering_credit=120)
-        bill2 = Electricity.objects.create(bill_date=datetime(2000, 3, 13),
+        bill2 = Electricity.objects.create(id=10005,
+                                           bill_date=datetime(2000, 3, 13),
                                            service_start_date=datetime(2000, 2, 9),
                                            service_end_date=datetime(2000, 3, 9),
                                            kWh_usage=100,
@@ -110,13 +117,15 @@ class DataSimpleTestCase(TestCase):
         from decimal import Decimal
 
         from data.models import Electricity
-        bill1 = Electricity.objects.create(bill_date=datetime(2000, 2, 10),
+        bill1 = Electricity.objects.create(id=10006,
+                                           bill_date=datetime(2000, 2, 10),
                                            service_start_date=datetime(2000, 1, 11),
                                            service_end_date=datetime(2000, 2, 8),
                                            kWh_usage=333,
                                            solar_amt_sent_to_grid=222,
                                            net_metering_credit=0)
-        bill2 = Electricity.objects.create(bill_date=datetime(2000, 3, 13),
+        bill2 = Electricity.objects.create(id=10007,
+                                           bill_date=datetime(2000, 3, 13),
                                            service_start_date=datetime(2000, 2, 9),
                                            service_end_date=datetime(2000, 3, 9),
                                            kWh_usage=50,
@@ -132,13 +141,15 @@ class DataSimpleTestCase(TestCase):
         from decimal import Decimal
 
         from data.models import Electricity
-        bill1 = Electricity.objects.create(bill_date=datetime(2000, 2, 10),
+        bill1 = Electricity.objects.create(id=10008,
+                                           bill_date=datetime(2000, 2, 10),
                                            service_start_date=datetime(2000, 1, 11),
                                            service_end_date=datetime(2000, 2, 8),
                                            kWh_usage=333,
                                            solar_amt_sent_to_grid=222,
                                            net_metering_credit=50)
-        bill2 = Electricity.objects.create(bill_date=datetime(2000, 3, 13),
+        bill2 = Electricity.objects.create(id=10009,
+                                           bill_date=datetime(2000, 3, 13),
                                            service_start_date=datetime(2000, 2, 9),
                                            service_end_date=datetime(2000, 3, 9),
                                            kWh_usage=50,
@@ -154,13 +165,15 @@ class DataSimpleTestCase(TestCase):
         from decimal import Decimal
 
         from data.models import Electricity
-        bill1 = Electricity.objects.create(bill_date=datetime(2000, 2, 10),
+        bill1 = Electricity.objects.create(id=10010,
+                                           bill_date=datetime(2000, 2, 10),
                                            service_start_date=datetime(2000, 1, 11),
                                            service_end_date=datetime(2000, 2, 8),
                                            kWh_usage=333,
                                            solar_amt_sent_to_grid=222,
                                            net_metering_credit=50)
-        bill2 = Electricity.objects.create(bill_date=datetime(2000, 3, 13),
+        bill2 = Electricity.objects.create(id=10011,
+                                           bill_date=datetime(2000, 3, 13),
                                            service_start_date=datetime(2000, 2, 9),
                                            service_end_date=datetime(2000, 3, 9),
                                            kWh_usage=150,
@@ -211,26 +224,6 @@ class DataSimpleTestCase(TestCase):
                               'solar_produced': Decimal('0.00'), 'solar_sent_to_grid': Decimal('0.00'),
                               'grid_energy_consumed': Decimal('850.10'), 'daily_consumption': Decimal('27.42')}]
         self.assertEqual(elec2022.get_data_points(), expected_for_2022)
-
-    # def test_elec_get_ytd_totals(self):
-    #     from data.functions import get_elec_dashboard_data
-    #     data = get_elec_dashboard_data(datetime(2023, 2, 13))
-    #     self.assertEqual(data["ytd_total"], 664.65)
-    #     self.assertEqual(data["prev_ytd"], 937.78)
-    #     self.assertEqual(data["all_ytd_avg"], 507)
-    #     self.assertEqual(data["ytd_total"], 664.65)
-
-    def test_elec_get_total_solar_produced_by_month(self):
-        # Need to wait until I have more real data to play with
-        pass
-
-    def test_elec_get_months_solar_sent_to_grid(self):
-        # Need to wait until I have more real data to play with
-        pass
-
-    def test_elec_get_months_grid_energy_consumed(self):
-        # Need to wait until I have more real data to play with
-        pass
 
     def test_car_miles_yearly_totals(self):
         vmt2020 = VehicleMilesTraveledYear(2020, "color")

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from data.models import Water, SolarEnergy, Electricity, Gas, CarMiles
+from data.models import Water, SolarEnergy, Electricity, Gas, CarMiles, ElectricRateSchedule
 
 
 class WaterAdmin(admin.ModelAdmin):
@@ -28,8 +28,13 @@ class CarMilesAdmin(admin.ModelAdmin):
     list_display = [field.name for field in CarMiles._meta.get_fields()]
 
 
+class ElectricRateScheduleAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ElectricRateSchedule._meta.get_fields()]
+
+
 admin.site.register(Water, WaterAdmin)
 admin.site.register(SolarEnergy, SolarAdmin)
 admin.site.register(Electricity, ElectricityAdmin)
 admin.site.register(Gas, GasAdmin)
 admin.site.register(CarMiles, CarMilesAdmin)
+admin.site.register(ElectricRateSchedule, ElectricRateScheduleAdmin)
