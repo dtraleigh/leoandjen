@@ -2,7 +2,7 @@ from calendar import monthrange
 from datetime import datetime
 from decimal import Decimal
 
-from django.db.models import Q
+from django.db.models import Q, Sum
 
 from data.models import Electricity, SolarEnergy
 
@@ -54,23 +54,25 @@ class ElecYear:
             for month in data_points:
                 month["solar_sent_to_grid"] += round(self.get_months_solar_sent_to_grid(bill, month["month_number"]), 2)
                 month["grid_energy_consumed"] = round(month["grid_energy_consumed"] +
-                                                      self.get_months_grid_energy_consumed(bill, month["month_number"]), 2)
-
-        # For these two, no need to go through each bill
-        for month in data_points:
-            month["solar_produced"] += self.get_total_solar_produced_by_month(month["month_number"])
-
-            # Total House energy = Grid Energy Consumed + Solar Produced - Solar energy sent to grid
-            month["value"] += round(month["grid_energy_consumed"] + month["solar_produced"] - month["solar_sent_to_grid"], 2)
-
-            # Daily consumption per month is month["value"] / month["days_in_month"]
-            month["daily_consumption"] = round(month["value"] / month["days_in_month"], 2)
+                                                      self.get_months_grid_energy_consumed(bill, month["month_number"]),
+                                                      2)
 
         # Remove future months
         for month in list(data_points):
             if month["month_number"] > self.latest_data_point.service_end_date.month \
                     and int(self.year) >= self.latest_data_point.service_end_date.year:
                 data_points.remove(month)
+
+        # For these two, no need to go through each bill
+        for month in data_points:
+            month["solar_produced"] += self.get_total_solar_produced_by_month(month["month_number"])
+
+            # Total House energy = Grid Energy Consumed + Solar Produced - Solar energy sent to grid
+            month["value"] += round(
+                month["grid_energy_consumed"] + month["solar_produced"] - month["solar_sent_to_grid"], 2)
+
+            # Daily consumption per month is month["value"] / month["days_in_month"]
+            month["daily_consumption"] = round(month["value"] / month["days_in_month"], 2)
 
         return data_points
 
@@ -91,7 +93,11 @@ class ElecYear:
         solar_days = SolarEnergy.objects.filter(date_of_production__year=self.year,
                                                 date_of_production__month=month)
         # return as kilowatts hours
-        result = sum([day.production for day in solar_days]) / 1000
+        if solar_days:
+            result = solar_days.aggregate(Sum("production"))["production__sum"] / 1000
+        else:
+            result = Decimal("0.00")
+
         return Decimal(result).quantize(Decimal("1.00"))
 
     def get_months_solar_sent_to_grid(self, bill, month):
@@ -143,7 +149,9 @@ class ElecYear:
     def get_total_house_consumed(self):
         # Total House energy = grid_energy_consumed + solar_produced - solar_energy_sent_to_grid_kwh
         if self.readings:
-            return round(self.get_readings_kwh_total() + self.get_solar_produced_total() - self.get_solar_sent_to_grid_total(), 3)
+            return round(
+                self.get_readings_kwh_total() + self.get_solar_produced_total() - self.get_solar_sent_to_grid_total(),
+                3)
         return None
 
     def get_solar_bar_chart_dataset(self):
