@@ -120,7 +120,7 @@ class ElecYear:
             end = readings[-1].service_end_date
             date_str = f"{start.strftime('%b %d, %Y')} - {end.strftime('%b %d, %Y')}"
 
-            solar_savings = sum([t.get_money_saved_by_solar for t in self.readings])
+            solar_savings = sum([t.calculated_money_saved_by_solar for t in self.readings])
             savings_str = f"${solar_savings}"
 
             return [date_str, savings_str]
@@ -128,7 +128,7 @@ class ElecYear:
 
     def get_solar_savings_sum(self):
         if self.readings:
-            return sum([t.get_money_saved_by_solar for t in self.readings])
+            return sum([t.calculated_money_saved_by_solar for t in self.readings])
         return None
 
     def get_readings_kwh_total(self):
