@@ -78,12 +78,12 @@ class ElectricRateSchedule(models.Model):
         return f"Schedule id: {self.id} ({self.schedule_start_date.month}-{self.schedule_start_date.year} to " \
                f"{self.schedule_end_date.month}-{self.schedule_end_date.year})"
 
-    def save(self):
+    def save(self, *args, **kwargs):
         bills_from_2023_and_earlier = Electricity.objects.filter(service_end_date__year__gte=2023)
         for bill in bills_from_2023_and_earlier:
             bill.calculated_money_saved_by_solar = bill.get_money_saved_by_solar
-            bill.save()
-        super(ElectricRateSchedule, self).save()
+            bill.save(*args, **kwargs)
+        super(ElectricRateSchedule, self).save(*args, **kwargs)
 
 
 class Electricity(models.Model):
@@ -109,9 +109,12 @@ class Electricity(models.Model):
     def __str__(self):
         return f"{self.service_start_date} to {self.service_end_date} ({self.id})"
 
-    def save(self):
-        self.calculated_money_saved_by_solar = self.get_money_saved_by_solar
-        super(Electricity, self).save()
+    def save(self, *args, **kwargs):
+        try:
+            self.calculated_money_saved_by_solar = self.get_money_saved_by_solar
+        except ValueError:
+            self.calculated_money_saved_by_solar = Decimal("0.00")
+        super(Electricity, self).save(*args, **kwargs)
 
     @property
     def get_number_of_days(self):
