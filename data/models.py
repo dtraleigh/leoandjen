@@ -78,6 +78,13 @@ class ElectricRateSchedule(models.Model):
         return f"Schedule id: {self.id} ({self.schedule_start_date.month}-{self.schedule_start_date.year} to " \
                f"{self.schedule_end_date.month}-{self.schedule_end_date.year})"
 
+    def save(self):
+        bills_from_2023_and_earlier = Electricity.objects.filter(service_end_date__year__gte=2023)
+        for bill in bills_from_2023_and_earlier:
+            bill.calculated_money_saved_by_solar = bill.get_money_saved_by_solar
+            bill.save()
+        super(ElectricRateSchedule, self).save()
+
 
 class Electricity(models.Model):
     submit_date = models.DateField(auto_now_add=True)
