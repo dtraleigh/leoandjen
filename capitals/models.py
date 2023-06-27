@@ -138,7 +138,9 @@ class Capital(models.Model):
 
 class Photo(models.Model):
     name = models.CharField(max_length=200)
-    photo_file = models.ImageField(upload_to="photos/")
+    photo_file = models.ImageField(upload_to="photos/", height_field="photo_height", width_field="photo_width")
+    photo_width = models.IntegerField()
+    photo_height = models.IntegerField()
     capital = models.ForeignKey(Capital, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
