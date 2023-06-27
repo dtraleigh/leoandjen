@@ -43,7 +43,7 @@
                       itemtype="https://schema.org/ImageObject">
                 <a href="{{ photo.photo_file.url }}"
                    itemprop="contentUrl"
-                   data-size="{{ photo.photo_file.width }}x{{ photo.photo_file.height }}">
+                   data-size="{{ photo.photo_width }}x{{ photo.photo_height }}">
                   <img src="{{ photo.photo_file.url }}"
                        itemprop="thumbnail"
                        alt="Image description" />
