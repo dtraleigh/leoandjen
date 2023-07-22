@@ -1,8 +1,12 @@
 import decimal
+import logging
 from datetime import timedelta, datetime
 from decimal import Decimal
 
+from django.contrib import admin
 from django.db import models
+
+logger = logging.getLogger("django")
 
 
 class Water(models.Model):
@@ -112,7 +116,8 @@ class Electricity(models.Model):
     def save(self, *args, **kwargs):
         try:
             self.calculated_money_saved_by_solar = self.get_money_saved_by_solar
-        except ValueError:
+        except ValueError as e:
+            logger.exception(e)
             self.calculated_money_saved_by_solar = Decimal("0.00")
         super(Electricity, self).save(*args, **kwargs)
 
@@ -153,8 +158,12 @@ class Electricity(models.Model):
     @property
     def get_bill_before_this_one(self):
         bills = Electricity.objects.all()
-        this_bills_index = [x for x in bills].index(self)
-        return [x for x in bills][this_bills_index - 1]
+        try:
+            this_bills_index = [x for x in bills].index(self)
+            return [x for x in bills][this_bills_index - 1]
+        except ValueError:
+            # When creating a new bill, it doesn't exist yet to be in bills
+            return [x for x in bills][-1]
 
     @property
     def get_money_saved_by_solar(self):
