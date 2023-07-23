@@ -1,9 +1,9 @@
 from movies.api import query_tmdb, query_tmdb_by_imdb_id
 from movies.functions import update_characters, update_directors
-from movies.models import Format, Movie
+from movies.models import Format, Movie, Collection
 
 
-def add_movie_from_form(imdb_id, is_tv_movie, letterboxd_slug, formats, sort_title):
+def add_movie_from_form(imdb_id, is_tv_movie, letterboxd_slug, formats, sort_title, collections):
     if Movie.objects.filter(imdb_id=imdb_id).exists():
         return None, "Movie already in the database"
 
@@ -43,6 +43,9 @@ def add_movie_from_form(imdb_id, is_tv_movie, letterboxd_slug, formats, sort_tit
                                      letterboxd_url_slug=letterboxd_url_slug)
     for f in formats:
         new_movie.formats.add(Format.objects.get(name=f))
+
+    for collection_name in collections:
+        Collection.objects.get(name=collection_name).movies.add(new_movie)
 
     update_directors(new_movie)
     update_characters(new_movie)
