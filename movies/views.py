@@ -270,8 +270,16 @@ def add_movie(request):
             letterboxd_slug = form.cleaned_data["letterboxd_slug"]
             formats = form.cleaned_data["formats"]
             sort_title = form.cleaned_data["sort_title"]
+            collections = form.cleaned_data["collections"]
 
-            new_movie, output_message = add_movie_from_form(imdb_id, is_tv_movie, letterboxd_slug, formats, sort_title)
+            new_movie, output_message = add_movie_from_form(
+                                                                imdb_id,
+                                                                is_tv_movie,
+                                                                letterboxd_slug,
+                                                                formats,
+                                                                sort_title,
+                                                                collections
+                                                            )
             messages.info(request, output_message)
 
             return HttpResponseRedirect("/movies/add-movie/")

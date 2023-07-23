@@ -1,10 +1,14 @@
 from django import forms
 
-from movies.models import Format
+from movies.models import Format, Collection
 
 FORMATS = []
-for count, movie_format in enumerate([f for f in Format.objects.all()]):
+for movie_format in [f for f in Format.objects.all()]:
     FORMATS.append((movie_format.name, movie_format.name))
+
+COLLECTIONS = []
+for collection in [c for c in Collection.objects.all()]:
+    COLLECTIONS.append((collection.name, collection.name))
 
 
 class AddMovieForm(forms.Form):
@@ -13,3 +17,7 @@ class AddMovieForm(forms.Form):
     is_tv_movie = forms.BooleanField(label="TV Movie?", required=False)
     letterboxd_slug = forms.CharField(label="Letterboxd slug", max_length=200)
     sort_title = forms.CharField(label="Sort Title", max_length=50, required=False)
+    collections = forms.MultipleChoiceField(label="Collections",
+                                            required=False,
+                                            choices=COLLECTIONS,
+                                            widget=forms.CheckboxSelectMultiple())

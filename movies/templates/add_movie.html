@@ -46,6 +46,11 @@
           <label for="{{ form.formats.id_for_label }}">Formats:</label>
           {{ form.formats }}
         </div>
+        <div class="fieldWrapper">
+          {{ form.collections.errors }}
+          <label for="{{ form.collections.id_for_label }}">Collections:</label>
+          {{ form.collections }}
+        </div>
         <input type="submit" value="Submit">
       </form>
     </div>
