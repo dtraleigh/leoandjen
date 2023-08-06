@@ -323,6 +323,7 @@ def get_elec_dashboard_data(current_date=datetime.now()):
     # For each year, create an ElecYear class
     elec_year_objects = [ElecYear(year, "") for year in all_elec_years]
 
+    data["ytd_total"] = elec_year_objects[-1].get_ytd_total()
     data["prev_ytd"] = elec_year_objects[-2].get_ytd_total()
     data["all_ytd_avg"] = round(get_average([y.get_ytd_total() for y in elec_year_objects[:-1]]))
 
