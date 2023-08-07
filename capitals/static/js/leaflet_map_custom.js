@@ -107,8 +107,13 @@ geojson = L.geoJson(statesData, {
 }).addTo(map);
 
 //*** Let's add US capital cities
-var awesomeMarker;
+//var awesomeMarker;
 var capital_popup = "Capital Name";
+var usCapitalIcon = L.icon({
+    iconUrl: usCapitalIconUrl,
+    iconSize: [10, 15],
+    iconAnchor: [5, 15],
+});
 
 for (var city in cities) {
     if (us_visited_cities.includes(cities[city].city_name) == true){
@@ -118,27 +123,35 @@ for (var city in cities) {
     }
     L.marker(
         [cities[city].latitude, cities[city].longitude],
-        {
-            // icon: awesomeMarker,
-            icon: L.AwesomeMarkers.icon({icon: 'star', prefix: 'fa', markerColor: 'cadetblue', iconColor: '#fff'}),
+        {icon: usCapitalIcon}
+        /*{
+            icon: awesomeMarker,
+            //icon: L.AwesomeMarkers.icon({icon: 'star', prefix: 'fa', markerColor: 'cadetblue', iconColor: '#fff'}),
             riseOnHover: true,
             title: cities[city].city_name + ', ' + cities[city].state_code
-        }
+        }*/
     )
     .addTo(map)
     .bindPopup(capital_popup);
 
 }
+//*** Let's add National capital cities
+var nationalCapitalIcon = L.icon({
+    iconUrl: nationalCapitalIconUrl,
+    iconSize: [10, 15],
+    iconAnchor: [5, 15],
+});
 
 for (var capital in country_capitals) {
     L.marker(
         [country_capitals[capital].fields.lat, country_capitals[capital].fields.lon],
-        {
+        {icon: nationalCapitalIcon}
+        /*{
             // icon: awesomeMarker,
             icon: L.AwesomeMarkers.icon({icon: 'star', prefix: 'fa', markerColor: 'red', iconColor: '#fff'}),
             riseOnHover: true,
             title: country_capitals[capital].fields.name
-        }
+        }*/
     )
     .addTo(map)
     .bindPopup(country_capitals[capital].fields.name + " [<a href=\"/capitals/capital/" + country_capitals[capital].fields.name + "\">📸</a>]");

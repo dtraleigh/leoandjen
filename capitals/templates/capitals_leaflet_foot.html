@@ -1,6 +1,5 @@
 <!-- Javascript/css for leaflet map -->
 {% load static %}
-<link rel="stylesheet" href="{% static "fontawesome-5.6.3/css/all.css" %}">
 <script type="text/javascript" src="{% static "js/us-states.js"%}"></script>
 <script type="text/javascript" src="{% static "js/us-capitals.js"%}"></script>
 <link rel="stylesheet" href="{% static "css/leaflet.awesome-markers.css" %}">
@@ -9,5 +8,7 @@
     var visited_states = {{us_visited_states|safe}}
     var us_visited_cities = {{us_visited_cities|safe}}
     var country_capitals = {{other_capitals_json|safe}}
+    var usCapitalIconUrl = "{% static "leaflet/images/marker-icon.png" %}";
+    var nationalCapitalIconUrl = "{% static "leaflet/images/marker-icon-red.png" %}";
 </script>
 <script src="{% static "js/leaflet_map_custom.js"%}"></script>
