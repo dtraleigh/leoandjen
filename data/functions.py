@@ -238,7 +238,6 @@ def get_trending_info(ytd_total, all_ytd_avg):
 
 
 def get_gas_dashboard_data(current_date=datetime.now()):
-    # initial data structure
     data = {
         "ytd_total": None,
         "prev_ytd": None,
@@ -269,7 +268,6 @@ def get_gas_dashboard_data(current_date=datetime.now()):
 
 
 def get_water_dashboard_data(current_date=datetime.now()):
-    # initial data structure
     data = {
         "ytd_total": None,
         "prev_ytd": None,
@@ -300,7 +298,6 @@ def get_water_dashboard_data(current_date=datetime.now()):
 
 
 def get_elec_dashboard_data(current_date=datetime.now()):
-    # initial data structure
     data = {
         "ytd_total": None,
         "prev_ytd": None,
@@ -334,7 +331,6 @@ def get_elec_dashboard_data(current_date=datetime.now()):
 
 
 def get_vmt_dashboard_data():
-    # initial data structure
     data = {"ytd_total": get_car_miles_ytd_total(),
             "prev_ytd": get_car_miles_prev_ytd(),
             "all_ytd_avg": get_car_miles_all_ytd_avg(),
