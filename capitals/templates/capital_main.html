@@ -4,14 +4,13 @@
     {% include "capitals_dashboard.html" %}
     <div class="pagination">
       <span class="step-links">
+        {% load static %}
         {% if page_obj.has_previous %}
-          <a href="?page=1"><i class="fas fa-angle-double-left"></i>  </a>
-          <a href="?page={{ page_obj.previous_page_number }}"><i class="fas fa-angle-left"></i> </a>
+          <a href="?page={{ page_obj.previous_page_number }}"><img src="{% static "img/back.png" %}" class="pagination-nav-icon"></a>
         {% endif %}
         <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
         {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}"><i class="fas fa-angle-right"></i> </a>
-          <a href="?page={{ page_obj.paginator.num_pages }}">  <i class="fas fa-angle-double-right"></i></a>
+          <a href="?page={{ page_obj.next_page_number }}"><img src="{% static "img/next.png" %}" class="pagination-nav-icon"></a>
         {% endif %}
       </span>
     </div>
@@ -20,14 +19,13 @@
     {% endfor %}
     <div class="pagination">
       <span class="step-links">
+        {% load static %}
         {% if page_obj.has_previous %}
-          <a href="?page=1"><i class="fas fa-angle-double-left"></i>  </a>
-          <a href="?page={{ page_obj.previous_page_number }}"><i class="fas fa-angle-left"></i> </a>
+          <a href="?page={{ page_obj.previous_page_number }}"><img src="{% static "img/back.png" %}" class="pagination-nav-icon"></a>
         {% endif %}
         <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
         {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}"><i class="fas fa-angle-right"></i> </a>
-          <a href="?page={{ page_obj.paginator.num_pages }}">  <i class="fas fa-angle-double-right"></i></a>
+          <a href="?page={{ page_obj.next_page_number }}"><img src="{% static "img/next.png" %}" class="pagination-nav-icon"></a>
         {% endif %}
       </span>
     </div>
