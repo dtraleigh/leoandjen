@@ -7,6 +7,7 @@ from django.apps import apps
 from django.core.exceptions import FieldError
 from django.db.models import Q
 
+import data.models
 from data.models import *
 from data.year_elec import ElecYear
 from data.year_gas import GasYear
@@ -405,13 +406,37 @@ def get_car_miles_all_ytd_avg(custom_most_recent=None):
 
 def get_days_energy_charge_per_kwh(month, day, year):
     dt_obj = datetime(year, month, day)
-    rate_schedule = ElectricRateSchedule.objects.get(schedule_start_date__lte=dt_obj, schedule_end_date__gte=dt_obj)
+    elec_bill = Electricity.objects.get(service_start_date__lte=dt_obj, service_end_date__gte=dt_obj)
+    try:
+        rate_schedule = ElectricRateSchedule.objects.get(electricity_bills=elec_bill)
+    except Exception as e:
+        logger.debug(e)
+        logger.debug(f"Check get_days_energy_charge_per_kwh({month}, {day}, {year})")
+        return Decimal('0.0')
 
     return rate_schedule.energy_charge_per_kwh
 
 
 def get_days_storm_recover_cost_per_kwh(month, day, year):
     dt_obj = datetime(year, month, day)
-    rate_schedule = ElectricRateSchedule.objects.get(schedule_start_date__lte=dt_obj, schedule_end_date__gte=dt_obj)
+    try:
+        rate_schedule = ElectricRateSchedule.objects.get(schedule_start_date__lte=dt_obj,
+                                                         schedule_end_date__gte=dt_obj,
+                                                         name__iexact="Storm Recovery Costs")
+    except Exception as e:
+        logger.debug(e)
+        logger.debug(f"Check get_days_storm_recover_cost_per_kwh({month}, {day}, {year})")
+        return Decimal('0.0')
 
-    return rate_schedule.storm_recover_cost_per_kwh
+    return rate_schedule.energy_charge_per_kwh
+
+
+def associate_elec_bills_to_rates():
+    # Associate bills to Energy Cost rates, not storm recovery cost schedules. Just focus on 2023+
+    bills_after_including_2023 = Electricity.objects.filter(bill_date__year__gte=2023)
+    all_energy_costs = ElectricRateSchedule.objects.filter(schedule_start_date__year__gte=2023, name__iexact="energy costs")
+
+    for bill in bills_after_including_2023:
+        for energy_cost in all_energy_costs:
+            if (bill.bill_date > energy_cost.schedule_start_date) and (bill.bill_date < energy_cost.schedule_end_date):
+                energy_cost.electricity_bills.add(bill)

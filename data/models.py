@@ -1,10 +1,11 @@
 import decimal
 import logging
-from datetime import timedelta, datetime
+from datetime import timedelta
 from decimal import Decimal
 
-from django.contrib import admin
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 logger = logging.getLogger("django")
 
@@ -60,36 +61,6 @@ class SolarEnergy(models.Model):
         return f"{self.date_of_production} ({self.id})"
 
 
-class ElectricRateSchedule(models.Model):
-    submit_date = models.DateField(auto_now_add=True)
-    comments = models.CharField(max_length=200)
-    schedule_start_date = models.DateField()
-    schedule_end_date = models.DateField()
-    energy_charge_per_kwh = models.DecimalField(max_digits=9,
-                                                decimal_places=8,
-                                                blank=True, null=True,
-                                                verbose_name="Energy Charge per kWh")
-    storm_recover_cost_per_kwh = models.DecimalField(max_digits=9,
-                                                     decimal_places=8,
-                                                     blank=True, null=True,
-                                                     verbose_name="Storm Recovery Cost per kWh")
-
-    class Meta:
-        verbose_name_plural = "Electricity Rate Schedules"
-        ordering = ["schedule_start_date"]
-
-    def __str__(self):
-        return f"Schedule id: {self.id} ({self.schedule_start_date.month}-{self.schedule_start_date.year} to " \
-               f"{self.schedule_end_date.month}-{self.schedule_end_date.year})"
-
-    def save(self, *args, **kwargs):
-        bills_from_2023_and_earlier = Electricity.objects.filter(service_end_date__year__gte=2023)
-        for bill in bills_from_2023_and_earlier:
-            bill.calculated_money_saved_by_solar = bill.get_money_saved_by_solar
-            bill.save(*args, **kwargs)
-        super(ElectricRateSchedule, self).save(*args, **kwargs)
-
-
 class Electricity(models.Model):
     submit_date = models.DateField(auto_now_add=True)
     bill_date = models.DateField(blank=True, null=True)
@@ -112,14 +83,6 @@ class Electricity(models.Model):
 
     def __str__(self):
         return f"{self.service_start_date} to {self.service_end_date} ({self.id})"
-
-    def save(self, *args, **kwargs):
-        try:
-            self.calculated_money_saved_by_solar = self.get_money_saved_by_solar
-        except ValueError as e:
-            logger.exception(e)
-            self.calculated_money_saved_by_solar = Decimal("0.00")
-        super(Electricity, self).save(*args, **kwargs)
 
     @property
     def get_number_of_days(self):
@@ -196,6 +159,55 @@ class Electricity(models.Model):
         except TypeError as e:
             print(e)
             return Decimal("0.00")
+
+
+class ElectricRateSchedule(models.Model):
+    name = models.CharField(max_length=200, blank=True, null=True)
+    submit_date = models.DateField(auto_now_add=True)
+    comments = models.TextField(blank=True, null=True)
+    schedule_start_date = models.DateField(blank=True, null=True)
+    schedule_end_date = models.DateField(blank=True, null=True)
+    schedule_end_date_perpetual = models.BooleanField(default=False)
+    energy_charge_per_kwh = models.DecimalField(max_digits=9,
+                                                decimal_places=8,
+                                                verbose_name="Charge per kWh", blank=True, null=True)
+    electricity_bills = models.ManyToManyField("Electricity", blank=True)
+
+    class Meta:
+        verbose_name_plural = "Electricity Rate Schedules"
+        ordering = ["name"]
+
+    def __str__(self):
+        if self.schedule_end_date_perpetual:
+            return f"{self.name}, id: {self.id} ({self.schedule_start_date.month}-{self.schedule_start_date.year} " \
+                   f"until....)"
+        return f"{self.name}, id: {self.id} ({self.schedule_start_date.month}-{self.schedule_start_date.year} to " \
+               f"{self.schedule_end_date.month}-{self.schedule_end_date.year})"
+
+
+@receiver(post_save, sender=Electricity)
+def update_money_saved_by_solar_on_instance(sender, created, instance, **kwargs):
+    from data.functions import associate_elec_bills_to_rates
+    associate_elec_bills_to_rates()
+    try:
+        instance.calculated_money_saved_by_solar = instance.get_money_saved_by_solar
+    except ValueError as e:
+        logger.exception(e)
+        instance.calculated_money_saved_by_solar = Decimal("0.00")
+
+    post_save.disconnect(update_money_saved_by_solar_on_instance, sender=Electricity)
+    instance.save()
+    post_save.connect(update_money_saved_by_solar_on_instance, sender=Electricity)
+
+
+@receiver(post_save, sender=ElectricRateSchedule)
+def update_money_saved_by_solar_on_instances(sender, created, instance, **kwargs):
+    bills_from_2023_and_earlier = Electricity.objects.filter(service_end_date__year__gte=2023)
+    for bill in bills_from_2023_and_earlier:
+        bill.calculated_money_saved_by_solar = bill.get_money_saved_by_solar
+        post_save.disconnect(update_money_saved_by_solar_on_instance, sender=Electricity)
+        bill.save()
+        post_save.connect(update_money_saved_by_solar_on_instance, sender=Electricity)
 
 
 class Gas(models.Model):
