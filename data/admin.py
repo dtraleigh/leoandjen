@@ -15,7 +15,9 @@ class SolarAdmin(admin.ModelAdmin):
 
 class ElectricityAdmin(admin.ModelAdmin):
     ordering = ("-service_start_date",)
-    list_display = [field.name for field in Electricity._meta.get_fields()]
+    # list_display = [field.name for field in Electricity._meta.get_fields()]
+    list_display = ["submit_date", "service_start_date", "service_end_date", "kWh_usage", "solar_amt_sent_to_grid",
+                    "net_metering_credit", "calculated_money_saved_by_solar"]
 
 
 class GasAdmin(admin.ModelAdmin):
@@ -29,7 +31,8 @@ class CarMilesAdmin(admin.ModelAdmin):
 
 
 class ElectricRateScheduleAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in ElectricRateSchedule._meta.get_fields()]
+    list_display = ["name", "schedule_start_date", "schedule_end_date",
+                    "schedule_end_date_perpetual", "energy_charge_per_kwh", "comments"]
 
 
 admin.site.register(Water, WaterAdmin)
