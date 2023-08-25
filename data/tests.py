@@ -45,147 +45,118 @@ class DataSimpleTestCase(TestCase):
         from decimal import Decimal
 
         from data.models import Electricity
-        bill1 = Electricity.objects.create(id=10000,
-                                           bill_date=datetime(2000, 2, 10),
-                                           service_start_date=datetime(2000, 1, 11),
-                                           service_end_date=datetime(2000, 2, 8),
-                                           kWh_usage=333,
-                                           solar_amt_sent_to_grid=222,
-                                           net_metering_credit=0)
-        bill2 = Electricity.objects.create(id=10001,
-                                           bill_date=datetime(2000, 3, 13),
-                                           service_start_date=datetime(2000, 2, 9),
-                                           service_end_date=datetime(2000, 3, 9),
-                                           kWh_usage=100,
-                                           solar_amt_sent_to_grid=10,
-                                           net_metering_credit=0)
+        bill1 = Electricity.objects.get(bill_date=datetime(2023, 2, 10))
+        bill1.kWh_usage = 333
+        bill1.solar_amt_sent_to_grid = 222
+        bill1.net_metering_credit = 0
+        bill1.save()
 
-        self.assertEqual(bill2.get_money_saved_by_solar, Decimal('1.20'))
-        bill1.delete()
-        bill2.delete()
+        bill2 = Electricity.objects.get(bill_date=datetime(2023, 3, 13))
+        bill2.kWh_usage = 100
+        bill2.solar_amt_sent_to_grid = 10
+        bill2.net_metering_credit = 0
+        bill2.save()
+
+        self.assertEqual(bill2.calculated_money_saved_by_solar, Decimal('1.21'))
 
     def test_model_get_money_saved_by_solar2(self):
         # Case 2: More use, small credits. If we use more than we send but we have some credits
         from decimal import Decimal
 
         from data.models import Electricity
-        bill1 = Electricity.objects.create(id=10002,
-                                           bill_date=datetime(2000, 2, 10),
-                                           service_start_date=datetime(2000, 1, 11),
-                                           service_end_date=datetime(2000, 2, 8),
-                                           kWh_usage=333,
-                                           solar_amt_sent_to_grid=222,
-                                           net_metering_credit=20)
-        bill2 = Electricity.objects.create(id=10003,
-                                           bill_date=datetime(2000, 3, 13),
-                                           service_start_date=datetime(2000, 2, 9),
-                                           service_end_date=datetime(2000, 3, 9),
-                                           kWh_usage=100,
-                                           solar_amt_sent_to_grid=10,
-                                           net_metering_credit=0)
+        bill1 = Electricity.objects.get(bill_date=datetime(2023, 2, 10))
+        bill1.kWh_usage = 333
+        bill1.solar_amt_sent_to_grid = 222
+        bill1.net_metering_credit = 20
+        bill1.save()
 
-        self.assertEqual(bill2.get_money_saved_by_solar, Decimal('3.61'))
-        bill1.delete()
-        bill2.delete()
+        bill2 = Electricity.objects.get(bill_date=datetime(2023, 3, 13))
+        bill2.kWh_usage = 100
+        bill2.solar_amt_sent_to_grid = 10
+        bill2.net_metering_credit = 0
+        bill2.save()
+
+        self.assertEqual(bill2.get_money_saved_by_solar, Decimal('3.63'))
 
     def test_model_get_money_saved_by_solar3(self):
         # Case 3: More use, big credits. If we use more than we send but we have lots of credits
         from decimal import Decimal
 
         from data.models import Electricity
-        bill1 = Electricity.objects.create(id=10004,
-                                           bill_date=datetime(2000, 2, 10),
-                                           service_start_date=datetime(2000, 1, 11),
-                                           service_end_date=datetime(2000, 2, 8),
-                                           kWh_usage=333,
-                                           solar_amt_sent_to_grid=222,
-                                           net_metering_credit=120)
-        bill2 = Electricity.objects.create(id=10005,
-                                           bill_date=datetime(2000, 3, 13),
-                                           service_start_date=datetime(2000, 2, 9),
-                                           service_end_date=datetime(2000, 3, 9),
-                                           kWh_usage=100,
-                                           solar_amt_sent_to_grid=10,
-                                           net_metering_credit=0)
+        bill1 = Electricity.objects.get(bill_date=datetime(2023, 2, 10))
+        bill1.kWh_usage = 333
+        bill1.solar_amt_sent_to_grid = 222
+        bill1.net_metering_credit = 120
+        bill1.save()
 
-        self.assertEqual(bill2.get_money_saved_by_solar, Decimal('12.03'))
-        bill1.delete()
-        bill2.delete()
+        bill2 = Electricity.objects.get(bill_date=datetime(2023, 3, 13))
+        bill2.kWh_usage = 100
+        bill2.solar_amt_sent_to_grid = 10
+        bill2.net_metering_credit = 0
+        bill2.save()
+
+        self.assertEqual(bill2.get_money_saved_by_solar, Decimal('12.09'))
 
     def test_model_get_money_saved_by_solar4(self):
         # Case 4: less use, no credits. If we use less than we send, no credits
         from decimal import Decimal
 
         from data.models import Electricity
-        bill1 = Electricity.objects.create(id=10006,
-                                           bill_date=datetime(2000, 2, 10),
-                                           service_start_date=datetime(2000, 1, 11),
-                                           service_end_date=datetime(2000, 2, 8),
-                                           kWh_usage=333,
-                                           solar_amt_sent_to_grid=222,
-                                           net_metering_credit=0)
-        bill2 = Electricity.objects.create(id=10007,
-                                           bill_date=datetime(2000, 3, 13),
-                                           service_start_date=datetime(2000, 2, 9),
-                                           service_end_date=datetime(2000, 3, 9),
-                                           kWh_usage=50,
-                                           solar_amt_sent_to_grid=100,
-                                           net_metering_credit=0)
+        bill1 = Electricity.objects.get(bill_date=datetime(2023, 2, 10))
+        bill1.kWh_usage = 333
+        bill1.solar_amt_sent_to_grid = 222
+        bill1.net_metering_credit = 0
+        bill1.save()
 
-        self.assertEqual(bill2.get_money_saved_by_solar, Decimal('6.02'))
-        bill1.delete()
-        bill2.delete()
+        bill2 = Electricity.objects.get(bill_date=datetime(2023, 3, 13))
+        bill2.kWh_usage = 50
+        bill2.solar_amt_sent_to_grid = 100
+        bill2.net_metering_credit = 0
+        bill2.save()
+
+        self.assertEqual(bill2.get_money_saved_by_solar, Decimal('6.05'))
 
     def test_model_get_money_saved_by_solar5(self):
         # Case 5: less use, existing credits. If we use less than we send and have credits
         from decimal import Decimal
 
         from data.models import Electricity
-        bill1 = Electricity.objects.create(id=10008,
-                                           bill_date=datetime(2000, 2, 10),
-                                           service_start_date=datetime(2000, 1, 11),
-                                           service_end_date=datetime(2000, 2, 8),
-                                           kWh_usage=333,
-                                           solar_amt_sent_to_grid=222,
-                                           net_metering_credit=50)
-        bill2 = Electricity.objects.create(id=10009,
-                                           bill_date=datetime(2000, 3, 13),
-                                           service_start_date=datetime(2000, 2, 9),
-                                           service_end_date=datetime(2000, 3, 9),
-                                           kWh_usage=50,
-                                           solar_amt_sent_to_grid=100,
-                                           net_metering_credit=0)
+        bill1 = Electricity.objects.get(bill_date=datetime(2023, 2, 10))
+        bill1.kWh_usage = 333
+        bill1.solar_amt_sent_to_grid = 222
+        bill1.net_metering_credit = 50
+        bill1.save()
 
-        self.assertEqual(bill2.get_money_saved_by_solar, Decimal('6.02'))
-        bill1.delete()
-        bill2.delete()
+        bill2 = Electricity.objects.get(bill_date=datetime(2023, 3, 13))
+        bill2.kWh_usage = 50
+        bill2.solar_amt_sent_to_grid = 100
+        bill2.net_metering_credit = 0
+        bill2.save()
+
+        self.assertEqual(bill2.get_money_saved_by_solar, Decimal('6.05'))
 
     def test_model_get_money_saved_by_solar6(self):
         # Case 6: Use exactly the same amount as credit
         from decimal import Decimal
 
         from data.models import Electricity
-        bill1 = Electricity.objects.create(id=10010,
-                                           bill_date=datetime(2000, 2, 10),
-                                           service_start_date=datetime(2000, 1, 11),
-                                           service_end_date=datetime(2000, 2, 8),
-                                           kWh_usage=333,
-                                           solar_amt_sent_to_grid=222,
-                                           net_metering_credit=50)
-        bill2 = Electricity.objects.create(id=10011,
-                                           bill_date=datetime(2000, 3, 13),
-                                           service_start_date=datetime(2000, 2, 9),
-                                           service_end_date=datetime(2000, 3, 9),
-                                           kWh_usage=150,
-                                           solar_amt_sent_to_grid=100,
-                                           net_metering_credit=0)
+        bill1 = Electricity.objects.get(bill_date=datetime(2023, 2, 10))
+        bill1.kWh_usage = 333
+        bill1.solar_amt_sent_to_grid = 222
+        bill1.net_metering_credit = 50
+        bill1.save()
 
-        self.assertEqual(bill2.get_money_saved_by_solar, Decimal('18.05'))
-        bill1.delete()
-        bill2.delete()
+        bill2 = Electricity.objects.get(bill_date=datetime(2023, 3, 13))
+        bill2.kWh_usage = 150
+        bill2.solar_amt_sent_to_grid = 100
+        bill2.net_metering_credit = 0
+        bill2.save()
+
+        self.assertEqual(bill2.get_money_saved_by_solar, Decimal('18.14'))
 
     def test_elec_usage_for_2022(self):
         from decimal import Decimal
+
         elec2022 = ElecYear(2022, "color")
         expected_for_2022 = [{'month_number': 1, 'month_str': 'Jan', 'days_in_month': 31, 'value': Decimal('937.78'),
                               'solar_produced': Decimal('0.00'), 'solar_sent_to_grid': Decimal('0.00'),
