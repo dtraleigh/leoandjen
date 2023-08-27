@@ -39,10 +39,10 @@ def home(request):
     top_solar_data = SolarEnergy.objects.all().order_by("-production")[:10]
 
     return render(request, "data_home.html", {"gas_data": gas_data,
-                                         "water_data": water_data,
-                                         "elec_data": elec_data,
-                                         "vmt_data": vmt_data,
-                                         "top_solar_data": top_solar_data})
+                                              "water_data": water_data,
+                                              "elec_data": elec_data,
+                                              "vmt_data": vmt_data,
+                                              "top_solar_data": top_solar_data})
 
 
 # Data for the dashboard is found in the get_abc_dashboard_data() function
@@ -124,21 +124,28 @@ def gas(request):
 
 def electricity(request):
     # Create a list of years based on the string the user provides or use default
-    warning = None
     years_range_request_str = request.GET.get("years")
     years_range_str = clean_year_range_request(years_range_request_str, "Electricity")
     years_list = convert_years_string_to_years_list(years_range_str)
 
     # Only support 8 years so if there are more, send the user a warning and only send the most recent 8.
+    warning = ""
     if len(years_list) > 8:
         years_list = years_list[-8:]
-        warning = "More than 8 years requested. Only showing most recent 8"
+        warning += "More than 8 years requested. Only showing most recent 8.\n"
 
     # Make a class for each year then remove classes that have no data
     requested_yearly_datasets = [ElecYear(year, colors[count]) for count, year in enumerate(years_list)]
+    dataset_lacking_energy_rates = []
     for dataset in list(requested_yearly_datasets):
         if not dataset.readings:
             requested_yearly_datasets.remove(dataset)
+            continue
+        if dataset.is_lacking_energy_rates() and int(dataset.year) >= 2023:
+            dataset_lacking_energy_rates.append(dataset)
+
+    if dataset_lacking_energy_rates:
+        warning = f"Some years are lacking energy rates: {str(dataset_lacking_energy_rates)}"
 
     # Add the average line
     elec_avg_line = create_avg_line_data("Electricity")

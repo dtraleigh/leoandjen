@@ -22,6 +22,7 @@ class ElecYear:
         # Get bills with a service_start_date in this year
         self.readings = get_measurement_data_from_years("Electricity", str(year))
         self.data_points = self.get_data_points()
+        self.lacking_energy_rates = self.is_lacking_energy_rates()
 
     def __repr__(self):
         return f"Elec dataset for {self.year}"
@@ -162,3 +163,9 @@ class ElecYear:
                             f"data:{[float(x['solar_produced']) for x in self.get_data_points()]}}}"
 
         return solar_bar_dataset
+
+    def is_lacking_energy_rates(self):
+        for reading in self.readings:
+            if reading.bill_is_lacking_rates:
+                return True
+        return False
