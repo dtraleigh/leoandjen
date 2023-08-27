@@ -18,7 +18,7 @@
         <p>Keywords: "all", "year+"</p>
       </form>
     </div>
-    {% if warning %}<div class="alert alert-warning" role="alert">{{ warning }}</div>{% endif %}
+    {% if warning != "" %}<div class="alert alert-warning" role="alert">{{ warning }}</div>{% endif %}
     <canvas class="my-4" id="chart" width="900" height="380"></canvas>
     <div class="alert alert-primary" role="alert">Data through {{ most_recent.service_end_date }}</div>
     <h3>Yearly Totals</h3>

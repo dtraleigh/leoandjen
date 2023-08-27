@@ -4,6 +4,7 @@ from datetime import timedelta
 from decimal import Decimal
 
 from django.db import models
+from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -157,8 +158,28 @@ class Electricity(models.Model):
 
             return savings.quantize(Decimal("1.00"))
         except TypeError as e:
-            print(e)
+            logger.exception(e)
             return Decimal("0.00")
+
+    @property
+    def bill_is_lacking_rates(self):
+        bill_is_lacking_rates = False
+        increment_date = self.service_start_date
+        while increment_date != self.service_end_date + timedelta(days=1):
+            try:
+                energy_rate_schedule = ElectricRateSchedule.objects.get(electricity_bills=self)
+                storm_rec_schedule = ElectricRateSchedule.objects.get(Q(schedule_start_date__lte=increment_date,
+                                                                        schedule_end_date__gte=increment_date,
+                                                                        name__iexact="Storm Recovery Costs") |
+                                                                      Q(schedule_start_date__lte=increment_date,
+                                                                        schedule_end_date_perpetual=True,
+                                                                        name__iexact="Storm Recovery Costs"))
+                increment_date += timedelta(days=1)
+            except Exception as e:
+                bill_is_lacking_rates = True
+                break
+
+        return bill_is_lacking_rates
 
 
 class ElectricRateSchedule(models.Model):

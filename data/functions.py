@@ -19,6 +19,7 @@ measurement_units = {
     "Gas": "therms_usage"
 }
 
+logger = logging.getLogger("django")
 currentYear = datetime.now().year
 
 month_strings_abbr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]
@@ -410,8 +411,8 @@ def get_days_energy_charge_per_kwh(month, day, year):
     try:
         rate_schedule = ElectricRateSchedule.objects.get(electricity_bills=elec_bill)
     except Exception as e:
-        logger.debug(e)
-        logger.debug(f"Check get_days_energy_charge_per_kwh({month}, {day}, {year})")
+        logger.exception(e)
+        logger.exception(f"Check get_days_energy_charge_per_kwh({month}, {day}, {year})")
         return Decimal('0.0')
 
     return rate_schedule.energy_charge_per_kwh
@@ -420,12 +421,15 @@ def get_days_energy_charge_per_kwh(month, day, year):
 def get_days_storm_recover_cost_per_kwh(month, day, year):
     dt_obj = datetime(year, month, day)
     try:
-        rate_schedule = ElectricRateSchedule.objects.get(schedule_start_date__lte=dt_obj,
-                                                         schedule_end_date__gte=dt_obj,
-                                                         name__iexact="Storm Recovery Costs")
+        rate_schedule = ElectricRateSchedule.objects.get(Q(schedule_start_date__lte=dt_obj,
+                                                           schedule_end_date__gte=dt_obj,
+                                                           name__iexact="Storm Recovery Costs") |
+                                                         Q(schedule_start_date__lte=dt_obj,
+                                                           schedule_end_date_perpetual=True,
+                                                           name__iexact="Storm Recovery Costs"))
     except Exception as e:
-        logger.debug(e)
-        logger.debug(f"Check get_days_storm_recover_cost_per_kwh({month}, {day}, {year})")
+        logger.exception(e)
+        logger.exception(f"Check get_days_storm_recover_cost_per_kwh({month}, {day}, {year})")
         return Decimal('0.0')
 
     return rate_schedule.energy_charge_per_kwh
@@ -434,7 +438,8 @@ def get_days_storm_recover_cost_per_kwh(month, day, year):
 def associate_elec_bills_to_rates():
     # Associate bills to Energy Cost rates, not storm recovery cost schedules. Just focus on 2023+
     bills_after_including_2023 = Electricity.objects.filter(bill_date__year__gte=2023)
-    all_energy_costs = ElectricRateSchedule.objects.filter(schedule_start_date__year__gte=2023, name__iexact="energy costs")
+    all_energy_costs = ElectricRateSchedule.objects.filter(schedule_start_date__year__gte=2023,
+                                                           name__iexact="energy costs")
 
     for bill in bills_after_including_2023:
         for energy_cost in all_energy_costs:
