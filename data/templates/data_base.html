@@ -43,7 +43,7 @@
       datasets: [
         {%for yearly_dataset in yearly_datasets%}
         {
-          label: '{{yearly_dataset.year}}',
+          label: 'Elec - {{yearly_dataset.year}}',
           fill: false,
           type: '{{yearly_dataset.chart_type}}',
           borderColor: '{{yearly_dataset.color}}',
@@ -52,7 +52,7 @@
           data: [{%for datapoint in yearly_dataset.data_points%}{{datapoint.value|safe}}{%if not forloop.last%},{%endif%}{%endfor%}]
         },
         {%if yearly_dataset.title == "Electricity"%}
-          {{yearly_dataset.get_solar_bar_chart_dataset|safe}},
+          {{yearly_dataset.get_solar_bar_chart_dataset|safe}}
         {%endif%}
         {%endfor%}
         {
