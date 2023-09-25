@@ -156,11 +156,16 @@ class ElecYear:
         return None
 
     def get_solar_bar_chart_dataset(self):
-        solar_bar_dataset = f"{{label:'none'," \
+        solar_data_for_this_year = [float(x['solar_produced']) for x in self.get_data_points()]
+
+        if list(set(solar_data_for_this_year)) == [0.0]:
+            return ""
+
+        solar_bar_dataset = f"{{label:'Solar - {self.year}'," \
                             f"type:'bar'," \
-                            f"borderColor:'{self.color}'," \
+                            f"borderColor:'{self.color.replace('0.8', '0.5')}'," \
                             f"borderWidth:'{self.borderWidth}'," \
-                            f"data:{[float(x['solar_produced']) for x in self.get_data_points()]}}}"
+                            f"data:{solar_data_for_this_year}}},"
 
         return solar_bar_dataset
 
