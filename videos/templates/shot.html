@@ -14,7 +14,7 @@
     {% if album_view %}
       <li>Album</li>
       <li>
-        <a href="/videos/albums/{{ albums.id }}">{{ album.name }}</a>
+        <a href="/videos/album/{{ current_album.id }}">{{ current_album.name }}</a>
       </li>
     {% elif tag_view %}
       <li>Tag</li>

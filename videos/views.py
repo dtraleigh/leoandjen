@@ -211,10 +211,10 @@ def shot_view(request, album_id, shot_type, shot_id):
     this_shot = get_shot(shot_type, shot_id)
 
     # The album the user is within
-    all_albums = Album.objects.get(id=album_id)
+    current_album = Album.objects.get(id=album_id)
 
-    album_videos = [v for v in all_albums.videos.all()]
-    album_external = [ex for ex in all_albums.external_videos.all()]
+    album_videos = [v for v in current_album.videos.all()]
+    album_external = [ex for ex in current_album.external_videos.all()]
 
     # All the shots within this album
     album_shots = combine_and_sort(album_videos, album_external)
@@ -236,7 +236,7 @@ def shot_view(request, album_id, shot_type, shot_id):
     video_map_data, external_map_data = get_map_data()
 
     return render(request, "shot.html", {"video": this_shot,
-                                         "album": all_albums,
+                                         "current_album": current_album,
                                          "album_videos": album_shots,
                                          "video_tags": [t for t in this_shot.tags.all()],
                                          "album_view": True,
