@@ -1,7 +1,9 @@
 {% extends "index.html" %}
 {% block content %}
   {% load static %}
-  {% include "collections.html" %}
+  {% if not search %}
+    {% include "collections.html" %}
+  {% endif %}
   {% if search == None %}
     <div class="row">
       <nav aria-label="breadcrumb">
