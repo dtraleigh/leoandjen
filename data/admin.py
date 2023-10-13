@@ -15,8 +15,7 @@ class SolarAdmin(admin.ModelAdmin):
 
 class ElectricityAdmin(admin.ModelAdmin):
     ordering = ("-service_start_date",)
-    # list_display = [field.name for field in Electricity._meta.get_fields()]
-    list_display = ["submit_date", "service_start_date", "service_end_date", "kWh_usage", "solar_amt_sent_to_grid",
+    list_display = ["bill_date", "service_start_date", "service_end_date", "kWh_usage", "solar_amt_sent_to_grid",
                     "net_metering_credit", "calculated_money_saved_by_solar"]
 
 
