@@ -33,6 +33,9 @@ def add_movie_from_form(imdb_id, is_tv_movie, letterboxd_slug, formats, sort_tit
         except IndexError:
             return None, f"No results for {imdb_id}"
 
+    if not sort_title:
+        sort_title = title
+
     new_movie = Movie.objects.create(title=title,
                                      sort_title=sort_title,
                                      primary_release_year=year,
