@@ -10,7 +10,7 @@
     {% load static %}
     <link rel="shortcut icon" type="image/png" href="{% static "img/data_favicon.png" %}">
     <!-- Bootstrap core CSS -->
-    <link href="{% static "bootstrap4.0.0/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "bootstrap4.6.2/bootstrap.min.css" %}" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="{% static "css/data_dashboard.css" %}" rel="stylesheet">
   </head>
@@ -24,12 +24,10 @@
         {% block content %}{% endblock %}
       </div>
     </div>
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{% static "js/jquery3.2.1/jquery-3.2.1.slim.min.js"%}"></script>
+    <!-- Bootstrap -->
+    <script src="{% static "js/jquery3.5.1/jquery-3.5.1.slim.min.js"%}"></script>
     <script src="{% static "js/popper1.16.1/popper.min.js"%}"></script>
-    <script src="{% static "bootstrap4.0.0/bootstrap.min.js"%}"></script>
+    <script src="{% static "bootstrap4.6.2/bootstrap.min.js"%}"></script>
     <!-- Icons -->
     <script src="{% static "feather-icons4.29.0/feather.min.js"%}"></script>
     <script>feather.replace()</script>
