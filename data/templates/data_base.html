@@ -13,6 +13,7 @@
     <link href="{% static "bootstrap4.6.2/bootstrap.min.css" %}" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="{% static "css/data_dashboard.css" %}" rel="stylesheet">
+    <link href="{% static "DataTables/datatables.min.css" %}" rel="stylesheet">
   </head>
   <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
@@ -28,6 +29,8 @@
     <script src="{% static "js/jquery3.5.1/jquery-3.5.1.slim.min.js"%}"></script>
     <script src="{% static "js/popper1.16.1/popper.min.js"%}"></script>
     <script src="{% static "bootstrap4.6.2/bootstrap.min.js"%}"></script>
+    <!-- DataTables -->
+    <script src="{% static "DataTables/datatables.min.js" %}"></script>
     <!-- Icons -->
     <script src="{% static "feather-icons4.29.0/feather.min.js"%}"></script>
     <script>feather.replace()</script>
@@ -66,5 +69,17 @@
     }
     </script>
     <script src="{% static "js/myChart.js"%}"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.7/sorting/natural.js"></script>
+    <script>
+      $(document).ready(function () {
+        $('#data_table_main').DataTable({
+        "order": [],
+        columnDefs: [
+          { type: 'natural', targets: '_all' }
+        ]
+        });
+        $('.dataTables_length').addClass('bs-select');
+      });
+    </script>
   </body>
 </html>
