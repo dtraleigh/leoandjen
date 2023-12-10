@@ -44,7 +44,7 @@
       datasets: [
         {%for yearly_dataset in yearly_datasets%}
         {
-          label: 'Elec - {{yearly_dataset.year}}',
+          label: '{{yearly_dataset.short_title}} - {{yearly_dataset.year}}',
           fill: false,
           type: '{{yearly_dataset.chart_type}}',
           borderColor: '{{yearly_dataset.color}}',

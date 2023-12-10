@@ -12,6 +12,7 @@ class ElecYear:
         from data.functions import get_measurement_data_from_years
 
         self.title = "Electricity"
+        self.short_title = "Elec"
         self.measurement = "Kilowatt hours used (house)"
         self.year = str(year)
         self.color = color

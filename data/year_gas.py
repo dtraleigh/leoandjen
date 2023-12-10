@@ -10,6 +10,7 @@ class GasYear:
         from data.functions import get_measurement_data_from_years
 
         self.title = "Natural Gas"
+        self.short_title = "Gas"
         self.measurement = "Therms per month"
         self.year = str(year)
         self.color = color
