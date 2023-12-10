@@ -10,6 +10,7 @@ class WaterYear:
         from data.functions import get_measurement_data_from_years
 
         self.title = "Water"
+        self.short_title = "Water"
         self.measurement = "Gallons / Month"
         self.year = str(year)
         self.color = color

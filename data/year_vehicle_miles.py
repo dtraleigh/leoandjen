@@ -5,6 +5,7 @@ from data.models import CarMiles
 class VehicleMilesTraveledYear:
     def __init__(self, year, color):
         self.title = "Vehicle Miles Traveled"
+        self.short_title = "VMT"
         self.measurement = "Miles / Month"
         self.year = str(year)
         self.color = color
