@@ -81,8 +81,6 @@ def get_movies(search, sort, movie_format_filter, order_by):
     if search:
         if search.lower() == "3d":
             movie_list = Movie.objects.filter(formats__name="3d").order_by(order_by)
-        elif search.lower() == "physical":
-            movie_list = get_physical_only(Movie.objects.all().order_by(order_by))
         else:
             movie_list = Movie.objects.filter(Q(title__icontains=search) | Q(comments__icontains=search))
     else:
