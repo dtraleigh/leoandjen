@@ -68,7 +68,6 @@ def filter_streaming(request):
         Q(formats__name="amz") |
         Q(formats__name="vudu") |
         Q(formats__name="ma") |
-        Q(formats__name="apple_tv") |
         Q(formats__name="g_play")).distinct().order_by("sort_title")
     breadcrumb = "Streaming Titles (" + str(len(streaming_movies)) + ")"
     sort_label = "Alphabetical"
