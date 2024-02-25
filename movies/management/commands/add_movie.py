@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
         # Optional arguments
         parser.add_argument("-f", "--format", metavar="\b",
-                            help="Add a list of formats. All options: vudu, plex, ma, hddvd, g_play, dvd, blu_ray, 4k, 3d, amz, apple_tv", )
+                            help="Add a list of formats. All options: vudu, plex, ma, hddvd, g_play, dvd, blu_ray, 4k, 3d, amz", )
         parser.add_argument("-t", "--tv_movie", action="store_true", help="Indicates that movie is from tv_results")
         parser.add_argument("-l", "--letterboxd_slug", metavar="\b",
                             help="Populate the url slug from the letterboxd website")
