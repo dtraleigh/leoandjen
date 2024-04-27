@@ -305,3 +305,14 @@ class CarMiles(models.Model):
             return next_months_datapoint.odometer_reading - self.odometer_reading
         except CarMiles.DoesNotExist:
             return None
+
+
+class AuthToken(models.Model):
+    app = models.CharField(max_length=200)
+    access_token = models.CharField(max_length=1024)
+    refresh_token = models.CharField(max_length=1024)
+    issued_datetime = models.DateTimeField(auto_now=True)
+    expires_in = models.IntegerField(default=1000)
+
+    def __str__(self):
+        return f"{self.id}"
