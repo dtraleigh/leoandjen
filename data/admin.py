@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from data.models import Water, SolarEnergy, Electricity, Gas, CarMiles, ElectricRateSchedule
+from data.models import Water, SolarEnergy, Electricity, Gas, CarMiles, ElectricRateSchedule, AuthToken
 
 
 class WaterAdmin(admin.ModelAdmin):
@@ -34,9 +34,14 @@ class ElectricRateScheduleAdmin(admin.ModelAdmin):
                     "schedule_end_date_perpetual", "energy_charge_per_kwh", "comments"]
 
 
+class AuthTokenAdmin(admin.ModelAdmin):
+    list_display = ["app", "issued_datetime"]
+
+
 admin.site.register(Water, WaterAdmin)
 admin.site.register(SolarEnergy, SolarAdmin)
 admin.site.register(Electricity, ElectricityAdmin)
 admin.site.register(Gas, GasAdmin)
 admin.site.register(CarMiles, CarMilesAdmin)
 admin.site.register(ElectricRateSchedule, ElectricRateScheduleAdmin)
+admin.site.register(AuthToken, AuthTokenAdmin)
