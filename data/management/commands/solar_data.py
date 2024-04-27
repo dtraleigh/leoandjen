@@ -20,7 +20,7 @@ class Command(BaseCommand):
         end_date = options["end"]
         is_test = options["test"]
 
-        enphase_auth = AuthToken.objects.get(app="enphase")
+        enphase_auth = AuthToken.objects.get(app=env("AUTH_APP_NAME"))
         if is_token_expired(enphase_auth):
             print("Refreshing tokens")
             refresh_access_token(env("ENPHASE_CLIENT_ID"),
