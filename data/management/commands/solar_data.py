@@ -37,11 +37,13 @@ class Command(BaseCommand):
         # Optional arguments
         parser.add_argument("-s", "--start", help="start date, format YYYY-MM-DD")
         parser.add_argument("-e", "--end", help="end date, format YYYY-MM-DD")
+        parser.add_argument("-t", "--test", action="store_true", help="Run a test, no changes made.")
 
     def handle(self, *args, **options):
         access_token = options["access_token"]
         start_date = options["start"]
         end_date = options["end"]
+        is_test = options["test"]
 
         site_data = get_site_production(access_token, start_date, end_date)
 
@@ -60,8 +62,12 @@ class Command(BaseCommand):
                                 f"For {production_object.date_of_production.strftime('%Y-%m-%d')}, DB has {production_object.production} where API reports {day_amt}")
                     else:
                         # Create a new object
-                        SolarEnergy.objects.create(date_of_production=start_date_dt,
-                                                   production=day_amt)
+                        if not is_test:
+                            SolarEnergy.objects.create(date_of_production=start_date_dt,
+                                                       production=day_amt)
+                            print(f"Creating new SolarEnergy day for {start_date_dt}, amt: {day_amt}")
+                        else:
+                            print(f"Fake creating new SolarEnergy day for {start_date_dt}, amt: {day_amt}")
                     # Increment the date
                     start_date_dt += timedelta(days=1)
 
