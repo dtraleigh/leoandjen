@@ -1,14 +1,20 @@
 from datetime import datetime, timedelta
-
 import requests
+import environ
+from pathlib import Path
+
 from django.core.management.base import BaseCommand
 
 from data.models import SolarEnergy
 
+env = environ.Env(DEBUG=(bool, False))
+BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(BASE_DIR / ".env")
+
 
 def get_site_production(token, start_date, end_date):
     url = f"https://api.enphaseenergy.com/api/v4/systems/3861048/energy_lifetime?key" \
-          f"=d6d9fa2332c7623a6c64011470effcf4&start_date={start_date}&end_date={end_date}"
+          f"={env('ENPHASE_API_KEY')}&start_date={start_date}&end_date={end_date}"
 
     headers = {
         "Authorization": f"Bearer {token}"
@@ -60,6 +66,8 @@ class Command(BaseCommand):
                         if production_object.production != day_amt:
                             print(
                                 f"For {production_object.date_of_production.strftime('%Y-%m-%d')}, DB has {production_object.production} where API reports {day_amt}")
+                        else:
+                            print(f"Data for {start_date_dt} already exists.")
                     else:
                         # Create a new object
                         if not is_test:
