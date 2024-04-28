@@ -67,8 +67,8 @@ class Electricity(models.Model):
     bill_date = models.DateField(blank=True, null=True)
     service_start_date = models.DateField()
     service_end_date = models.DateField()
-    kWh_usage = models.IntegerField("Grid Energy Consumed")
-    solar_amt_sent_to_grid = models.IntegerField("Solar Sent to Grid")
+    kWh_usage = models.IntegerField("Energy Used (Grid Energy Consumed)")
+    solar_amt_sent_to_grid = models.IntegerField("Energy Delivered to Grid (Solar Sent to Grid)")
     net_metering_credit = models.IntegerField("Carried Forward Balance", default=0)
     calculated_money_saved_by_solar = models.DecimalField(max_digits=9,
                                                           decimal_places=2,

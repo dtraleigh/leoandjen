@@ -17,6 +17,8 @@ class ElectricityAdmin(admin.ModelAdmin):
     ordering = ("-service_start_date",)
     list_display = ["bill_date", "service_start_date", "service_end_date", "kWh_usage", "solar_amt_sent_to_grid",
                     "net_metering_credit", "calculated_money_saved_by_solar"]
+    fields = ("bill_date", "service_start_date", "service_end_date", "net_metering_credit",
+              "kWh_usage", "solar_amt_sent_to_grid")
 
 
 class GasAdmin(admin.ModelAdmin):
