@@ -259,8 +259,8 @@ def get_gas_dashboard_data(current_date=datetime.now()):
     data["title"] = "Natural Gas"
     data["measurement"] = "Therms per month"
 
-    data["ytd_total"] = gas_year_objects[-1].get_ytd_total()
-    data["prev_ytd"] = gas_year_objects[-2].get_ytd_total()
+    data["ytd_total"] = round(gas_year_objects[-1].get_ytd_total())
+    data["prev_ytd"] = round(gas_year_objects[-2].get_ytd_total())
     data["all_ytd_avg"] = round(get_average([y.get_ytd_total() for y in gas_year_objects[:-1]]))
 
     # If data["ytd_total"] < data["all_ytd_avg"] then down
@@ -289,8 +289,8 @@ def get_water_dashboard_data(current_date=datetime.now()):
     data["title"] = "Water"
     data["measurement"] = "Gallons per month"
 
-    data["ytd_total"] = water_year_objects[-1].get_ytd_total()
-    data["prev_ytd"] = water_year_objects[-2].get_ytd_total()
+    data["ytd_total"] = round(water_year_objects[-1].get_ytd_total())
+    data["prev_ytd"] = round(water_year_objects[-2].get_ytd_total())
     data["all_ytd_avg"] = round(get_average([y.get_ytd_total() for y in water_year_objects[:-1]]))
 
     # If data["ytd_total"] < data["all_ytd_avg"] then down
@@ -322,8 +322,8 @@ def get_elec_dashboard_data(current_date=datetime.now()):
     # For each year, create an ElecYear class
     elec_year_objects = [ElecYear(year, "") for year in all_elec_years]
 
-    data["ytd_total"] = elec_year_objects[-1].get_ytd_total()
-    data["prev_ytd"] = elec_year_objects[-2].get_ytd_total()
+    data["ytd_total"] = round(elec_year_objects[-1].get_ytd_total())
+    data["prev_ytd"] = round(elec_year_objects[-2].get_ytd_total())
     data["all_ytd_avg"] = round(get_average([y.get_ytd_total() for y in elec_year_objects[:-1]]))
 
     # If data["ytd_total"] < data["all_ytd_avg"] then down
