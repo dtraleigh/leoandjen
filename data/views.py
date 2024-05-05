@@ -38,11 +38,15 @@ def home(request):
 
     top_solar_data = SolarEnergy.objects.all().order_by("-production")[:10]
 
+    current_year = datetime.now().year
+    top_yearly_solar = SolarEnergy.objects.filter(date_of_production__year=current_year).order_by("-production")[:10]
+
     return render(request, "data_home.html", {"gas_data": gas_data,
                                               "water_data": water_data,
                                               "elec_data": elec_data,
                                               "vmt_data": vmt_data,
-                                              "top_solar_data": top_solar_data})
+                                              "top_solar_data": top_solar_data,
+                                              "top_yearly_solar": top_yearly_solar})
 
 
 # Data for the dashboard is found in the get_abc_dashboard_data() function
