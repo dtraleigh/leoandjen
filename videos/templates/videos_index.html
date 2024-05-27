@@ -23,9 +23,15 @@
         <span class="label label-info">Sorted by Most Recently shot.</span>
       </p>
       {% for shot in most_recent %}
+        {% if shot.get_cname == "ExternalVideo" %}
+        <a href="/videos/recent/external/{{ shot.id }}">
+          <img class="album-poster-recent" src="{{ shot.poster.url }}">
+        </a>
+        {% else %}
         <a href="/videos/recent/video/{{ shot.id }}">
           <img class="album-poster-recent" src="{{ shot.poster.url }}">
         </a>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
