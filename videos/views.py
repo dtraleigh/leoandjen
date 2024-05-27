@@ -50,11 +50,10 @@ def get_prev_shot(curr_shot, shot_list):
 
 
 def combine_and_sort(video_list, all_external):
-    shots_sorted = sorted(
-        chain(video_list, all_external),
-        key=attrgetter("date_shot"))
+    combined_qs = chain(video_list, all_external)
+    sorted_combined_qs = sorted(combined_qs, key=attrgetter('date_shot'), reverse=True)
 
-    return shots_sorted[::-1]
+    return sorted_combined_qs
 
 
 def get_random_shot():
@@ -130,17 +129,13 @@ def get_shot(shot_type, shot_id):
 def main(request):
     albums = Album.objects.all()
 
-    all_videos = [v for v in Video.objects.all()]
-    all_external = [ex for ex in ExternalVideo.objects.all()]
-
+    all_videos = Video.objects.all()
+    all_external = ExternalVideo.objects.all()
     all_shots = combine_and_sort(all_videos, all_external)
-
-    # most_recent means the 6 most recently shot (not uploaded) files
-    most_recent = all_shots[0:6]
 
     return render(request, "videos_index.html", {"albums": albums,
                                                  "tag_list": Tag.objects.all(),
-                                                 "most_recent": most_recent,
+                                                 "most_recent": all_shots[0:6],
                                                  "show_nav": True})
 
 
@@ -237,6 +232,7 @@ def shot_view(request, album_id, shot_type, shot_id):
 
     return render(request, "shot.html", {"video": this_shot,
                                          "current_album": current_album,
+                                         "album": current_album,
                                          "album_videos": album_shots,
                                          "video_tags": [t for t in this_shot.tags.all()],
                                          "album_view": True,
@@ -305,7 +301,6 @@ def recent_view(request, shot_type, shot_id):
 
     all_videos = Video.objects.all()
     all_external = ExternalVideo.objects.all()
-
     all_shots = combine_and_sort(all_videos, all_external)
 
     if not is_most_recent(this_shot, all_shots):
