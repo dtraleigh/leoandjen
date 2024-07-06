@@ -309,6 +309,10 @@ class CarMiles(models.Model):
 
 class AuthToken(models.Model):
     app = models.CharField(max_length=200)
+    client_id = models.CharField(max_length=200)
+    client_secret = models.CharField(max_length=200)
+    app_code = models.CharField(max_length=200)
+    redirect_uri = models.CharField(max_length=200)
     access_token = models.CharField(max_length=1024)
     refresh_token = models.CharField(max_length=1024)
     issued_datetime = models.DateTimeField(auto_now=True)

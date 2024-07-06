@@ -22,7 +22,7 @@ class Command(BaseCommand):
 
         enphase_auth = AuthToken.objects.get(app=env("AUTH_APP_NAME"))
         if is_token_expired(enphase_auth):
-            print("Refreshing tokens")
+            print("Access token has expired.")
             refresh_access_token(env("ENPHASE_CLIENT_ID"),
                                  env("ENPHASE_CLIENT_SECRET"),
                                  enphase_auth.refresh_token,

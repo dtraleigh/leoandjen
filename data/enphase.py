@@ -30,6 +30,7 @@ def get_auth_code(auth_url):
 
 
 def get_access_token(client_id, client_secret, code, redirect_uri):
+    print("Getting new access tokens")
     # Encode client_id and client_secret for the Authorization header
     credentials = f"{client_id}:{client_secret}"
     encoded_credentials = base64.b64encode(credentials.encode()).decode()
@@ -55,13 +56,15 @@ def get_access_token(client_id, client_secret, code, redirect_uri):
         token_data = response.json()
         access_token = token_data.get('access_token')
         refresh_token = token_data.get('refresh_token')
-        return access_token, refresh_token
+        expires_in = token_data.get("expires_in")
+        return access_token, refresh_token, expires_in
     else:
         print(f"Error: {response.status_code} - {response.text}")
-        return None, None
+        return None, None, None
 
 
 def refresh_access_token(client_id, client_secret, refresh_token, app):
+    print("Refreshing access tokens")
     # Encode client_id and client_secret for the Authorization header
     credentials = f"{client_id}:{client_secret}"
     encoded_credentials = base64.b64encode(credentials.encode()).decode()
@@ -89,9 +92,15 @@ def refresh_access_token(client_id, client_secret, refresh_token, app):
         app.expires_in = token_data.get("expires_in")
         app.save()
         return app.access_token, app.refresh_token
+    elif response.status_code == 401:
+        app.access_token, app.refresh_token, app.expires_in = get_access_token(client_id, client_secret, app.app_code, app.redirect_uri)
+        if not app.access_token and not app.refresh_token and not app.expires_in:
+            raise Exception(f"Unable to refresh the tokens.\n get_access_token({client_id}, {client_secret}, {app.app_code}, {app.redirect_uri})")
+        app.save()
+        return app.access_token, app.refresh_token, app.expires_in
     else:
         print(f"Error: {response.status_code} - {response.text}")
-        return None, None
+        return None, None, None
 
 
 def is_token_expired(auth_data):
