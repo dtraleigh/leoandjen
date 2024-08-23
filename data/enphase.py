@@ -1,9 +1,13 @@
+import sys
+import webbrowser
 from urllib.parse import urlparse, parse_qs
 import requests
 import base64
 import time
 import environ
 from pathlib import Path
+
+from data.models import AuthToken
 
 env = environ.Env(DEBUG=(bool, False))
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +31,12 @@ def get_auth_code(auth_url):
     else:
         print("Error: Authorization code not found in the redirect URI.")
         return None
+
+
+def update_app_code(code, client_id):
+    auth_token = AuthToken.objects.get(client_id=client_id)
+    auth_token.app_code = code
+    auth_token.save()
 
 
 def get_access_token(client_id, client_secret, code, redirect_uri):
@@ -54,13 +64,28 @@ def get_access_token(client_id, client_secret, code, redirect_uri):
     # Check if the request was successful
     if response.status_code == 200:
         token_data = response.json()
-        access_token = token_data.get('access_token')
-        refresh_token = token_data.get('refresh_token')
-        expires_in = token_data.get("expires_in")
-        return access_token, refresh_token, expires_in
+        return token_data.get('access_token'), token_data.get('refresh_token'), token_data.get("expires_in")
     else:
-        print(f"Error: {response.status_code} - {response.text}")
-        return None, None, None
+        print(f"Failed to get access token. Status: {response.status_code}, Response: {response.text}")
+        if response.status_code == 400 and "invalid_grant" in response.text:
+            # Reauthenticate to get a new authorization code
+            print("Authorization code is invalid or expired. Redirecting to reauthenticate...")
+
+            auth_url = f"https://api.enphaseenergy.com/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}"
+
+            print(f"Go to the following url and get a new auth code:\n")
+            print(auth_url)
+            new_code = input("\nEnter the new authorization code: ")
+
+            update_app_code(new_code, client_id)
+
+            if new_code.lower() == 'q':
+                print("Exiting the process as requested.")
+                sys.exit(0)
+
+            return get_access_token(client_id, client_secret, new_code, redirect_uri)
+        else:
+            return None, None, None
 
 
 def refresh_access_token(client_id, client_secret, refresh_token, app):
@@ -93,14 +118,29 @@ def refresh_access_token(client_id, client_secret, refresh_token, app):
         app.save()
         return app.access_token, app.refresh_token
     elif response.status_code == 401:
-        app.access_token, app.refresh_token, app.expires_in = get_access_token(client_id, client_secret, app.app_code, app.redirect_uri)
+        app.access_token, app.refresh_token, app.expires_in = get_access_token(
+                                                                                client_id,
+                                                                                client_secret,
+                                                                                app.app_code,
+                                                                                app.redirect_uri
+                                                                              )
+
+        if not all([app.access_token, app.refresh_token, app.expires_in]):
+            raise Exception(
+                f"get_access_token did not return valid tokens. "
+                f"Access Token: {app.access_token}, Refresh Token: {app.refresh_token}, Expires In: {app.expires_in}"
+            )
+
         if not app.access_token and not app.refresh_token and not app.expires_in:
-            raise Exception(f"Unable to refresh the tokens.\n get_access_token({client_id}, {client_secret}, {app.app_code}, {app.redirect_uri})")
+            raise Exception(
+                f"Unable to refresh the tokens. "
+                f"Status Code: {response.status_code}, Response: {response.text}, "
+                f"Client ID: {client_id}, App Code: {app.app_code}, Redirect URI: {app.redirect_uri}"
+            )
         app.save()
         return app.access_token, app.refresh_token, app.expires_in
     else:
-        print(f"Error: {response.status_code} - {response.text}")
-        return None, None, None
+        raise Exception(f"Failed to refresh token. Status: {response.status_code}, Response: {response.text}")
 
 
 def is_token_expired(auth_data):
