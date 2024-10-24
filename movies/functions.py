@@ -68,28 +68,30 @@ def get_sort_character(sort_order):
     return "⌃"
 
 
-def get_movies(search, sort, movie_format_filter, order_by):
-    """Sort"""
-    if sort == "desc":
-        sort = "asc"
-        order_by = "-" + order_by
-        sort_arrow = get_sort_character("desc")
-    else:
-        sort = "desc"
-        sort_arrow = get_sort_character("asc")
+def get_movies(search, sort, movie_format_filter, order_by=None):
+    """Retrieve and sort the movie list based on search input, sort order, and format filter."""
+
+    movie_list = Movie.objects.all()
 
     if search:
         if search.lower() == "3d":
-            movie_list = Movie.objects.filter(formats__name="3d").order_by(order_by)
+            movie_list = movie_list.filter(formats__name="3d")
         else:
-            movie_list = Movie.objects.filter(Q(title__icontains=search) | Q(comments__icontains=search))
-    else:
-        movie_list = Movie.objects.order_by(order_by)
+            movie_list = movie_list.filter(Q(title__icontains=search) | Q(comments__icontains=search))
 
     if movie_format_filter:
-        movie_list = Movie.objects.filter(formats__name=movie_format_filter).order_by(order_by)
+        movie_list = movie_list.filter(formats__name=movie_format_filter)
 
-    return movie_list, search, sort, sort_arrow
+    if order_by:
+        movie_list = movie_list.order_by(order_by)
+
+    if sort == "desc":
+        movie_list = movie_list.reverse()
+
+    sort_arrow = get_sort_character(sort)
+    new_sort = "asc" if sort == "desc" else "desc"
+
+    return movie_list, search, new_sort, sort_arrow
 
 
 def get_movie_list_sort(sort, order_by):
