@@ -4,7 +4,7 @@ from datetime import datetime
 from functools import reduce
 
 from django.apps import apps
-from django.core.exceptions import FieldError
+from django.core.exceptions import FieldError, MultipleObjectsReturned
 from django.db.models import Q
 
 import data.models
@@ -407,7 +407,19 @@ def get_car_miles_all_ytd_avg(custom_most_recent=None):
 
 def get_days_energy_charge_per_kwh(month, day, year):
     dt_obj = datetime(year, month, day)
-    elec_bill = Electricity.objects.get(service_start_date__lte=dt_obj, service_end_date__gte=dt_obj)
+    try:
+        elec_bill = Electricity.objects.get(service_start_date__lte=dt_obj, service_end_date__gte=dt_obj)
+    except MultipleObjectsReturned:
+        logger.error(f"Multiple electricity bills found for date: {dt_obj} (Month: {month}, Day: {day}, Year: {year})")
+        all_bills = Electricity.objects.filter(service_start_date__lte=dt_obj, service_end_date__gte=dt_obj)
+        for bill in all_bills:
+            logger.error(f"Conflicting bill - ID: {bill.id}, Service Start Date: {bill.service_start_date}, Service End Date: {bill.service_end_date}")
+        return Decimal('0.0')
+    except Exception as e:
+        logger.exception(e)
+        logger.exception(f"Check get_days_energy_charge_per_kwh({month}, {day}, {year})")
+        return Decimal('0.0')
+
     try:
         rate_schedule = ElectricRateSchedule.objects.get(electricity_bills=elec_bill)
     except Exception as e:
