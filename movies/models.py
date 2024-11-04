@@ -9,14 +9,14 @@ class Movie(models.Model):
     themoviedb_id = models.IntegerField()
     imdb_id = models.CharField(max_length=50)
     poster_path = models.CharField(max_length=300)
-    formats = models.ManyToManyField("Format", default=None, blank=True)
+    formats = models.ManyToManyField("Format", blank=True)
     comments = models.CharField(max_length=300, blank=True, null=True)
     genre_data = models.JSONField(blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
     letterboxd_url_slug = models.CharField(max_length=300, blank=True, null=True)
-    directors = models.ManyToManyField("Director", default=None, blank=True)
-    characters = models.ManyToManyField("Character", default=None, blank=True)
+    directors = models.ManyToManyField("Director", blank=True)
+    characters = models.ManyToManyField("Character", blank=True)
 
     class Meta:
         ordering = ["sort_title"]
@@ -48,7 +48,7 @@ class APIUser(models.Model):
 class Collection(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(default=None, blank=True)
-    movies = models.ManyToManyField("Movie", default=None, blank=True)
+    movies = models.ManyToManyField("Movie", blank=True)
 
     def __str__(self):
         return self.name

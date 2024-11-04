@@ -78,7 +78,14 @@ class ElecYear:
 
         return data_points
 
-    def get_ytd_total(self, latest_month=Electricity.objects.all().latest("service_end_date").service_end_date.month):
+    def get_ytd_total(self):
+        # Query the latest month from the Electricity table here
+        try:
+            latest_month = Electricity.objects.latest("service_end_date").service_end_date.month
+        except Electricity.DoesNotExist:
+            # Handle the case where there are no records in Electricity
+            return Decimal("0.0")
+
         # YTD should be total between Jan 1 and first of the current month
         # - Since we get data in chunks (the bills), not worrying about YTD daily values
         # - Therefore, YTD range is from Jan 1 up to current_month or the latest bill we have
