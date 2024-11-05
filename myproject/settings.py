@@ -111,20 +111,24 @@ else:
     MEDIA_ROOT = BASE_DIR / "uploads"
     MEDIA_URL = "/uploads/"
 
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-    AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
-    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME")
-    AWS_QUERYSTRING_EXPIRE = 300
-    AWS_S3_CUSTOM_DOMAIN = "d2iokg5xf8f841.cloudfront.net"
-    AWS_CLOUDFRONT_KEY = env.str("AWS_CLOUDFRONT_KEY", multiline=True).encode("ascii").strip()
-    AWS_CLOUDFRONT_KEY_ID = env.str("AWS_CLOUDFRONT_KEY_ID").strip()
-
-# Add individual app static folders here if needed.
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "movies/static"),
-# ]
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "OPTIONS": {
+                "access_key": env("AWS_ACCESS_KEY_ID"),
+                "secret_key": env("AWS_SECRET_ACCESS_KEY"),
+                "bucket_name": env("AWS_STORAGE_BUCKET_NAME"),
+                "region_name": env("AWS_S3_REGION_NAME"),
+                "querystring_expire": 300,
+                "custom_domain": env("AWS_S3_CUSTOM_DOMAIN"),
+                "cloudfront_key": env.str("AWS_CLOUDFRONT_KEY", multiline=True).encode("ascii").strip(),
+                "cloudfront_key_id": env.str("AWS_CLOUDFRONT_KEY_ID").strip(),
+            },
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
 
 ADMINS = (
     ("Leo", "leo@dtraleigh.com"),
