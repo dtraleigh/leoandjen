@@ -1,10 +1,11 @@
-import django.contrib.postgres.fields
 from django.db import models
+from django.db.models import Case, When
+from django.db.models.functions import Coalesce
 
 
 class Movie(models.Model):
     title = models.CharField(max_length=300)
-    sort_title = models.CharField(max_length=300, default=title)
+    sort_title = models.CharField(max_length=300, blank=True, null=True, default=title)
     primary_release_year = models.IntegerField()
     themoviedb_id = models.IntegerField()
     imdb_id = models.CharField(max_length=50)
@@ -19,13 +20,26 @@ class Movie(models.Model):
     characters = models.ManyToManyField("Character", blank=True)
 
     class Meta:
-        ordering = ["sort_title"]
+        ordering = [
+            Coalesce(
+                Case(
+                    When(sort_title="", then=None),
+                    default="sort_title",
+                    output_field=models.CharField(),
+                ),
+                "title",
+            )
+        ]
 
     def __str__(self):
         return f"{self.title} ({self.primary_release_year})"
 
     def get_formats(self):
         return ", ".join([f.name for f in self.formats.all()])
+
+    @property
+    def get_sort_title(self):
+        return self.sort_title or self.title
 
 
 class Format(models.Model):

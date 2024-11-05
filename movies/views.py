@@ -15,7 +15,7 @@ from movies.models import Movie, Collection
 def home(request):
     search = request.GET.get("search")
     sort = request.GET.get("sort")
-    movie_list, search, sort, sort_arrow = get_movies(search, sort, None, "sort_title")
+    movie_list, search, sort, sort_arrow = get_movies(search, sort, None, None)
     breadcrumb = str(len(movie_list)) + " Titles"
     sort_label = "Alphabetical"
     movie_recent_list = Movie.objects.order_by("-created_date")[0:12]
@@ -39,7 +39,7 @@ def home(request):
 
 def filter_4k(request):
     sort = request.GET.get("sort")
-    uhd_movies, search, sort, sort_arrow = get_movies(None, sort, "4k", "sort_title")
+    uhd_movies, search, sort, sort_arrow = get_movies(None, sort, "4k", None)
     breadcrumb = "4K Titles (" + str(len(uhd_movies)) + ")"
     sort_label = "Alphabetical"
 
@@ -52,7 +52,7 @@ def filter_4k(request):
 
 def filter_bd(request):
     sort = request.GET.get("sort")
-    bd_movies, search, sort, sort_arrow = get_movies(None, sort, "blu_ray", "sort_title")
+    bd_movies, search, sort, sort_arrow = get_movies(None, sort, "blu_ray", None)
     breadcrumb = "Blu-Ray Titles (" + str(len(bd_movies)) + ")"
     sort_label = "Alphabetical"
 
@@ -79,7 +79,7 @@ def filter_streaming(request):
 
 def filter_plex(request):
     sort = request.GET.get("sort")
-    plex_movies, search, sort, sort_arrow = get_movies(None, sort, "plex", "sort_title")
+    plex_movies, search, sort, sort_arrow = get_movies(None, sort, "plex", None)
     breadcrumb = "Titles on Plex (" + str(len(plex_movies)) + ")"
     sort_label = "Alphabetical"
 
