@@ -7,54 +7,46 @@
         <li class="breadcrumb-item">
           <a href="/movies">Home</a>
         </li>
-        {% if search %}
-          <li class="breadcrumb-item" aria-current="page">
-            Search results for:
-            <span class="font-weight-bold">{{ search }}</span>
-          </li>
-        {% elif breadcrumb %}
-          <li class="breadcrumb-item" aria-current="page">
-            <span class="font-weight-bold">{{ breadcrumb }}</span>
-          </li>
-        {% endif %}
       </ol>
     </nav>
-    <div class="col">
-      {% if search %}
-        <div class="float-right">
-          <a href="?sort={{ sort }}&search={{ search }}">{{ sort_label }}</a><span class="badge">{{ sort_arrow }}</span>
-        </div>
-      {% elif not sort %}
-        <div class="float-right">
-          <p>{{ sort_label }}</p>
-        </div>
-      {% else %}
-        <div class="float-right">
-          <a href="?sort={{ sort }}">{{ sort_label }}</a><span class="badge">{{ sort_arrow }}</span>
-        </div>
-      {% endif %}
-    </div>
   </div>
   <div class="row">
-    {% for movie in movie_list %}
-      <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-4">
-        <div class="card">
-          <a href="/movies/movie/{{ movie.themoviedb_id }}">
-            <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
-                 class="card-img-top"
-                 alt="poster for {{ movie.title }} ({{ movie.primary_release_year }})">
-          </a>
-          <div class="card-body custom-card-body">
-            <h6 class="card-title d-inline-block text-truncate">{{ movie.title }}</h6>
-            <p class="year">({{ movie.primary_release_year }})</p>
-          </div>
-          <div class="card-body formats">
-            {% for format in movie.formats.all %}
-              <img src="{% static "img" %}/{{ format.name }}.png" style="width:25px;">
-            {% endfor %}
+    <div class="col-sm-4" style="background-color:gray;">
+      <img src="https://image.tmdb.org/t/p/w500{{ person_poster_path }}"
+           class="card-img-top"
+           alt="poster for {{ title }} ({{ year }})">
+    </div>
+    <div class="col-sm-8">
+      <h1>{{ person_name }}</h1>
+      {% if birthday %}<h6>Birthday: {{ birthday }}</h6>{% endif %}
+      {% if deathday %}<h6>Died: {{ deathday }}</h6>{% endif %}
+      <p>{{ biography }}</p>
+      <h2>Movies at Home</h2>
+      <div class="row">
+        {% for movie in movie_list_at_home %}
+        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-8 col-8">
+          {% include 'card.html' %}
+        </div>
+        {% endfor %}
+      </div>
+      <h2>Other Movies</h2>
+      <div class="row">
+        {% for movie in movie_list_other %}
+        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-8 col-8">
+          <div class="card">
+            <a href="https://www.justwatch.com/us/search?q={{movie.title}}">
+              <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                   class="card-img-top"
+                   alt="poster for {{ movie.title }} ({{ movie.release_date }})">
+            </a>
+            <div class="card-body custom-card-body">
+              <h6 class="card-title d-inline-block text-truncate">{{ movie.title }}</h6>
+              <p class="year">({{ movie.release_date }})</p>
+            </div>
           </div>
         </div>
+        {% endfor %}
       </div>
-    {% endfor %}
+    </div>
   </div>
 {% endblock %}

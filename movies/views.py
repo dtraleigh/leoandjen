@@ -209,19 +209,6 @@ def director(request, tmdb_id):
 
 
 def actor(request, themoviedb_actor_id):
-    characters_played_by_actor = Character.objects.filter(themoviedb_actor_id=themoviedb_actor_id)
-    search = request.GET.get("search")
-    actor_name = characters_played_by_actor[0].actor_name
-    breadcrumb = f"Movies with {actor_name}"
-
-    movie_list = \
-        Movie.objects.filter(characters__themoviedb_actor_id=themoviedb_actor_id).order_by("-primary_release_year")
-
-    return render(request, "person.html", {"movie_list": movie_list,
-                                             "search": search,
-                                             "breadcrumb": breadcrumb})
-
-def actor2(request, themoviedb_actor_id):
     actor_info_from_character = Character.objects.filter(themoviedb_actor_id=themoviedb_actor_id)[0]
     actor_info = get_person_info_from_tmdb(themoviedb_actor_id)
 
@@ -235,15 +222,21 @@ def actor2(request, themoviedb_actor_id):
             actor_deathday = None
             actor_biography = None
 
+    #movie_list_at_home = Movie.objects.filter(characters__themoviedb_actor_id=10980).order_by("-primary_release_year")
     movie_list_at_home = \
         Movie.objects.filter(characters__themoviedb_actor_id=themoviedb_actor_id).order_by("-primary_release_year")
 
-    return render(request, "person2.html", {"person_poster_path": actor_info_from_character.profile_path,
+    actor_credits_as_cast = get_actors_movies_from_tmdb(themoviedb_actor_id)["cast"]
+    movies_not_at_home = [f for f in actor_credits_as_cast if f["id"] not in [m.themoviedb_id for m in movie_list_at_home]]
+    sorted_movies_not_at_home = sorted(movies_not_at_home, key=lambda x: x['popularity'], reverse=True)
+
+    return render(request, "person.html", {"person_poster_path": actor_info_from_character.profile_path,
                                             "person_name": actor_info_from_character.actor_name,
                                             "birthday": actor_birthday,
                                             "deathday": actor_deathday,
                                             "biography": actor_biography,
-                                            "movie_list_at_home": movie_list_at_home})
+                                            "movie_list_at_home": movie_list_at_home,
+                                           "movie_list_other": sorted_movies_not_at_home})
 
 
 def genre_solo(request, genre_solo):
