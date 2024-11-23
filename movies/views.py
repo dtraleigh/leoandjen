@@ -221,6 +221,30 @@ def actor(request, themoviedb_actor_id):
                                              "search": search,
                                              "breadcrumb": breadcrumb})
 
+def actor2(request, themoviedb_actor_id):
+    actor_info_from_character = Character.objects.filter(themoviedb_actor_id=themoviedb_actor_id)[0]
+    actor_info = get_person_info_from_tmdb(themoviedb_actor_id)
+
+    try:
+        if actor_info["id"]:
+            actor_birthday = actor_info["birthday"]
+            actor_deathday = actor_info["deathday"]
+            actor_biography = actor_info["biography"]
+    except KeyError:
+            actor_birthday = None
+            actor_deathday = None
+            actor_biography = None
+
+    movie_list_at_home = \
+        Movie.objects.filter(characters__themoviedb_actor_id=themoviedb_actor_id).order_by("-primary_release_year")
+
+    return render(request, "person2.html", {"person_poster_path": actor_info_from_character.profile_path,
+                                            "person_name": actor_info_from_character.actor_name,
+                                            "birthday": actor_birthday,
+                                            "deathday": actor_deathday,
+                                            "biography": actor_biography,
+                                            "movie_list_at_home": movie_list_at_home})
+
 
 def genre_solo(request, genre_solo):
     search = request.GET.get("search")

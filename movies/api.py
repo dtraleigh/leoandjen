@@ -76,3 +76,12 @@ def query_tmdb_movie_credits(tmdb_id):
     response = query_url_with_retries(url)
 
     return response.json()
+
+def get_person_info_from_tmdb(person_id):
+    api_user = APIUser.objects.get(name="Leo")
+
+    url = f"https://api.themoviedb.org/3/person/{str(person_id)}?api_key={api_user.api_key}"
+
+    response = query_url_with_retries(url)
+
+    return response.json()

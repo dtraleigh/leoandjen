@@ -1,0 +1,34 @@
+{% extends "index.html" %}
+{% block content %}
+  {% load static %}
+  <div class="row">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="/movies">Home</a>
+        </li>
+      </ol>
+    </nav>
+  </div>
+  <div class="row">
+    <div class="col-sm-4" style="background-color:gray;">
+      <img src="https://image.tmdb.org/t/p/w500{{ person_poster_path }}"
+           class="card-img-top"
+           alt="poster for {{ title }} ({{ year }})">
+    </div>
+    <div class="col-sm-8">
+      <h1>{{ person_name }}</h1>
+      {% if birthday %}<h6>Birthday: {{ birthday }}</h6>{% endif %}
+      {% if deathday %}<h6>Died: {{ deathday }}</h6>{% endif %}
+      <p>{{ biography }}</p>
+      <h2>Movies at Home</h2>
+      <div class="row">
+        {% for movie in movie_list_at_home %}
+        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-8 col-8">
+          {% include 'card.html' %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
