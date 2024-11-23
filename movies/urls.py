@@ -16,6 +16,6 @@ urlpatterns = [
     path("director/<int:tmdb_id>/", views.director, name="director"),
     path("genre/<str:genre_solo>/", views.genre_solo, name="genre_solo"),
     path("collection/<int:collection_id>/", views.collection, name="collection"),
-    path("actor/<int:themoviedb_actor_id>/", views.actor, name="actor"),
+    path("actor/<int:themoviedb_actor_id>/", views.actor2, name="actor2"),
     path("add-movie/", views.add_movie, name="add_movie"),
 ]

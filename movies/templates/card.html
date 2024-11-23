@@ -1,0 +1,17 @@
+{% load static %}
+<div class="card">
+  <a href="/movies/movie/{{ movie.themoviedb_id }}">
+    <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+         class="card-img-top"
+         alt="poster for {{ movie.title }} ({{ movie.primary_release_year }})">
+  </a>
+  <div class="card-body custom-card-body">
+    <h6 class="card-title d-inline-block text-truncate">{{ movie.title }}</h6>
+    <p class="year">({{ movie.primary_release_year }})</p>
+  </div>
+  <div class="card-body formats">
+    {% for format in movie.formats.all %}
+      <img src="{% static "img" %}/{{ format.name }}.png" style="width:25px;">
+    {% endfor %}
+  </div>
+</div>
