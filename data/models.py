@@ -3,8 +3,9 @@ import logging
 from datetime import timedelta
 from decimal import Decimal
 
+from django.utils import timezone
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Max
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -60,6 +61,12 @@ class SolarEnergy(models.Model):
 
     def __str__(self):
         return f"{self.date_of_production} ({self.id})"
+
+    @classmethod
+    def get_last_production_date(cls):
+        """Returns the date of the most recent SolarEnergy instance in YYYY-MM-DD format."""
+        last_date = cls.objects.aggregate(Max('date_of_production'))['date_of_production__max']
+        return last_date.strftime('%Y-%m-%d') if last_date else None
 
 
 class Electricity(models.Model):
@@ -308,7 +315,7 @@ class CarMiles(models.Model):
 
 
 class AuthToken(models.Model):
-    app = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
     client_id = models.CharField(max_length=200)
     client_secret = models.CharField(max_length=200)
     app_code = models.CharField(max_length=200)
@@ -320,3 +327,12 @@ class AuthToken(models.Model):
 
     def __str__(self):
         return f"{self.id}"
+
+    def is_token_expired(self, buffer=0):
+        """
+        Checks if the token is expired or will expire within the given buffer time.
+        Returns True if expired or about to expire (considering the buffer), False otherwise.
+        """
+        expiration_time = self.issued_datetime + timedelta(seconds=self.expires_in)
+        expiration_with_buffer = expiration_time - timedelta(seconds=buffer)
+        return expiration_with_buffer <= timezone.now()

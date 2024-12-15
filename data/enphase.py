@@ -1,9 +1,9 @@
 import sys
-import webbrowser
+from datetime import timedelta
 from urllib.parse import urlparse, parse_qs
 import requests
 import base64
-import time
+from django.utils.timezone import now
 import environ
 from pathlib import Path
 
@@ -89,68 +89,57 @@ def get_access_token(client_id, client_secret, code, redirect_uri):
 
 
 def refresh_access_token(client_id, client_secret, refresh_token, app):
-    print("Refreshing access tokens")
-    # Encode client_id and client_secret for the Authorization header
+    """Refresh the access token or reauthenticate if necessary."""
+    print("Refreshing access tokens...")
     credentials = f"{client_id}:{client_secret}"
     encoded_credentials = base64.b64encode(credentials.encode()).decode()
 
-    # Define the payload for the POST request to refresh the access token
     payload = {
         'grant_type': 'refresh_token',
         'refresh_token': refresh_token
     }
 
-    # Define the headers with the Authorization header
     headers = {
         'Authorization': f'Basic {encoded_credentials}',
         'Content-Type': 'application/x-www-form-urlencoded'
     }
 
-    # Make the POST request to refresh the access token
     response = requests.post('https://api.enphaseenergy.com/oauth/token', data=payload, headers=headers)
 
-    # Check if the request was successful
     if response.status_code == 200:
         token_data = response.json()
         app.access_token = token_data.get("access_token")
         app.refresh_token = token_data.get("refresh_token")
         app.expires_in = token_data.get("expires_in")
         app.save()
+        print("Tokens refreshed successfully.")
         return app.access_token, app.refresh_token
+
     elif response.status_code == 401:
-        app.access_token, app.refresh_token, app.expires_in = get_access_token(
-                                                                                client_id,
-                                                                                client_secret,
-                                                                                app.app_code,
-                                                                                app.redirect_uri
-                                                                              )
+        print("Refresh token is invalid or expired. Reauthenticating...")
+        auth_url = f"https://api.enphaseenergy.com/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={app.redirect_uri}"
+        print(f"Go to the following URL to reauthenticate:\n{auth_url}")
+        new_code = input("Enter the new authorization code: ")
 
-        if not all([app.access_token, app.refresh_token, app.expires_in]):
-            raise Exception(
-                f"get_access_token did not return valid tokens. "
-                f"Access Token: {app.access_token}, Refresh Token: {app.refresh_token}, Expires In: {app.expires_in}"
-            )
-
-        if not app.access_token and not app.refresh_token and not app.expires_in:
-            raise Exception(
-                f"Unable to refresh the tokens. "
-                f"Status Code: {response.status_code}, Response: {response.text}, "
-                f"Client ID: {client_id}, App Code: {app.app_code}, Redirect URI: {app.redirect_uri}"
-            )
+        app.access_token, app.refresh_token, app.expires_in = get_access_token(client_id, client_secret, new_code, app.redirect_uri)
         app.save()
-        return app.access_token, app.refresh_token, app.expires_in
+        return app.access_token, app.refresh_token
+
     else:
-        raise Exception(f"Failed to refresh token. Status: {response.status_code}, Response: {response.text}")
+        error_message = f"Failed to refresh token. Status: {response.status_code}, Response: {response.text}"
+        print(error_message)
+        raise Exception(error_message)
 
 
 def is_token_expired(auth_data):
-    current_time = int(time.time())
-    expiration_timestamp = auth_data.issued_datetime.timestamp() + auth_data.expires_in
-
-    if current_time >= expiration_timestamp:
-        return True
-    else:
-        return False
+    """Check if the token is expired, with a buffer for time drift."""
+    print(f"Current time: {now()}")
+    print(f"Issued time: {auth_data.issued_datetime}")
+    print(f"Expires in: {auth_data.expires_in} seconds")
+    expiration_time = auth_data.issued_datetime + timedelta(seconds=auth_data.expires_in)
+    print(f"Calculated expiration time: {expiration_time}")
+    buffer_time = timedelta(seconds=60)  # 1-minute buffer
+    return now() >= (expiration_time - buffer_time)
 
 
 def get_site_production(token, start_date, end_date):
