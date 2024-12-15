@@ -1,9 +1,22 @@
 from datetime import datetime, timedelta
 from data.enphase import *
+from django.db.models import Max
 
 from django.core.management.base import BaseCommand
 
 from data.models import SolarEnergy, AuthToken
+
+
+def get_yesterdays_date():
+    """Returns yesterday's date in the format YYYY-MM-DD."""
+    yesterday = datetime.now() - timedelta(days=1)
+    return yesterday.strftime('%Y-%m-%d')
+
+
+def get_last_production_date():
+    """Returns the date of the most recent SolarEnergy instance in YYYY-MM-DD format."""
+    last_date = SolarEnergy.objects.aggregate(Max('date_of_production'))['date_of_production__max']
+    return last_date.strftime('%Y-%m-%d') if last_date else None
 
 
 class Command(BaseCommand):
@@ -14,21 +27,29 @@ class Command(BaseCommand):
         parser.add_argument("-s", "--start", help="start date, format YYYY-MM-DD")
         parser.add_argument("-e", "--end", help="end date, format YYYY-MM-DD")
         parser.add_argument("-t", "--test", action="store_true", help="Run a test, no changes made.")
+        parser.add_argument("-a", "--auto_dates", action="store_true", help="Auto set the dates.")
 
     def handle(self, *args, **options):
         start_date = options["start"]
         end_date = options["end"]
         is_test = options["test"]
+        auto_dates = options["auto_dates"]
 
-        enphase_auth = AuthToken.objects.get(app=env("AUTH_APP_NAME"))
+        enphase_auth = AuthToken.objects.get(name=env("AUTH_APP_NAME"))
+        print(f"Checking token expiration for app {enphase_auth.name}...")
         if is_token_expired(enphase_auth):
-            print("Access token has expired.")
+            print("Access token expired. Refreshing...")
             refresh_access_token(env("ENPHASE_CLIENT_ID"),
                                  env("ENPHASE_CLIENT_SECRET"),
                                  enphase_auth.refresh_token,
                                  enphase_auth)
 
-        site_data = get_site_production(enphase_auth.access_token, start_date, end_date)
+        if auto_dates:
+            start_date = get_last_production_date()
+            end_date = get_yesterdays_date()
+            site_data = get_site_production(enphase_auth.access_token, start_date, end_date)
+        else:
+            site_data = get_site_production(enphase_auth.access_token, start_date, end_date)
 
         # Add new solar data to SolarEnergy models
         try:

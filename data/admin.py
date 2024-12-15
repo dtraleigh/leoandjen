@@ -37,7 +37,7 @@ class ElectricRateScheduleAdmin(admin.ModelAdmin):
 
 
 class AuthTokenAdmin(admin.ModelAdmin):
-    list_display = ["app", "issued_datetime"]
+    list_display = ["name", "issued_datetime"]
 
 
 admin.site.register(Water, WaterAdmin)
