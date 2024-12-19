@@ -1,5 +1,6 @@
+import logging
 import sys
-from datetime import timedelta
+from datetime import timedelta, datetime
 from urllib.parse import urlparse, parse_qs
 import requests
 import base64
@@ -8,6 +9,7 @@ import environ
 from pathlib import Path
 
 from data.models import AuthToken
+logger = logging.getLogger("django")
 
 env = environ.Env(DEBUG=(bool, False))
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -90,7 +92,7 @@ def get_access_token(client_id, client_secret, code, redirect_uri):
 
 def refresh_access_token(client_id, client_secret, refresh_token, app):
     """Refresh the access token or reauthenticate if necessary."""
-    print("Refreshing access tokens...")
+    logger.info(f"{datetime.now()}: Refreshing access tokens...")
     credentials = f"{client_id}:{client_secret}"
     encoded_credentials = base64.b64encode(credentials.encode()).decode()
 
@@ -112,7 +114,7 @@ def refresh_access_token(client_id, client_secret, refresh_token, app):
         app.refresh_token = token_data.get("refresh_token")
         app.expires_in = token_data.get("expires_in")
         app.save()
-        print("Tokens refreshed successfully.")
+        logger.info(f"{datetime.now()}: Tokens refreshed successfully.")
         return app.access_token, app.refresh_token
 
     elif response.status_code == 401:
@@ -133,11 +135,11 @@ def refresh_access_token(client_id, client_secret, refresh_token, app):
 
 def is_token_expired(auth_data):
     """Check if the token is expired, with a buffer for time drift."""
-    print(f"Current time: {now()}")
-    print(f"Issued time: {auth_data.issued_datetime}")
-    print(f"Expires in: {auth_data.expires_in} seconds")
+    logger.info(f"{datetime.now()}: Current time: {now()}")
+    logger.info(f"{datetime.now()}: Issued time: {auth_data.issued_datetime}")
+    logger.info(f"{datetime.now()}: Expires in: {auth_data.expires_in} seconds")
     expiration_time = auth_data.issued_datetime + timedelta(seconds=auth_data.expires_in)
-    print(f"Calculated expiration time: {expiration_time}")
+    logger.info(f"{datetime.now()}: Calculated expiration time: {expiration_time}")
     buffer_time = timedelta(seconds=60)  # 1-minute buffer
     return now() >= (expiration_time - buffer_time)
 
