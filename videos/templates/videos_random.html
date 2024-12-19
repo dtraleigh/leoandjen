@@ -46,7 +46,7 @@
           {% if user.is_staff == True %}
             {% if video.get_cname == "Video" %}<a href="/videos/edit/video/{{ video.id }}">Edit</a>{% endif %}
           {% endif %}
-          <p>{{ video.rich_description }}</p>
+          <p>{{ video.description }}</p>
         {% endautoescape %}
         <p>
           Date Taken: <strong>{{ video.date_shot }}</strong>

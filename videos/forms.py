@@ -14,7 +14,6 @@ class NewVideoForm(ModelForm):
                   "poster",
                   "video_file",
                   "description",
-                  "rich_description",
                   "tags",
                   "lat",
                   "lon"]
@@ -34,7 +33,6 @@ class EditVideoForm(ModelForm):
                   "poster",
                   "video_file",
                   "description",
-                  "rich_description",
                   "tags",
                   "lat",
                   "lon"]
@@ -54,7 +52,6 @@ class EditExternalForm(ModelForm):
                   "embed_code",
                   "poster",
                   "description",
-                  "rich_description",
                   "tags",
                   "lat",
                   "lon"

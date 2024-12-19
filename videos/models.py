@@ -1,4 +1,3 @@
-from ckeditor.fields import RichTextField
 from django.db import models
 from django.urls import reverse
 
@@ -13,7 +12,6 @@ class Video(models.Model):
     poster = models.FileField(upload_to="poster/%Y/%m/", validators=[validate_poster_extension])
     video_file = models.FileField(upload_to="video/%Y/%m/", validators=[validate_video_extension])
     description = models.TextField(default=None, blank=True, null=True)
-    rich_description = RichTextField(default="", blank=True, null=True)
     tags = models.ManyToManyField("Tag", default=None, blank=True)
     lat = models.DecimalField(max_digits=9, decimal_places=6, default=0)
     lon = models.DecimalField(max_digits=9, decimal_places=6, default=0)
@@ -47,7 +45,6 @@ class ExternalVideo(models.Model):
     embed_code = models.TextField(default=None, blank=True, null=True)
     poster = models.FileField(upload_to="poster/%Y/%m/")
     description = models.TextField(default=None, blank=True, null=True)
-    rich_description = RichTextField(default="", blank=True, null=True)
     tags = models.ManyToManyField("Tag", default=None, blank=True)
     lat = models.DecimalField(max_digits=9, decimal_places=6, default=0)
     lon = models.DecimalField(max_digits=9, decimal_places=6, default=0)
