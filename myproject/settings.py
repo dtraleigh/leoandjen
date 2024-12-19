@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     "django_extensions",
     "widget_tweaks",
     "debug_toolbar",
-    "ckeditor",
     "movies",
     "capitals",
     "data",
