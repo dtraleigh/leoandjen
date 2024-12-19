@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta
 from data.enphase import *
 from django.db.models import Max
@@ -6,17 +7,17 @@ from django.core.management.base import BaseCommand
 
 from data.models import SolarEnergy, AuthToken
 
+logger = logging.getLogger("django")
 
 def get_yesterdays_date():
-    """Returns yesterday's date in the format YYYY-MM-DD."""
     yesterday = datetime.now() - timedelta(days=1)
-    return yesterday.strftime('%Y-%m-%d')
+    return yesterday
 
 
 def get_last_production_date():
-    """Returns the date of the most recent SolarEnergy instance in YYYY-MM-DD format."""
+    """Returns the date of the most recent SolarEnergy instance"""
     last_date = SolarEnergy.objects.aggregate(Max('date_of_production'))['date_of_production__max']
-    return last_date.strftime('%Y-%m-%d') if last_date else None
+    return last_date if last_date else None
 
 
 class Command(BaseCommand):
@@ -36,17 +37,18 @@ class Command(BaseCommand):
         auto_dates = options["auto_dates"]
 
         enphase_auth = AuthToken.objects.get(name=env("AUTH_APP_NAME"))
-        print(f"Checking token expiration for app {enphase_auth.name}...")
+        logger.info(f"{datetime.now()}: Checking token expiration for app {enphase_auth.name}...")
         if is_token_expired(enphase_auth):
-            print("Access token expired. Refreshing...")
+            logger.info(f"{datetime.now()}: Access token expired. Refreshing...")
             refresh_access_token(env("ENPHASE_CLIENT_ID"),
                                  env("ENPHASE_CLIENT_SECRET"),
                                  enphase_auth.refresh_token,
                                  enphase_auth)
 
         if auto_dates:
-            start_date = get_last_production_date()
-            end_date = get_yesterdays_date()
+            start_date = get_last_production_date() + timedelta(days=1)
+            start_date = start_date.strftime('%Y-%m-%d')
+            end_date = get_yesterdays_date().strftime('%Y-%m-%d')
             site_data = get_site_production(enphase_auth.access_token, start_date, end_date)
         else:
             site_data = get_site_production(enphase_auth.access_token, start_date, end_date)
@@ -71,7 +73,7 @@ class Command(BaseCommand):
                         if not is_test:
                             SolarEnergy.objects.create(date_of_production=start_date_dt,
                                                        production=day_amt)
-                            print(f"Creating new SolarEnergy day for {start_date_dt}, amt: {day_amt}")
+                            logger.info(f"{datetime.now()}: Creating new SolarEnergy day for {start_date_dt}, amt: {day_amt}")
                         else:
                             print(f"Fake creating new SolarEnergy day for {start_date_dt}, amt: {day_amt}")
                     # Increment the date

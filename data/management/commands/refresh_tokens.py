@@ -1,21 +1,26 @@
+import logging
+from datetime import datetime
+
 import requests
 from django.core.management.base import BaseCommand
 from django.utils.timezone import now
 from data.models import AuthToken
 
+logger = logging.getLogger("django")
+
 class Command(BaseCommand):
     help = "Refresh OAuth tokens for all applications"
 
     def handle(self, *args, **options):
-        self.stdout.write("Starting token refresh process...")
+        logger.info(f"{datetime.now()}: Starting token refresh process...")
         success_count = 0
         fail_count = 0
 
         for app in AuthToken.objects.all():
-            self.stdout.write(f"Checking token for app: {app.name}")
+            logger.info(f"{datetime.now()}: Checking token for app: {app.name}")
             # Check if token needs refreshing
             if app.is_token_expired(buffer=3600):  # Refresh if less than 1 hour left
-                self.stdout.write(f"Token for app '{app.name}' is nearing expiration. Refreshing...")
+                logger.info(f"{datetime.now()}: Token for app '{app.name}' is nearing expiration. Refreshing...")
                 try:
                     response = requests.post(
                         "https://api.enphaseenergy.com/oauth/token",
@@ -34,10 +39,10 @@ class Command(BaseCommand):
                         app.expires_in = token_data["expires_in"]
                         app.issued_datetime = now()
                         app.save()
-                        self.stdout.write(f"Token for app '{app.name}' refreshed successfully.")
+                        logger.info(f"Token for app '{app.name}' refreshed successfully.")
                         success_count += 1
                     else:
-                        self.stderr.write(
+                        logger.info(f"{datetime.now()}: "
                             f"Failed to refresh token for app '{app.name}'. "
                             f"Response: {response.json()}"
                         )
@@ -49,8 +54,8 @@ class Command(BaseCommand):
                     )
                     fail_count += 1
             else:
-                self.stdout.write(f"Token for app '{app.name}' is still valid.")
+                logger.info(f"{datetime.now()}: Token for app '{app.name}' is still valid.")
 
-        self.stdout.write(
+        logger.info(f"{datetime.now()}: "
             f"Token refresh process completed. Success: {success_count}, Failures: {fail_count}."
         )
