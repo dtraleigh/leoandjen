@@ -3,13 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse
 
 from movies.add_movie import add_movie_from_form
 from movies.api import *
-from movies.forms import AddMovieForm
+from movies.forms import AddMovieForm, EditMovieForm
 from movies.functions import *
-from movies.models import Movie, Collection
+from movies.models import Movie, Collection, Format
 
 
 def home(request):
@@ -322,3 +323,37 @@ def add_movie(request):
 
     return render(request, "add_movie.html", {"form": form,
                                               "message": output_message})
+
+
+@login_required(login_url="/admin")
+def edit_movie(request, movie_id):
+    movie = get_object_or_404(Movie, id=movie_id)
+
+    if request.method == "POST":
+        form = EditMovieForm(request.POST, instance=movie)
+        if form.is_valid():
+            imdb_id = form.cleaned_data["imdb_id"]
+            letterboxd_slug = form.cleaned_data["letterboxd_slug"]
+            formats = form.cleaned_data["formats"]
+            sort_title = form.cleaned_data["sort_title"]
+            collections = form.cleaned_data["collections"]
+
+            movie.imdb_id = imdb_id
+            movie.letterboxd_url_slug = letterboxd_slug
+            movie.sort_title = sort_title if sort_title else movie.title
+            movie.save()
+
+            movie.formats.clear()
+            for format_name in formats:
+                movie.formats.add(Format.objects.get(name=format_name))
+
+            movie.collection_set.clear()
+            for collection_name in collections:
+                Collection.objects.get(name=collection_name).movies.add(movie)
+
+            messages.info(request, f"{movie.title} was updated successfully.")
+            return HttpResponseRedirect(f"/movies/movie/{movie.themoviedb_id}/")
+    else:
+        form = EditMovieForm(instance=movie)
+
+    return render(request, "edit_movie.html", {"form": form, "movie": movie})
