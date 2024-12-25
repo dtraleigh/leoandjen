@@ -1,0 +1,54 @@
+{% extends "index.html" %}
+{% block content %}
+  <div class="row">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="/movies">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Edit Movie</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      {% if messages %}
+        <div class="alert alert-success" role="alert">
+          {% for message in messages %}
+            <p {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <form action="/movies/edit-movie/{{ movie.id}}" method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="fieldWrapper">
+          {{ form.imdb_id.errors }}
+          <label for="{{ form.imdb_id.id_for_label }}">IMDB ID:</label>
+          {{ form.imdb_id }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.letterboxd_slug.errors }}
+          <label for="{{ form.letterboxd_slug.id_for_label }}">Letterboxd slug:</label>
+          {{ form.letterboxd_slug }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.sort_title.errors }}
+          <label for="{{ form.sort_title.id_for_label }}">Sort Title:</label>
+          {{ form.sort_title }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.formats.errors }}
+          <label for="{{ form.formats.id_for_label }}">Formats:</label>
+          {{ form.formats }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.collections.errors }}
+          <label for="{{ form.collections.id_for_label }}">Collections:</label>
+          {{ form.collections }}
+        </div>
+        <input type="submit" value="Save Changes">
+      </form>
+    </div>
+  </div>
+{% endblock %}

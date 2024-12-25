@@ -18,6 +18,9 @@
     </div>
     <div class="col-sm-8">
       <h1>{{ title }} ({{ year }})</h1>
+      {% if user.is_staff == True %}
+      <a href="/movies/edit-movie/{{movie.id}}">Edit</a>
+      {% endif %}
       <h4>
         <i>{{ tagline }}</i>
       </h4>
