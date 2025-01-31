@@ -148,13 +148,17 @@ def get_site_production(token, start_date, end_date):
     url = f"https://api.enphaseenergy.com/api/v4/systems/3861048/energy_lifetime?key" \
           f"={env('ENPHASE_API_KEY')}&start_date={start_date}&end_date={end_date}"
 
-    headers = {
-        "Authorization": f"Bearer {token}"
-    }
+    headers = {"Authorization": f"Bearer {token}"}
 
-    response = requests.request("GET", url, headers=headers, data={})
+    response = requests.get(url, headers=headers)
 
-    return response.json()
+    if response.status_code != 200:
+        raise ValueError(f"API request failed! Status: {response.status_code}, Response: {response.text}")
+
+    try:
+        return response.json()
+    except requests.exceptions.JSONDecodeError:
+        raise ValueError(f"Invalid JSON response received: {response.text}")
 
 
 def get_production_amts(site_data):
