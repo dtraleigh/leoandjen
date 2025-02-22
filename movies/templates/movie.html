@@ -44,9 +44,15 @@
       <div class="row">
         {% for character in character_list %}
           <div class="col-4">
+            {% if character.profile_path %}
             <img src="https://image.tmdb.org/t/p/w500{{ character.profile_path }}"
                  class="card-img-top"
-                 alt="Actor {{ actor.actor_name }}">
+                 alt="Actor {{ character.actor_name }}">
+            {% else %}
+            <img src="{% static "img/film-poster-placeholder.png" %}"
+                 class="card-img-top"
+                 alt="Placeholder image; no actor image is available for {{ character.actor_name }}.">
+            {% endif %}
             <h6>{{ character.character_name }}</h6>
             <p>
               <a href="/movies/actor/{{ character.themoviedb_actor_id }}">{{ character.actor_name }}</a>
