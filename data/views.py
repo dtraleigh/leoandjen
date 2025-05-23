@@ -229,3 +229,6 @@ def export_csv(request):
         writer.writerow(values)
 
     return response
+
+def upload_files(request):
+    return render(request, 'upload.html')
