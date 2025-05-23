@@ -17,7 +17,17 @@
   </head>
   <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/data">Leo and Jen</a>
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0 text-light" href="/data">Leo and Jen</a>
+      <ul class="d-flex ml-auto mb-0 list-unstyled">
+        <li class="nav-item text-nowrap px-2">
+          <a class="nav-link text-muted" href="/admin/">Login</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item text-nowrap px-2">
+          <a class="nav-link text-muted" href="/data/upload/">Upload</a>
+        </li>
+        {% endif %}
+      </ul>
     </nav>
     <div class="container-fluid">
       <div class="row">
