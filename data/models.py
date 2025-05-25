@@ -134,13 +134,12 @@ class Electricity(models.Model):
 
     @property
     def get_bill_before_this_one(self):
-        bills = Electricity.objects.all()
-        try:
-            this_bills_index = [x for x in bills].index(self)
-            return [x for x in bills][this_bills_index - 1]
-        except ValueError:
-            # When creating a new bill, it doesn't exist yet to be in bills
-            return [x for x in bills][-1]
+        return (
+            Electricity.objects
+            .filter(service_start_date__lt=self.service_start_date)
+            .order_by("-service_start_date")
+            .first()
+        )
 
     @property
     def get_money_saved_by_solar(self):
@@ -148,7 +147,10 @@ class Electricity(models.Model):
         # Returns as a Decimal rounded to 2 DP
         decimal.getcontext().rounding = decimal.ROUND_HALF_UP
 
-        credited_solar = self.get_bill_before_this_one.net_metering_credit + self.solar_amt_sent_to_grid
+        prev_bill = self.get_bill_before_this_one
+        if not prev_bill:
+            return Decimal("0.00")
+        credited_solar = prev_bill.net_metering_credit + self.solar_amt_sent_to_grid
         billed_kwh = self.kWh_usage - credited_solar
         if billed_kwh < 0:
             this_bills_kwh_saved = self.kWh_usage
