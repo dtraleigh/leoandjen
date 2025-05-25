@@ -81,6 +81,12 @@ class Electricity(models.Model):
                                                           decimal_places=2,
                                                           blank=True, null=True,
                                                           verbose_name="Calc $$ Saved")
+    uploaded_pdf = models.FileField(
+        upload_to="electricity_pdfs/",
+        blank=True,
+        null=True,
+        verbose_name="Uploaded PDF Bill"
+    )
 
     class Meta:
         verbose_name_plural = "Electricity"

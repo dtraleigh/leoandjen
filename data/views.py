@@ -1,12 +1,21 @@
 import csv
 import logging
-from datetime import datetime
+import os
+from datetime import datetime, date
+from pathlib import Path
 
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.files import File
+from django.core.files.storage import default_storage
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_http_methods
 
 from data.functions import *
 from data.models import *
+from data.pdf_utils import extract_pdf_data_for_preview, extract_pdf_data_for_saving
 from data.year_elec import ElecYear
 from data.year_gas import GasYear
 from data.year_vehicle_miles import VehicleMilesTraveledYear
@@ -230,5 +239,100 @@ def export_csv(request):
 
     return response
 
+@login_required(login_url="/admin")
 def upload_files(request):
-    return render(request, 'upload.html')
+    if request.method == "POST":
+        uploaded_file = request.FILES.get('file')
+        if not uploaded_file:
+            messages.error(request, "No file uploaded.")
+            return redirect("/data/upload/")
+
+        if not uploaded_file.name.lower().endswith('.pdf'):
+            messages.error(request, "Only PDF files are allowed.")
+            return redirect("/data/upload/")
+
+        # Save to a temporary location
+        temp_path = default_storage.save(f"temp/{uploaded_file.name}", uploaded_file)
+        temp_file_path = os.path.join(settings.MEDIA_ROOT, temp_path)
+
+        try:
+            # Get all data from the pdf
+            parsed_data = extract_pdf_data_for_preview(temp_file_path)
+
+            # Calculate $ saved by solar
+            instance = Electricity(
+                bill_date=date.fromisoformat(parsed_data["billing_date"]),
+                service_start_date=date.fromisoformat(parsed_data["start_date"]),
+                service_end_date=date.fromisoformat(parsed_data["end_date"]),
+                kWh_usage=parsed_data["electricity_usage_kwh"],
+                solar_amt_sent_to_grid=parsed_data["energy_delivered_to_grid"],
+                net_metering_credit=parsed_data["carried_forward_balance"],
+            )
+            calculated_money_saved_by_solar = instance.get_money_saved_by_solar
+            parsed_data["calculated_money_saved_by_solar"] = str(calculated_money_saved_by_solar)
+
+        except Exception as e:
+            messages.error(request, "Failed to process PDF.")
+            return redirect("/data/upload/")
+
+        # Save parsed data in session (or use cache/hidden form fields)
+        request.session['parsed_data'] = parsed_data
+        request.session['temp_file_path'] = temp_file_path
+
+        return redirect("/data/preview")
+
+    return render(request, "upload.html")
+
+@login_required(login_url="/admin")
+@require_http_methods(["GET", "POST"])
+def preview_pdf(request):
+    parsed_data = request.session.get('parsed_data')
+    temp_file_path = request.session.get('temp_file_path')
+
+    if not parsed_data or not temp_file_path:
+        messages.error(request, "Missing data. Please upload again.")
+        return redirect("/data/upload/")
+
+    if request.method == "POST":
+        if 'cancel' in request.POST:
+            if os.path.exists(temp_file_path):
+                os.remove(temp_file_path)
+            request.session.pop('parsed_data', None)
+            request.session.pop('temp_file_path', None)
+            return redirect("/data/upload/")
+
+
+        elif 'save' in request.POST:
+            try:
+                model_data = extract_pdf_data_for_saving(temp_file_path)
+                electricity_instance = Electricity.objects.create(
+                    bill_date=model_data["billing_date"],
+                    service_start_date=model_data["start_date"],
+                    service_end_date=model_data["end_date"],
+                    kWh_usage=model_data["electricity_usage_kwh"],
+                    solar_amt_sent_to_grid=model_data["energy_delivered_to_grid"],
+                    net_metering_credit=model_data["carried_forward_balance"]
+                )
+
+                if os.path.exists(temp_file_path):
+                    with open(temp_file_path, 'rb') as f:
+                        filename = Path(temp_file_path).name
+                        electricity_instance.uploaded_pdf.save(filename, File(f), save=True)
+
+                messages.success(request, "Data saved.")
+                return redirect("/data/upload/")
+
+            except (KeyError, OSError) as e:
+                messages.error(request, f"Error saving data: {e}")
+                return redirect("/data/upload/")
+
+            finally:
+                if os.path.exists(temp_file_path):
+                    try:
+                        os.remove(temp_file_path)
+                    except Exception as e:
+                        logger.warning(f"Could not delete temp file: {e}")
+                request.session.pop('parsed_data', None)
+                request.session.pop('temp_file_path', None)
+
+    return render(request, "preview.html", {"data": parsed_data})
