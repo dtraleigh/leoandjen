@@ -1,6 +1,16 @@
 {% extends "data_base.html" %}
 {% block content %}
-  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <h1>Upload Files</h1>
     <p>This is the page for uploading bills.</p>
-  </main>
+
+    <form method="post" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="file">Select a file to upload</label>
+            <input type="file" class="form-control-file" id="file" name="file">
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+</main>
 {% endblock %}
