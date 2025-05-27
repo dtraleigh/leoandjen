@@ -260,16 +260,17 @@ def upload_files(request):
             parsed_data = extract_pdf_data_for_preview(temp_file_path)
 
             # Calculate $ saved by solar
-            instance = Electricity(
-                bill_date=date.fromisoformat(parsed_data["billing_date"]),
-                service_start_date=date.fromisoformat(parsed_data["start_date"]),
-                service_end_date=date.fromisoformat(parsed_data["end_date"]),
-                kWh_usage=parsed_data["electricity_usage_kwh"],
-                solar_amt_sent_to_grid=parsed_data["energy_delivered_to_grid"],
-                net_metering_credit=parsed_data["carried_forward_balance"],
-            )
-            calculated_money_saved_by_solar = instance.get_money_saved_by_solar
-            parsed_data["calculated_money_saved_by_solar"] = str(calculated_money_saved_by_solar)
+            # This doesn't work because the instance hasn't been saved yet.
+            # instance = Electricity(
+            #     bill_date=date.fromisoformat(parsed_data["billing_date"]),
+            #     service_start_date=date.fromisoformat(parsed_data["start_date"]),
+            #     service_end_date=date.fromisoformat(parsed_data["end_date"]),
+            #     kWh_usage=parsed_data["electricity_usage_kwh"],
+            #     solar_amt_sent_to_grid=parsed_data["energy_delivered_to_grid"],
+            #     net_metering_credit=parsed_data["carried_forward_balance"],
+            # )
+            # calculated_money_saved_by_solar = instance.get_money_saved_by_solar
+            # parsed_data["calculated_money_saved_by_solar"] = str(calculated_money_saved_by_solar)
 
         except Exception as e:
             messages.error(request, "Failed to process PDF.")
@@ -281,7 +282,9 @@ def upload_files(request):
 
         return redirect("/data/preview")
 
-    return render(request, "upload.html")
+    most_recent_elec_bill = Electricity.objects.latest('service_start_date')
+
+    return render(request, "upload.html", {"most_recent_elec_bill": most_recent_elec_bill})
 
 @login_required(login_url="/admin")
 @require_http_methods(["GET", "POST"])
