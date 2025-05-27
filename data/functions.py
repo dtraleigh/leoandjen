@@ -406,7 +406,8 @@ def get_car_miles_all_ytd_avg(custom_most_recent=None):
 
 
 def get_days_energy_charge_per_kwh(month, day, year):
-    dt_obj = datetime(year, month, day)
+    dt_obj = datetime(year, month, day).date()
+
     try:
         elec_bill = Electricity.objects.get(service_start_date__lte=dt_obj, service_end_date__gte=dt_obj)
     except MultipleObjectsReturned:
@@ -421,39 +422,69 @@ def get_days_energy_charge_per_kwh(month, day, year):
         return Decimal('0.0')
 
     try:
-        rate_schedule = ElectricRateSchedule.objects.get(electricity_bills=elec_bill)
+        # A bill may fall within one rateSchedule or could span across two.
+        all_schedules = ElectricRateSchedule.objects.filter(electricity_bills=elec_bill)
+        applicable_schedule = None
+        for schedule in all_schedules:
+            if schedule.schedule_start_date <= dt_obj <= schedule.schedule_end_date:
+                applicable_schedule = schedule
+                break
+
+        if not applicable_schedule:
+            logger.error(f"No applicable rate schedule found for date: {dt_obj} (Bill ID: {elec_bill.id})")
+            for schedule in all_schedules:
+                logger.error(
+                    f"Available schedule - ID: {schedule.id}, Start: {schedule.schedule_start_date}, End: {schedule.schedule_end_date}, "
+                    f"Energy Charge: {schedule.energy_charge_per_kwh}"
+                )
+            return Decimal('0.0')
+
     except Exception as e:
         logger.exception(e)
         logger.exception(f"Check get_days_energy_charge_per_kwh({month}, {day}, {year})")
         return Decimal('0.0')
 
-    return rate_schedule.energy_charge_per_kwh
+    return applicable_schedule.energy_charge_per_kwh
 
 
 def get_days_storm_recover_cost_per_kwh(month, day, year):
-    dt_obj = datetime(year, month, day)
-    try:
-        rate_schedule = ElectricRateSchedule.objects.get(Q(schedule_start_date__lte=dt_obj,
-                                                           schedule_end_date__gte=dt_obj,
-                                                           name__iexact="Storm Recovery Costs") |
-                                                         Q(schedule_start_date__lte=dt_obj,
-                                                           schedule_end_date_perpetual=True,
-                                                           name__iexact="Storm Recovery Costs"))
-    except Exception as e:
-        logger.exception(e)
-        logger.exception(f"Check get_days_storm_recover_cost_per_kwh({month}, {day}, {year})")
-        return Decimal('0.0')
+    dt_obj = datetime(year, month, day).date()
 
-    return rate_schedule.energy_charge_per_kwh
+    try:
+        rate_schedule = ElectricRateSchedule.objects.get(
+            Q(schedule_start_date__lte=dt_obj, schedule_end_date__gte=dt_obj,
+              name__iexact="Storm Recovery Costs") |
+            Q(schedule_start_date__lte=dt_obj, schedule_end_date_perpetual=True,
+              name__iexact="Storm Recovery Costs")
+        )
+        return rate_schedule.energy_charge_per_kwh or Decimal("0.00")
+    except ElectricRateSchedule.DoesNotExist:
+        logger.warning(
+            f"No storm recovery rate schedule found for {dt_obj}. "
+            f"Returning 0.00"
+        )
+        return Decimal("0.00")
 
 
 def associate_elec_bills_to_rates():
-    # Associate bills to Energy Cost rates, not storm recovery cost schedules. Just focus on 2023+
-    bills_after_including_2023 = Electricity.objects.filter(bill_date__year__gte=2023)
-    all_energy_costs = ElectricRateSchedule.objects.filter(schedule_start_date__year__gte=2023,
-                                                           name__iexact="energy costs")
+    # Associate bills to Energy Cost rates (ignore storm recovery cost schedules).
+    # Only include bills from 2023 onward.
+    bills = Electricity.objects.filter(service_start_date__year__gte=2023)
+    schedules = ElectricRateSchedule.objects.all()
 
-    for bill in bills_after_including_2023:
-        for energy_cost in all_energy_costs:
-            if (bill.bill_date > energy_cost.schedule_start_date) and (bill.bill_date < energy_cost.schedule_end_date):
-                energy_cost.electricity_bills.add(bill)
+    for bill in bills:
+        for schedule in schedules:
+            # If the schedule has no end date, treat it as perpetual.
+            schedule_end = (
+                schedule.schedule_end_date
+                if schedule.schedule_end_date and not schedule.schedule_end_date_perpetual
+                else date.max
+            )
+
+            # Check for overlap between the bill's service period and the rate schedule period.
+            if (
+                bill.service_start_date <= schedule_end and
+                bill.service_end_date >= schedule.schedule_start_date
+            ):
+                schedule.electricity_bills.add(bill)
+

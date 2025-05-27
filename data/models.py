@@ -3,11 +3,11 @@ import logging
 from datetime import timedelta
 from decimal import Decimal
 
-from django.utils import timezone
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q, Max
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 logger = logging.getLogger("django")
 
@@ -132,14 +132,24 @@ class Electricity(models.Model):
         # return as kilowatts hours
         return sum([day.production for day in solar_days]) / 1000
 
+    # Not all bill's have a bill_date so we use service_start_date
     @property
-    def get_bill_before_this_one(self):
-        return (
-            Electricity.objects
-            .filter(service_start_date__lt=self.service_start_date)
-            .order_by("-service_start_date")
-            .first()
-        )
+    def get_previous_month_bill(self):
+        """Return the bill whose service_start_date is exactly one calendar
+                month before this bill, or None if it doesn’t exist."""
+        this_bills_year_start = self.service_start_date.year
+        this_bills_month_start = self.service_start_date.month
+
+        # Compute previous month
+        if this_bills_month_start == 1:
+            prev_bills_month_start = 12
+            prev_bills_year_start = this_bills_year_start - 1
+        else:
+            prev_bills_month_start = this_bills_month_start - 1
+            prev_bills_year_start = this_bills_year_start
+
+        return Electricity.objects.filter(service_start_date__year=prev_bills_year_start,
+                                       service_start_date__month=prev_bills_month_start).first()
 
     @property
     def get_money_saved_by_solar(self):
@@ -147,10 +157,12 @@ class Electricity(models.Model):
         # Returns as a Decimal rounded to 2 DP
         decimal.getcontext().rounding = decimal.ROUND_HALF_UP
 
-        prev_bill = self.get_bill_before_this_one
+        prev_bill = self.get_previous_month_bill
         if not prev_bill:
+            logger.warning(f"No previous bill found for bill ID {self.id}. calculated_money_saved_by_solar defaults to 0.00.")
             return Decimal("0.00")
-        credited_solar = prev_bill.net_metering_credit + self.solar_amt_sent_to_grid
+        else:
+            credited_solar = prev_bill.net_metering_credit + self.solar_amt_sent_to_grid
         billed_kwh = self.kWh_usage - credited_solar
         if billed_kwh < 0:
             this_bills_kwh_saved = self.kWh_usage
@@ -196,6 +208,13 @@ class Electricity(models.Model):
 
         return bill_is_lacking_rates
 
+    def calculate_and_set_money_saved(self):
+        try:
+            self.calculated_money_saved_by_solar = self.get_money_saved_by_solar
+        except Exception as e:
+            logger.exception(e)
+            self.calculated_money_saved_by_solar = Decimal("0.00")
+
 
 class ElectricRateSchedule(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
@@ -225,25 +244,51 @@ class ElectricRateSchedule(models.Model):
 def update_money_saved_by_solar_on_instance(sender, created, instance, **kwargs):
     from data.functions import associate_elec_bills_to_rates
     associate_elec_bills_to_rates()
-    try:
-        instance.calculated_money_saved_by_solar = instance.get_money_saved_by_solar
-    except ValueError as e:
-        logger.exception(e)
-        instance.calculated_money_saved_by_solar = Decimal("0.00")
 
-    post_save.disconnect(update_money_saved_by_solar_on_instance, sender=Electricity)
-    instance.save()
-    post_save.connect(update_money_saved_by_solar_on_instance, sender=Electricity)
+    try:
+        value = instance.get_money_saved_by_solar
+    except Exception as e:
+        logger.exception(e)
+        value = Decimal("0.00")
+
+    Electricity.objects.filter(pk=instance.pk).update(
+        calculated_money_saved_by_solar=value
+    )
+
+    # Update other stale bills from 2023+ that have 0.00 saved solar value
+    stale_bills = Electricity.objects.filter(
+        service_start_date__year__gte=2023,
+        calculated_money_saved_by_solar=Decimal("0.00")
+    )
+
+    for bill in stale_bills:
+        try:
+            value = bill.get_money_saved_by_solar
+        except Exception as e:
+            logger.exception(e)
+            value = Decimal("0.00")
+        Electricity.objects.filter(pk=bill.pk).update(
+            calculated_money_saved_by_solar=value
+        )
 
 
 @receiver(post_save, sender=ElectricRateSchedule)
 def update_money_saved_by_solar_on_instances(sender, created, instance, **kwargs):
-    bills_from_2023_and_earlier = Electricity.objects.filter(service_end_date__year__gte=2023)
-    for bill in bills_from_2023_and_earlier:
-        bill.calculated_money_saved_by_solar = bill.get_money_saved_by_solar
-        post_save.disconnect(update_money_saved_by_solar_on_instance, sender=Electricity)
-        bill.save()
-        post_save.connect(update_money_saved_by_solar_on_instance, sender=Electricity)
+    from data.functions import associate_elec_bills_to_rates
+    associate_elec_bills_to_rates()
+
+    bills = Electricity.objects.filter(service_end_date__year__gte=2023)
+
+    updated_bills = []
+    for bill in bills:
+        try:
+            bill.calculated_money_saved_by_solar = bill.get_money_saved_by_solar
+            updated_bills.append(bill)
+        except Exception as e:
+            logger.exception(f"Failed to calculate savings for bill ID {bill.id}: {e}")
+
+    with transaction.atomic():
+        Electricity.objects.bulk_update(updated_bills, ['calculated_money_saved_by_solar'])
 
 
 class Gas(models.Model):
