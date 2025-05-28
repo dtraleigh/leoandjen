@@ -4,6 +4,13 @@
     <h1>Upload Files</h1>
     <h4>Most Recent Elec Bill</h4>
     <p>{{most_recent_elec_bill}}</p>
+    {% if messages %}
+    <div class="alert-container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
     <form method="post" enctype="multipart/form-data" class="mt-4">
         {% csrf_token %}
         <div class="form-group">

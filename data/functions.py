@@ -1,6 +1,6 @@
 import calendar
 import operator
-from datetime import datetime
+from datetime import datetime, date
 from functools import reduce
 
 from django.apps import apps
