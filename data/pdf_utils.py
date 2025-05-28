@@ -1,6 +1,11 @@
+import tempfile
+from urllib.parse import urlparse
+
 import pdfplumber
 import re
 from datetime import datetime
+
+import requests
 
 MONTHS = {
     'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6,
@@ -98,15 +103,28 @@ def extract_carried_forward_balance(text):
     return 0
 
 
-def get_text_from_pdf(pdf_path):
-    with pdfplumber.open(pdf_path) as pdf:
-        text = ""
-        for page in pdf.pages:
-            page_text = page.extract_text()
-            if page_text:
-                text += page_text + "\n\n"  # add spacing between pages
+def get_text_from_pdf(source):
+    """
+    Extract text from a PDF, either from a local file or from a remote URL.
+    """
+    parsed = urlparse(source)
+    is_remote = parsed.scheme in ("http", "https")
 
-    return text
+    if is_remote:
+        response = requests.get(source)
+        response.raise_for_status()
+
+        with tempfile.NamedTemporaryFile(suffix=".pdf") as tmp:
+            tmp.write(response.content)
+            tmp.flush()
+
+            with pdfplumber.open(tmp.name) as pdf:
+                return "\n".join(page.extract_text() for page in pdf.pages if page.extract_text())
+
+    else:
+        # Assume it's a local file path
+        with pdfplumber.open(source) as pdf:
+            return "\n".join(page.extract_text() for page in pdf.pages if page.extract_text())
 
 
 def extract_pdf_data_for_preview(pdf_path):

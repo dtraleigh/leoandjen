@@ -1,6 +1,7 @@
 import csv
 import logging
 import os
+import tempfile
 from datetime import datetime, date
 from pathlib import Path
 
@@ -251,13 +252,38 @@ def upload_files(request):
             messages.error(request, "Only PDF files are allowed.")
             return redirect("/data/upload/")
 
-        # Save to a temporary location
-        temp_path = default_storage.save(f"temp/{uploaded_file.name}", uploaded_file)
-        temp_file_path = os.path.join(settings.MEDIA_ROOT, temp_path)
+        # Step 1: Save file temporarily to disk
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+            for chunk in uploaded_file.chunks():
+                tmp_file.write(chunk)
+            original_temp_path = tmp_file.name
+
+        logger.info(f"Original temp file saved to: {original_temp_path}")
 
         try:
-            # Get all data from the pdf
-            parsed_data = extract_pdf_data_for_preview(temp_file_path)
+            # Step 2: Create a unique S3 and local filename using original name + timestamp
+            original_name, ext = os.path.splitext(uploaded_file.name)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            new_filename = f"{original_name}_{timestamp}{ext}"
+            s3_path = f"electrcity_bills/{new_filename}"
+
+            # Step 3: Rename temp file on disk to match new_filename
+            temp_dir = os.path.dirname(original_temp_path)
+            new_local_temp_path = os.path.join(temp_dir, new_filename)
+            os.rename(original_temp_path, new_local_temp_path)
+
+            # Step 4: Upload to S3
+            with open(new_local_temp_path, 'rb') as f:
+                s3_file = File(f)
+                saved_path = default_storage.save(s3_path, s3_file)
+
+            # Step 5: Use file for processing
+            file_url = default_storage.url(saved_path)
+            parsed_data = extract_pdf_data_for_preview(file_url)
+
+            # Step 6: Store the renamed local path
+            request.session['parsed_data'] = parsed_data
+            request.session['temp_file_path'] = new_local_temp_path
 
             # Calculate $ saved by solar
             # This doesn't work because the instance hasn't been saved yet.
@@ -273,12 +299,17 @@ def upload_files(request):
             # parsed_data["calculated_money_saved_by_solar"] = str(calculated_money_saved_by_solar)
 
         except Exception as e:
+            # Clean up if something goes wrong
+            if os.path.exists(original_temp_path):
+                os.remove(original_temp_path)
+            if os.path.exists(new_local_temp_path):
+                os.remove(new_local_temp_path)
             messages.error(request, "Failed to process PDF.")
             return redirect("/data/upload/")
 
         # Save parsed data in session (or use cache/hidden form fields)
         request.session['parsed_data'] = parsed_data
-        request.session['temp_file_path'] = temp_file_path
+        request.session['temp_file_path'] = new_local_temp_path
 
         return redirect("/data/preview")
 
@@ -307,6 +338,10 @@ def preview_pdf(request):
 
         elif 'save' in request.POST:
             try:
+                if not os.path.exists(temp_file_path):
+                    messages.error(request, f"Temporary file is missing. Please re-upload the PDF. temp_file_path: {temp_file_path}")
+                    return redirect("/data/upload/")
+
                 model_data = extract_pdf_data_for_saving(temp_file_path)
                 electricity_instance = Electricity.objects.create(
                     bill_date=model_data["billing_date"],
