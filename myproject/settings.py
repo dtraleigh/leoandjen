@@ -138,8 +138,8 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            "format": "[%(asctime)s] p%(process)s {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s',"
-                      "'%m-%d %H:%M:%S'"
+            "format": "[%(asctime)s] p%(process)s {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s",
+            "datefmt": "%m-%d %H:%M:%S"
         },
         "simple": {
             "format": "%(levelname)s %(message)s"
