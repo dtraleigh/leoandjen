@@ -1,9 +1,11 @@
 import csv
 import logging
 import os
-import tempfile
 from datetime import datetime, date
+from dateutil.relativedelta import relativedelta
 from pathlib import Path
+from collections import namedtuple
+from calendar import month_name
 
 from django.conf import settings
 from django.contrib import messages
@@ -14,6 +16,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 
+from data.file_handler import save_uploaded_file_to_temporary, rename_file_on_disk, create_unique_filename
 from data.functions import *
 from data.models import *
 from data.pdf_utils import extract_pdf_data_for_preview, extract_pdf_data_for_saving
@@ -240,10 +243,38 @@ def export_csv(request):
 
     return response
 
+def get_cards_for_the_year():
+    MonthCard = namedtuple("MonthCard", ["month", "year", "has_bill", "has_multiple"])
+
+    cards = []
+    start_month = timezone.now().replace(day=1) - relativedelta(months=1)
+
+    for i in range(12):
+        target_date = start_month - relativedelta(months=i)
+        month = target_date.month
+        year = target_date.year
+
+        bill_count = Electricity.objects.filter(
+            service_start_date__year=year,
+            service_start_date__month=month
+        ).count()
+
+        cards.append(
+            MonthCard(
+                month=month_name[month],
+                year=year,
+                has_bill=bill_count >= 1,
+                has_multiple=bill_count > 1
+            )
+        )
+
+    return list(reversed(cards))
+
 @login_required(login_url="/admin")
 def upload_files(request):
     if request.method == "POST":
         uploaded_file = request.FILES.get('file')
+
         if not uploaded_file:
             messages.error(request, "No file uploaded.")
             return redirect("/data/upload/")
@@ -252,70 +283,35 @@ def upload_files(request):
             messages.error(request, "Only PDF files are allowed.")
             return redirect("/data/upload/")
 
-        # Step 1: Save file temporarily to disk
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-            for chunk in uploaded_file.chunks():
-                tmp_file.write(chunk)
-            original_temp_path = tmp_file.name
-
-        logger.info(f"Original temp file saved to: {original_temp_path}")
+        # Step 1: Upload the file temporary to disk
+        original_temp_path = save_uploaded_file_to_temporary(uploaded_file)
+        new_local_temp_path = None
 
         try:
-            # Step 2: Create a unique S3 and local filename using original name + timestamp
-            original_name, ext = os.path.splitext(uploaded_file.name)
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            new_filename = f"{original_name}_{timestamp}{ext}"
-            s3_path = f"electrcity_bills/{new_filename}"
+            new_filename = create_unique_filename(uploaded_file.name)
+            new_local_temp_path = rename_file_on_disk(original_temp_path, new_filename)
+            parsed_data = extract_pdf_data_for_preview(new_local_temp_path)
 
-            # Step 3: Rename temp file on disk to match new_filename
-            temp_dir = os.path.dirname(original_temp_path)
-            new_local_temp_path = os.path.join(temp_dir, new_filename)
-            os.rename(original_temp_path, new_local_temp_path)
-
-            # Step 4: Upload to S3
-            with open(new_local_temp_path, 'rb') as f:
-                s3_file = File(f)
-                saved_path = default_storage.save(s3_path, s3_file)
-
-            # Step 5: Use file for processing
-            file_url = default_storage.url(saved_path)
-            parsed_data = extract_pdf_data_for_preview(file_url)
-
-            # Step 6: Store the renamed local path
             request.session['parsed_data'] = parsed_data
             request.session['temp_file_path'] = new_local_temp_path
 
-            # Calculate $ saved by solar
-            # This doesn't work because the instance hasn't been saved yet.
-            # instance = Electricity(
-            #     bill_date=date.fromisoformat(parsed_data["billing_date"]),
-            #     service_start_date=date.fromisoformat(parsed_data["start_date"]),
-            #     service_end_date=date.fromisoformat(parsed_data["end_date"]),
-            #     kWh_usage=parsed_data["electricity_usage_kwh"],
-            #     solar_amt_sent_to_grid=parsed_data["energy_delivered_to_grid"],
-            #     net_metering_credit=parsed_data["carried_forward_balance"],
-            # )
-            # calculated_money_saved_by_solar = instance.get_money_saved_by_solar
-            # parsed_data["calculated_money_saved_by_solar"] = str(calculated_money_saved_by_solar)
+            # [Step 7: []Work in Progress] Calculate $ saved by solar
+            # parsed_data["calculated_money_saved_by_solar"] = str(get_money_saved_by_solar_pre_save(parsed_data))
 
         except Exception as e:
             # Clean up if something goes wrong
-            if os.path.exists(original_temp_path):
+            if original_temp_path and os.path.exists(original_temp_path):
                 os.remove(original_temp_path)
-            if os.path.exists(new_local_temp_path):
+            if new_local_temp_path and os.path.exists(new_local_temp_path):
                 os.remove(new_local_temp_path)
             messages.error(request, "Failed to process PDF.")
             return redirect("/data/upload/")
 
-        # Save parsed data in session (or use cache/hidden form fields)
-        request.session['parsed_data'] = parsed_data
-        request.session['temp_file_path'] = new_local_temp_path
-
         return redirect("/data/preview")
 
-    most_recent_elec_bill = Electricity.objects.latest('service_start_date')
+    cards = get_cards_for_the_year()
 
-    return render(request, "upload.html", {"most_recent_elec_bill": most_recent_elec_bill})
+    return render(request, "upload.html", {"cards": cards})
 
 @login_required(login_url="/admin")
 @require_http_methods(["GET", "POST"])
@@ -357,7 +353,14 @@ def preview_pdf(request):
                         filename = Path(temp_file_path).name
                         electricity_instance.uploaded_pdf.save(filename, File(f), save=True)
 
-                messages.success(request, "Data saved.")
+                start = electricity_instance.service_start_date.strftime("%B %-d, %Y")
+                end = electricity_instance.service_end_date.strftime("%B %-d, %Y")
+
+                messages.success(
+                    request,
+                    f"Electricity data saved for service period: {start} to {end}."
+                )
+
                 return redirect("/data/upload/")
 
             except (KeyError, OSError) as e:

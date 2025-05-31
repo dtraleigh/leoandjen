@@ -5,7 +5,7 @@ from decimal import Decimal
 
 from django.db import models, transaction
 from django.db.models import Q, Max
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils import timezone
 
@@ -149,7 +149,7 @@ class Electricity(models.Model):
             prev_bills_year_start = this_bills_year_start
 
         return Electricity.objects.filter(service_start_date__year=prev_bills_year_start,
-                                       service_start_date__month=prev_bills_month_start).first()
+                                          service_start_date__month=prev_bills_month_start).first()
 
     @property
     def get_money_saved_by_solar(self):
@@ -159,7 +159,8 @@ class Electricity(models.Model):
 
         prev_bill = self.get_previous_month_bill
         if not prev_bill:
-            logger.warning(f"No previous bill found for bill ID {self.id}. calculated_money_saved_by_solar defaults to 0.00.")
+            logger.warning(
+                f"No previous bill found for bill ID {self.id}. calculated_money_saved_by_solar defaults to 0.00.")
             return Decimal("0.00")
         else:
             credited_solar = prev_bill.net_metering_credit + self.solar_amt_sent_to_grid
@@ -216,30 +217,6 @@ class Electricity(models.Model):
             self.calculated_money_saved_by_solar = Decimal("0.00")
 
 
-class ElectricRateSchedule(models.Model):
-    name = models.CharField(max_length=200, blank=True, null=True)
-    submit_date = models.DateField(auto_now_add=True)
-    comments = models.TextField(blank=True, null=True)
-    schedule_start_date = models.DateField(blank=True, null=True)
-    schedule_end_date = models.DateField(blank=True, null=True)
-    schedule_end_date_perpetual = models.BooleanField(default=False)
-    energy_charge_per_kwh = models.DecimalField(max_digits=9,
-                                                decimal_places=8,
-                                                verbose_name="Charge per kWh", blank=True, null=True)
-    electricity_bills = models.ManyToManyField("Electricity", blank=True)
-
-    class Meta:
-        verbose_name_plural = "Electricity Rate Schedules"
-        ordering = ["name"]
-
-    def __str__(self):
-        if self.schedule_end_date_perpetual:
-            return f"{self.name}, id: {self.id} ({self.schedule_start_date.month}-{self.schedule_start_date.year} " \
-                   f"until....)"
-        return f"{self.name}, id: {self.id} ({self.schedule_start_date.month}-{self.schedule_start_date.year} to " \
-               f"{self.schedule_end_date.month}-{self.schedule_end_date.year})"
-
-
 @receiver(post_save, sender=Electricity)
 def update_money_saved_by_solar_on_instance(sender, created, instance, **kwargs):
     from data.functions import associate_elec_bills_to_rates
@@ -270,6 +247,36 @@ def update_money_saved_by_solar_on_instance(sender, created, instance, **kwargs)
         Electricity.objects.filter(pk=bill.pk).update(
             calculated_money_saved_by_solar=value
         )
+
+
+@receiver(post_delete, sender=Electricity)
+def delete_uploaded_pdf_from_s3(sender, instance, **kwargs):
+    if instance.uploaded_pdf:
+        instance.uploaded_pdf.delete(save=False)
+
+
+class ElectricRateSchedule(models.Model):
+    name = models.CharField(max_length=200, blank=True, null=True)
+    submit_date = models.DateField(auto_now_add=True)
+    comments = models.TextField(blank=True, null=True)
+    schedule_start_date = models.DateField(blank=True, null=True)
+    schedule_end_date = models.DateField(blank=True, null=True)
+    schedule_end_date_perpetual = models.BooleanField(default=False)
+    energy_charge_per_kwh = models.DecimalField(max_digits=9,
+                                                decimal_places=8,
+                                                verbose_name="Charge per kWh", blank=True, null=True)
+    electricity_bills = models.ManyToManyField("Electricity", blank=True)
+
+    class Meta:
+        verbose_name_plural = "Electricity Rate Schedules"
+        ordering = ["name"]
+
+    def __str__(self):
+        if self.schedule_end_date_perpetual:
+            return f"{self.name}, id: {self.id} ({self.schedule_start_date.month}-{self.schedule_start_date.year} " \
+                   f"until....)"
+        return f"{self.name}, id: {self.id} ({self.schedule_start_date.month}-{self.schedule_start_date.year} to " \
+               f"{self.schedule_end_date.month}-{self.schedule_end_date.year})"
 
 
 @receiver(post_save, sender=ElectricRateSchedule)
