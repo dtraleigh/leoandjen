@@ -488,3 +488,17 @@ def associate_elec_bills_to_rates():
             ):
                 schedule.electricity_bills.add(bill)
 
+
+def get_money_saved_by_solar_pre_save(parsed_data):
+    # Calculate $ saved by solar
+    # This doesn't work because the instance hasn't been saved yet, needs to be refactored
+    instance = Electricity(
+        bill_date=date.fromisoformat(parsed_data["billing_date"]),
+        service_start_date=date.fromisoformat(parsed_data["start_date"]),
+        service_end_date=date.fromisoformat(parsed_data["end_date"]),
+        kWh_usage=parsed_data["electricity_usage_kwh"],
+        solar_amt_sent_to_grid=parsed_data["energy_delivered_to_grid"],
+        net_metering_credit=parsed_data["carried_forward_balance"],
+    )
+
+    return instance.get_money_saved_by_solar

@@ -2,8 +2,31 @@
 {% block content %}
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
     <h1>Upload Files</h1>
-    <h4>Most Recent Elec Bill</h4>
-    <p>{{most_recent_elec_bill}}</p>
+    <div class="container mt-5">
+    <div class="row">
+      {% for card in cards %}
+        <div class="col-md-2">
+          <div class="card text-center
+            {% if card.has_multiple %}
+              card-red
+            {% elif card.has_bill %}
+              card-green
+            {% else %}
+              card-gray
+            {% endif %}
+          ">
+            <div class="card-body">
+              <h5 class="card-title">{{ card.month }}</h5>
+              <p class="card-text">{{ card.year }}</p>
+            </div>
+          </div>
+        </div>
+        {% if forloop.counter|divisibleby:"6" %}
+          </div><div class="row">
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
     {% if messages %}
     <div class="alert-container">
         {% for message in messages %}
