@@ -353,13 +353,13 @@ def preview_pdf(request):
                         filename = Path(temp_file_path).name
                         electricity_instance.uploaded_pdf.save(filename, File(f), save=True)
 
-                start = electricity_instance.service_start_date.strftime("%B %-d, %Y")
-                end = electricity_instance.service_end_date.strftime("%B %-d, %Y")
+                start = electricity_instance.service_start_date
+                end = electricity_instance.service_end_date
 
-                messages.success(
-                    request,
-                    f"Electricity data saved for service period: {start} to {end}."
-                )
+                start_str = f"{start.strftime('%B')} {start.day}, {start.year}"
+                end_str = f"{end.strftime('%B')} {end.day}, {end.year}"
+
+                messages.success(request, f"Data saved for service dates {start_str} to {end_str}.")
 
                 return redirect("/data/upload/")
 
