@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from pathlib import Path
 import pdfplumber
@@ -13,6 +14,8 @@ from django.test import TestCase
 from data.functions import convert_years_string_to_years_list
 from data.test_data.create_test_data import *
 
+# Suppress pdfminer warnings
+logging.getLogger("pdfminer").setLevel(logging.ERROR)
 
 class DataTestCase(TestCase):
     databases = "__all__"

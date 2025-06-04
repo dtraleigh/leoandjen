@@ -1,8 +1,10 @@
 from django.test import TestCase
 from django.conf import settings
-import boto3
+import boto3, os
 from botocore.exceptions import ClientError
+from unittest import skipUnless
 
+@skipUnless(os.environ.get("RUN_SERVER_TESTS") == "1", "Skipping test unless RUN_SERVER_TESTS=1 is set")
 class S3ConnectionTest(TestCase):
     def test_s3_connection(self):
         bucket_name = settings.STORAGES["default"]["OPTIONS"]["bucket_name"]
