@@ -7,44 +7,8 @@ from django.db import models, transaction
 from django.db.models import Q, Max
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from django.utils import timezone
 
 logger = logging.getLogger("django")
-
-
-class Water(models.Model):
-    submit_date = models.DateField(auto_now_add=True)
-    bill_date = models.DateField(blank=True, null=True)
-    service_start_date = models.DateField()
-    service_end_date = models.DateField()
-    avg_gallons_per_day = models.DecimalField(max_digits=5, decimal_places=2)
-
-    class Meta:
-        verbose_name_plural = "Water"
-        ordering = ["service_start_date"]
-
-    def get_cname(self):
-        return self.__class__.__name__
-
-    def __str__(self):
-        return f"{self.service_start_date} to {self.service_end_date} ({self.id})"
-
-    @property
-    def get_number_of_days(self):
-        # data includes the end and starts so let's add 1
-        return self.service_end_date - self.service_start_date + timedelta(days=1)
-
-    def get_number_of_days_in_month(self, month, year):
-        year = int(year)
-        day_count = 0
-        list_of_dates = [self.service_start_date + timedelta(days=x) for x in
-                         range((self.service_end_date - self.service_start_date).days)]
-        # above does not include self.service_end_date itself
-        # list_of_dates.append(self.service_end_date) <-- No need for Water
-        for date in list_of_dates:
-            if date.month == month and date.year == year:
-                day_count += 1
-        return day_count
 
 
 class SolarEnergy(models.Model):
@@ -298,101 +262,10 @@ def update_money_saved_by_solar_on_instances(sender, created, instance, **kwargs
         Electricity.objects.bulk_update(updated_bills, ['calculated_money_saved_by_solar'])
 
 
-class Gas(models.Model):
-    submit_date = models.DateField(auto_now_add=True)
-    bill_date = models.DateField(blank=True, null=True)
-    service_start_date = models.DateField()
-    service_end_date = models.DateField()
-    therms_usage = models.IntegerField()
-
-    class Meta:
-        verbose_name_plural = "Natural Gas"
-        ordering = ["service_start_date"]
-
-    def get_cname(self):
-        return self.__class__.__name__
-
-    def __str__(self):
-        return f"{self.service_start_date} to {self.service_end_date} ({self.id})"
-
-    @property
-    def get_number_of_days(self):
-        # data includes the end and starts so let's add 1
-        return self.service_end_date - self.service_start_date + timedelta(days=1)
-
-    @property
-    def get_daily_gas_usage(self):
-        return round(self.therms_usage / self.get_number_of_days.days, 2)
-
-    def get_number_of_days_in_month(self, month, year):
-        year = int(year)
-        day_count = 0
-        list_of_dates = [self.service_start_date + timedelta(days=x) for x in
-                         range((self.service_end_date - self.service_start_date).days)]
-        # above does not include self.service_end_date itself
-        list_of_dates.append(self.service_end_date)
-        for date in list_of_dates:
-            if date.month == month and date.year == year:
-                day_count += 1
-        return day_count
 
 
-class CarMiles(models.Model):
-    submit_date = models.DateField(auto_now_add=True)
-    reading_date = models.DateField()
-    odometer_reading = models.IntegerField()
-
-    class Meta:
-        verbose_name_plural = "Car Miles"
-        ordering = ["reading_date"]
-
-    def get_cname(self):
-        return self.__class__.__name__
-
-    def __str__(self):
-        return f"{self.reading_date} ({self.id})"
-
-    @property
-    def get_measurement_units(self):
-        return "Miles / Month"
-
-    @property
-    def get_name(self):
-        return self._meta.verbose_name_plural
-
-    @property
-    def get_miles_per_month(self):
-        try:
-            if self.reading_date.month == 12:
-                next_months_datapoint = CarMiles.objects.get(reading_date__year=self.reading_date.year + 1,
-                                                             reading_date__month=1)
-            else:
-                next_months_datapoint = CarMiles.objects.get(reading_date__year=self.reading_date.year,
-                                                             reading_date__month=self.reading_date.month + 1)
-            return next_months_datapoint.odometer_reading - self.odometer_reading
-        except CarMiles.DoesNotExist:
-            return None
 
 
-class AuthToken(models.Model):
-    name = models.CharField(max_length=200)
-    client_id = models.CharField(max_length=200)
-    client_secret = models.CharField(max_length=200)
-    app_code = models.CharField(max_length=200)
-    redirect_uri = models.CharField(max_length=200)
-    access_token = models.CharField(max_length=1024)
-    refresh_token = models.CharField(max_length=1024)
-    issued_datetime = models.DateTimeField(auto_now=True)
-    expires_in = models.IntegerField(default=1000)
 
-    def __str__(self):
-        return f"{self.id}"
 
-    def is_token_expired(self, buffer=0):
-        """
-        Checks if the token is expired or will expire within the given buffer time.
-        Returns True if expired or about to expire (considering the buffer), False otherwise.
-        """
-        expiration_time = self.issued_datetime + timedelta(seconds=self.expires_in)
-        expiration_with_buffer = expiration_time - timedelta(seconds=buffer)
-        return expiration_with_buffer <= timezone.now()
+
