@@ -135,6 +135,8 @@ def get_bill_type(text):
     text_lower = text.lower()
     if "duke-energy" in text_lower or "duke energy" in text_lower:
         return "Electricity"
+    elif "enbridge gas north carolina" in text_lower:
+        return "Gas"
     return None
 
 
