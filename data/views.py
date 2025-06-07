@@ -14,6 +14,7 @@ from django.core.files import File
 from django.core.files.storage import default_storage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 
 from data.file_handler import save_uploaded_file_to_temporary, rename_file_on_disk, create_unique_filename
@@ -292,6 +293,10 @@ def upload_files(request):
             new_local_temp_path = rename_file_on_disk(original_temp_path, new_filename)
             parsed_data = extract_pdf_data_for_preview(new_local_temp_path)
 
+            if parsed_data is None:
+                messages.error(request, "Cannot recognize this bill type.")
+                raise ValueError("Cannot recognize this bill type.")
+
             request.session['parsed_data'] = parsed_data
             request.session['temp_file_path'] = new_local_temp_path
 
@@ -304,7 +309,9 @@ def upload_files(request):
                 os.remove(original_temp_path)
             if new_local_temp_path and os.path.exists(new_local_temp_path):
                 os.remove(new_local_temp_path)
-            messages.error(request, "Failed to process PDF.")
+            if "Cannot recognize this bill type." not in str(e):
+                messages.error(request, "Failed to process PDF.")
+
             return redirect("/data/upload/")
 
         return redirect("/data/preview")
