@@ -4,7 +4,8 @@ from data.pdf_utils import (
     extract_elec_billing_date,
     extract_elec_service_dates, extract_elec_energy_used, extract_elec_actual_reading, extract_elec_previous_reading,
     extract_energy_delivered_to_grid, extract_delivered_actual_reading, extract_delivered_previous_reading,
-    extract_carried_forward_balance, get_text_from_pdf, get_bill_type
+    extract_carried_forward_balance, get_text_from_pdf, get_bill_type, extract_gas_billing_date,
+    extract_gas_service_dates, extract_gas_therms_usage
 )
 
 from django.test import TestCase
@@ -29,7 +30,7 @@ class DataTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.expected_data = {
+        cls.expected_elec_data = {
             "data/test_data/elec_bill_nov24.pdf": {
                 "billing_date": "2024-12-10",
                 "billing_year": 2024,
@@ -109,6 +110,15 @@ class DataTestCase(TestCase):
                 "carried_forward_balance": 0
             },
         }
+        cls.expected_gas_data = {
+            "data/test_data/gas_bill_apr25.pdf": {
+                "billing_date": "2025-05-08",
+                "billing_year": 2025,
+                "service_start": "2025-04-07",
+                "service_end": "2025-05-07",
+                "therms_usage": 10,
+            }
+        }
 
     def test_clean_year_range_request(self):
         from data.functions import clean_year_range_request
@@ -130,59 +140,76 @@ class DataTestCase(TestCase):
         self.assertEqual(convert_years_string_to_years_list("202A"), [])
 
     def test_extract_billing_date(self):
-        for filename, data in self.expected_data.items():
+        for filename, data in self.expected_elec_data.items():
             text = get_text_from_pdf(filename)
             result = extract_elec_billing_date(text)
             self.assertEqual(result.isoformat(), data["billing_date"], f"Failed billing_date on {filename}")
 
+        for filename, data in self.expected_gas_data.items():
+            text = get_text_from_pdf(filename)
+            result = extract_gas_billing_date(text)
+            self.assertEqual(result.isoformat(), data["billing_date"], f"Failed billing_date on {filename}")
+
     def test_extract_service_dates(self):
-        for filename, data in self.expected_data.items():
+        for filename, data in self.expected_elec_data.items():
             text = get_text_from_pdf(filename)
             start, end = extract_elec_service_dates(text, data["billing_year"])
             self.assertEqual(start.isoformat(), data["service_start"], f"Failed service_start on {filename}")
             self.assertEqual(end.isoformat(), data["service_end"], f"Failed service_end on {filename}")
 
+        for filename, data in self.expected_gas_data.items():
+            text = get_text_from_pdf(filename)
+            start, end = extract_gas_service_dates(text, data["billing_year"])
+            self.assertEqual(start.isoformat(), data["service_start"], f"Failed service_start on {filename}")
+            self.assertEqual(end.isoformat(), data["service_end"], f"Failed service_end on {filename}")
+
     def test_extract_energy_used(self):
-        for filename, data in self.expected_data.items():
+        for filename, data in self.expected_elec_data.items():
             text = get_text_from_pdf(filename)
             result = extract_elec_energy_used(text)
             self.assertEqual(result, data["energy_used"], msg=f"{filename} failed")
 
     def test_extract_actual_reading(self):
-        for filename, data in self.expected_data.items():
+        for filename, data in self.expected_elec_data.items():
             text = get_text_from_pdf(filename)
             result = extract_elec_actual_reading(text)
             self.assertEqual(result, data["actual_reading"], msg=f"{filename} failed")
 
     def test_extract_previous_reading(self):
-        for filename, data in self.expected_data.items():
+        for filename, data in self.expected_elec_data.items():
             text = get_text_from_pdf(filename)
             result = extract_elec_previous_reading(text)
             self.assertEqual(result, data["previous_reading"], msg=f"{filename} failed")
 
     def test_extract_energy_delivered_to_grid(self):
-        for filename, data in self.expected_data.items():
+        for filename, data in self.expected_elec_data.items():
             text = get_text_from_pdf( filename)
             result = extract_energy_delivered_to_grid(text)
             self.assertEqual(result, data["energy_delivered"], msg=f"{filename} failed")
 
     def test_extract_delivered_actual_reading(self):
-        for filename, data in self.expected_data.items():
+        for filename, data in self.expected_elec_data.items():
             text = get_text_from_pdf(filename)
             result = extract_delivered_actual_reading(text)
             self.assertEqual(result, data["delivered_actual_reading"], msg=f"{filename} failed")
 
     def test_extract_delivered_previous_reading(self):
-        for filename, data in self.expected_data.items():
+        for filename, data in self.expected_elec_data.items():
             text = get_text_from_pdf(filename)
             result = extract_delivered_previous_reading(text)
             self.assertEqual(result, data["delivered_previous_reading"], msg=f"{filename} failed")
 
     def test_extract_carried_forward_balance(self):
-        for filename, data in self.expected_data.items():
+        for filename, data in self.expected_elec_data.items():
             text = get_text_from_pdf(filename)
             result = extract_carried_forward_balance(text)
             self.assertEqual(result, data["carried_forward_balance"], msg=f"{filename} failed")
+
+    def test_extract_gas_therms_usage(self):
+        for filename, data in self.expected_gas_data.items():
+            text = get_text_from_pdf(filename)
+            result = extract_gas_therms_usage(text)
+            self.assertEqual(result, data["therms_usage"], msg=f"{filename} failed")
 
     def test_get_bill_type(self):
         # Test cases that should return "Electricity"

@@ -12,14 +12,8 @@ from data.year_elec import ElecYear
 class ElectricityTestCase(TestCase):
     databases = "__all__"
     fixtures = [
-        # "data/test_data/test_data_Electricity.json",
         "data/test_data/test_data_ElectricRateSchedule.json",
     ]
-
-    # @classmethod
-    # def setUpTestData(cls):
-    #     create_test_data_elec_rates()
-    #     create_test_data_elec()
 
     def test_model_get_money_saved_by_solar1(self):
         # Case 1: More use, no credits. If we use more than we send
