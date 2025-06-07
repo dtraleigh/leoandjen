@@ -208,12 +208,33 @@ class DataTestCase(TestCase):
             result = get_bill_type(text)
             self.assertEqual(result, "Electricity", f"Failed for text: {text[:50]}...")
 
+        # Test cases that should return "Gas"
+        gas_text_strings = [
+            "This is a bill from enbridge gas north carolina for natural gas service.",
+            "This is a bill from ENBRIDGE GAS NORTH CAROLINA for natural gas service.",
+            "This is a bill from Enbridge Gas North Carolina for natural gas service.",
+            "enbridge gas north carolina is your gas provider.",
+            "Your gas bill is from enbridge gas north carolina",
+            "Bill statement from: ENBRIDGE GAS NORTH CAROLINA. Thank you.",
+            """
+            Natural Gas Utility Bill
+            Provider: Enbridge Gas North Carolina
+            Account Number: 987654321
+            """
+        ]
+
+        for text in gas_text_strings:
+            result = get_bill_type(text)
+            self.assertEqual(result, "Gas", f"Failed for text: {text[:50]}...")
+
         # Test cases that should return None
         none_text_strings = [
             "This is a bill from another utility company.",
             "This is a bill from duke power company.",
             "This is an energy bill from another company.",
             "This is a bill from duke-power or energy-duke company.",
+            "This is a bill from enbridge gas virginia.",  # Different state
+            "This is a bill from enbridge north carolina.",  # Missing "gas"
             "",
             "   \n\t  "
         ]
