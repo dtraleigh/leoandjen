@@ -1,39 +1,16 @@
 {% extends "data_base.html" %}
 {% block content %}
-<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
     <h1>Upload Files</h1>
-    <div class="container mt-5">
-    <div class="row">
-      {% for card in cards %}
-        <div class="col-md-2">
-          <div class="card text-center
-            {% if card.has_multiple %}
-              card-red
-            {% elif card.has_bill %}
-              card-green
-            {% else %}
-              card-gray
-            {% endif %}
-          ">
-            <div class="card-body">
-              <h5 class="card-title">{{ card.month }}</h5>
-              <p class="card-text">{{ card.year }}</p>
-            </div>
-          </div>
-        </div>
-        {% if forloop.counter|divisibleby:"6" %}
-          </div><div class="row">
-        {% endif %}
-      {% endfor %}
-    </div>
-  </div>
+    <div class="container mt-4">
     {% if messages %}
-    <div class="alert-container">
+      <div class="alert-container">
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
         {% endfor %}
-    </div>
+      </div>
     {% endif %}
+    </div>
     <div class="container mt-4">
       <div class="card">
         <div class="card-body">
@@ -48,5 +25,80 @@
         </div>
       </div>
     </div>
-</main>
+    <div class="container mt-4">
+      <h3>Electricity Bills</h3>
+      <div class="row">
+        {% for card in elec_cards %}
+          <div class="col-md-2">
+            <div class="card text-center
+                        {% if card.has_multiple %}
+                          card-red
+                        {% elif card.has_bill %}
+                          card-green
+                        {% else %}
+                          card-gray
+                        {% endif %}
+                       ">
+              <div class="card-body">
+                <h6 class="card-text">{{ card.month|slice:":3" }} - {{ card.year }}</h6>
+              </div>
+            </div>
+          </div>
+          {% if forloop.counter|divisibleby:"6" %}
+            </div><div class="row">
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="container mt-4">
+      <h3>Gas Bills</h3>
+      <div class="row">
+        {% for card in gas_cards %}
+          <div class="col-md-2">
+            <div class="card text-center
+                        {% if card.has_multiple %}
+                          card-red
+                        {% elif card.has_bill %}
+                          card-green
+                        {% else %}
+                          card-gray
+                        {% endif %}
+                       ">
+              <div class="card-body">
+                <h6 class="card-text">{{ card.month|slice:":3" }} - {{ card.year }}</h6>
+              </div>
+            </div>
+          </div>
+          {% if forloop.counter|divisibleby:"6" %}
+            </div><div class="row">
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="container mt-4">
+      <h3>Water Bills</h3>
+      <div class="row">
+        {% for card in water_cards %}
+          <div class="col-md-2">
+            <div class="card text-center
+                        {% if card.has_multiple %}
+                          card-red
+                        {% elif card.has_bill %}
+                          card-green
+                        {% else %}
+                          card-gray
+                        {% endif %}
+                       ">
+              <div class="card-body">
+                <h6 class="card-text">{{ card.month|slice:":3" }} - {{ card.year }}</h6>
+              </div>
+            </div>
+          </div>
+          {% if forloop.counter|divisibleby:"6" %}
+            </div><div class="row">
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </main>
 {% endblock %}

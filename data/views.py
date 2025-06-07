@@ -244,7 +244,17 @@ def export_csv(request):
 
     return response
 
-def get_cards_for_the_year():
+
+def get_cards_for_the_year(model_class):
+    """
+    Generic function to get month cards for any utility bill model.
+
+    Args:
+        model_class: Django model class (e.g., Electricity, Gas, Water)
+
+    Returns:
+        List of MonthCard namedtuples with month data
+    """
     MonthCard = namedtuple("MonthCard", ["month", "year", "has_bill", "has_multiple"])
 
     cards = []
@@ -255,7 +265,7 @@ def get_cards_for_the_year():
         month = target_date.month
         year = target_date.year
 
-        bill_count = Electricity.objects.filter(
+        bill_count = model_class.objects.filter(
             service_start_date__year=year,
             service_start_date__month=month
         ).count()
@@ -270,6 +280,7 @@ def get_cards_for_the_year():
         )
 
     return list(reversed(cards))
+
 
 @login_required(login_url="/admin")
 def upload_files(request):
@@ -316,9 +327,13 @@ def upload_files(request):
 
         return redirect("/data/preview")
 
-    cards = get_cards_for_the_year()
+    elec_cards = get_cards_for_the_year(Electricity)
+    gas_cards = get_cards_for_the_year(Gas)
+    water_cards = get_cards_for_the_year(Water)
 
-    return render(request, "upload.html", {"cards": cards})
+    return render(request, "upload.html", {"elec_cards": elec_cards,
+                                           "gas_cards": gas_cards,
+                                           "water_cards": water_cards})
 
 @login_required(login_url="/admin")
 @require_http_methods(["GET", "POST"])
