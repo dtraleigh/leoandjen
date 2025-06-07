@@ -1,12 +1,10 @@
 import logging
 from datetime import datetime
-from pathlib import Path
-import pdfplumber
 from data.pdf_utils import (
     extract_billing_date,
     extract_service_dates, extract_energy_used, extract_actual_reading, extract_previous_reading,
     extract_energy_delivered_to_grid, extract_delivered_actual_reading, extract_delivered_previous_reading,
-    extract_carried_forward_balance,
+    extract_carried_forward_balance, get_text_from_pdf
 )
 
 from django.test import TestCase
@@ -32,7 +30,7 @@ class DataTestCase(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.expected_data = {
-            "elec_bill_dec24.pdf": {
+            "data/test_data/elec_bill_dec24.pdf": {
                 "billing_date": "2024-12-10",
                 "billing_year": 2024,
                 "service_start": "2024-11-09",
@@ -45,7 +43,7 @@ class DataTestCase(TestCase):
                 "delivered_previous_reading": 9985,
                 "carried_forward_balance": 122
             },
-            "elec_bill_jan25.pdf": {
+            "data/test_data/elec_bill_jan25.pdf": {
                 "billing_date": "2025-01-14",
                 "billing_year": 2025,
                 "service_start": "2024-12-08",
@@ -58,7 +56,7 @@ class DataTestCase(TestCase):
                 "delivered_previous_reading": 10345,
                 "carried_forward_balance": 0
             },
-            "elec_bill_feb25.pdf": {
+            "data/test_data/elec_bill_feb25.pdf": {
                 "billing_date": "2025-02-13",
                 "billing_year": 2025,
                 "service_start": "2025-01-11",
@@ -71,7 +69,7 @@ class DataTestCase(TestCase):
                 "delivered_previous_reading": 10686,
                 "carried_forward_balance": 0
             },
-            "elec_bill_mar25.pdf": {
+            "data/test_data/elec_bill_mar25.pdf": {
                 "billing_date": "2025-03-13",
                 "billing_year": 2025,
                 "service_start": "2025-02-12",
@@ -84,7 +82,7 @@ class DataTestCase(TestCase):
                 "delivered_previous_reading": 11078,
                 "carried_forward_balance": 0
             },
-            "elec_bill_apr25.pdf": {
+            "data/test_data/elec_bill_apr25.pdf": {
                 "billing_date": "2025-04-11",
                 "billing_year": 2025,
                 "service_start": "2025-03-12",
@@ -97,7 +95,7 @@ class DataTestCase(TestCase):
                 "delivered_previous_reading": 11513,
                 "carried_forward_balance": 360
             },
-            "elec_bill_may25.pdf": {
+            "data/test_data/elec_bill_may25.pdf": {
                 "billing_date": "2025-05-13",
                 "billing_year": 2025,
                 "service_start": "2025-04-10",
@@ -131,62 +129,57 @@ class DataTestCase(TestCase):
         self.assertEqual(convert_years_string_to_years_list("2020"), [2020])
         self.assertEqual(convert_years_string_to_years_list("202A"), [])
 
-    def get_pdf_text(self, pdf_filename):
-        pdf_path = Path(__file__).parent.parent / "test_data" / pdf_filename
-        with pdfplumber.open(pdf_path) as pdf:
-            return "\n\n".join(page.extract_text() or "" for page in pdf.pages)
-
     def test_extract_billing_date(self):
         for filename, data in self.expected_data.items():
-            text = self.get_pdf_text(filename)
+            text = get_text_from_pdf(filename)
             result = extract_billing_date(text)
             self.assertEqual(result.isoformat(), data["billing_date"], f"Failed billing_date on {filename}")
 
     def test_extract_service_dates(self):
         for filename, data in self.expected_data.items():
-            text = self.get_pdf_text(filename)
+            text = get_text_from_pdf(filename)
             start, end = extract_service_dates(text, data["billing_year"])
             self.assertEqual(start.isoformat(), data["service_start"], f"Failed service_start on {filename}")
             self.assertEqual(end.isoformat(), data["service_end"], f"Failed service_end on {filename}")
 
     def test_extract_energy_used(self):
         for filename, data in self.expected_data.items():
-            text = self.get_pdf_text(filename)
+            text = get_text_from_pdf(filename)
             result = extract_energy_used(text)
             self.assertEqual(result, data["energy_used"], msg=f"{filename} failed")
 
     def test_extract_actual_reading(self):
         for filename, data in self.expected_data.items():
-            text = self.get_pdf_text(filename)
+            text = get_text_from_pdf(filename)
             result = extract_actual_reading(text)
             self.assertEqual(result, data["actual_reading"], msg=f"{filename} failed")
 
     def test_extract_previous_reading(self):
         for filename, data in self.expected_data.items():
-            text = self.get_pdf_text(filename)
+            text = get_text_from_pdf(filename)
             result = extract_previous_reading(text)
             self.assertEqual(result, data["previous_reading"], msg=f"{filename} failed")
 
     def test_extract_energy_delivered_to_grid(self):
         for filename, data in self.expected_data.items():
-            text = self.get_pdf_text( filename)
+            text = get_text_from_pdf( filename)
             result = extract_energy_delivered_to_grid(text)
             self.assertEqual(result, data["energy_delivered"], msg=f"{filename} failed")
 
     def test_extract_delivered_actual_reading(self):
         for filename, data in self.expected_data.items():
-            text = self.get_pdf_text(filename)
+            text = get_text_from_pdf(filename)
             result = extract_delivered_actual_reading(text)
             self.assertEqual(result, data["delivered_actual_reading"], msg=f"{filename} failed")
 
     def test_extract_delivered_previous_reading(self):
         for filename, data in self.expected_data.items():
-            text = self.get_pdf_text(filename)
+            text = get_text_from_pdf(filename)
             result = extract_delivered_previous_reading(text)
             self.assertEqual(result, data["delivered_previous_reading"], msg=f"{filename} failed")
 
     def test_extract_carried_forward_balance(self):
         for filename, data in self.expected_data.items():
-            text = self.get_pdf_text(filename)
+            text = get_text_from_pdf(filename)
             result = extract_carried_forward_balance(text)
             self.assertEqual(result, data["carried_forward_balance"], msg=f"{filename} failed")
