@@ -4,7 +4,7 @@ from data.pdf_utils import (
     extract_billing_date,
     extract_service_dates, extract_energy_used, extract_actual_reading, extract_previous_reading,
     extract_energy_delivered_to_grid, extract_delivered_actual_reading, extract_delivered_previous_reading,
-    extract_carried_forward_balance, get_text_from_pdf
+    extract_carried_forward_balance, get_text_from_pdf, get_bill_type
 )
 
 from django.test import TestCase
@@ -183,3 +183,45 @@ class DataTestCase(TestCase):
             text = get_text_from_pdf(filename)
             result = extract_carried_forward_balance(text)
             self.assertEqual(result, data["carried_forward_balance"], msg=f"{filename} failed")
+
+    def test_get_bill_type(self):
+        # Test cases that should return "Electricity"
+        electricity_text_strings = [
+            "This is a bill from duke-energy for electricity service.",
+            "This is a bill from DUKE-ENERGY for electricity service.",
+            "This is a bill from Duke-Energy for electricity service.",
+            "This is a bill from duke energy for electricity service.",
+            "This is a bill from DUKE ENERGY for electricity service.",
+            "This is a bill from Duke Energy for electricity service.",
+            "Duke Energy bill for duke-energy customer service from Duke Energy.",
+            "duke-energy is your electricity provider.",
+            "Your electricity bill is from duke energy",
+            "Bill from: DUKE-ENERGY! Thank you for your business.",
+            """
+            Electric Utility Bill
+            Provider: Duke Energy
+            Account Number: 123456789
+            """
+        ]
+
+        for text in electricity_text_strings:
+            result = get_bill_type(text)
+            self.assertEqual(result, "Electricity", f"Failed for text: {text[:50]}...")
+
+        # Test cases that should return None
+        none_text_strings = [
+            "This is a bill from another utility company.",
+            "This is a bill from duke power company.",
+            "This is an energy bill from another company.",
+            "This is a bill from duke-power or energy-duke company.",
+            "",
+            "   \n\t  "
+        ]
+
+        for text in none_text_strings:
+            result = get_bill_type(text)
+            self.assertIsNone(result, f"Failed for text: {text[:50]}...")
+
+        # Test None input raises error
+        with self.assertRaises(AttributeError):
+            get_bill_type(None)
