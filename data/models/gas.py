@@ -8,6 +8,12 @@ class Gas(models.Model):
     service_start_date = models.DateField()
     service_end_date = models.DateField()
     therms_usage = models.IntegerField()
+    uploaded_pdf = models.FileField(
+        upload_to="gas_pdfs/",
+        blank=True,
+        null=True,
+        verbose_name="Uploaded PDF Bill"
+    )
 
     class Meta:
         verbose_name_plural = "Natural Gas"

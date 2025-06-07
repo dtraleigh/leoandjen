@@ -19,14 +19,14 @@ logging.getLogger("pdfminer").setLevel(logging.ERROR)
 def parse_month_day(month_str, day_str, year):
     return datetime(year, MONTHS[month_str], int(day_str)).date()
 
-def extract_billing_date(text):
+def extract_elec_billing_date(text):
     match = re.search(r'Bill date\s+([A-Za-z]{3}) (\d{1,2}), (\d{4})', text)
     if match:
         month, day, year = match.groups()
         return parse_month_day(month, day, int(year))
     return None
 
-def extract_service_dates(text, billing_year):
+def extract_elec_service_dates(text, billing_year):
     match = re.search(r'For service\s+([A-Za-z]{3}) (\d{1,2})\s*-\s*([A-Za-z]{3}) (\d{1,2})', text)
     if match:
         start_month, start_day, end_month, end_day = match.groups()
@@ -47,7 +47,7 @@ def extract_service_dates(text, billing_year):
 
     return None, None
 
-def extract_energy_used(text):
+def extract_elec_energy_used(text):
     usage_section = re.search(r'Current electric usage for meter number.*?(?=Energy Delivered)', text, re.DOTALL)
     if usage_section:
         match = re.search(r'Energy Used\s+(\d+(?:\.\d+)?)\s*kWh', usage_section.group())
@@ -55,7 +55,7 @@ def extract_energy_used(text):
             return float(match.group(1))
     return None
 
-def extract_actual_reading(text):
+def extract_elec_actual_reading(text):
     usage_section = re.search(r'Current electric usage for meter number.*?(?=Energy Delivered)', text, re.DOTALL)
     if usage_section:
         match = re.search(r'Actual reading on\s+[A-Za-z]{3}\s+\d{1,2}\s+(\d+)', usage_section.group())
@@ -63,7 +63,7 @@ def extract_actual_reading(text):
             return int(match.group(1))
     return None
 
-def extract_previous_reading(text):
+def extract_elec_previous_reading(text):
     usage_section = re.search(r'Current electric usage for meter number.*?(?=Energy Delivered)', text, re.DOTALL)
     if usage_section:
         match = re.search(r'Previous reading on\s+[A-Za-z]{3}\s+\d{1,2}\s*-\s*(\d+)', usage_section.group())
@@ -107,6 +107,57 @@ def extract_carried_forward_balance(text):
     return 0
 
 
+def extract_gas_billing_date(text):
+    # Look for the statement date in the table format
+    # STATEMENT DATE DATE DUE AMOUNT DUE
+    # May 8 2025 Jun 6 2025 $22.33
+    match = re.search(r'STATEMENT DATE.*?([A-Za-z]{3}) (\d{1,2}) (\d{4})', text, re.DOTALL)
+    if match:
+        month, day, year = match.groups()
+        return parse_month_day(month, day, int(year))
+    return None
+
+
+def extract_gas_service_dates(text, year):
+    # Look for the billing period in the meter table
+    # Format: 04/07/25-05/07/25
+    match = re.search(r'BILLING PERIOD.*?(\d{2})/(\d{2})/(\d{2})-(\d{2})/(\d{2})/(\d{2})', text, re.DOTALL)
+    if match:
+        start_month, start_day, start_year, end_month, end_day, end_year = match.groups()
+
+        # Convert 2-digit years to 4-digit (assuming 20xx)
+        start_year_full = 2000 + int(start_year)
+        end_year_full = 2000 + int(end_year)
+
+        # Convert month numbers to month names for parse_month_day
+        month_names = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun',
+                       7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
+
+        start_month_name = month_names[int(start_month)]
+        end_month_name = month_names[int(end_month)]
+
+        start_date = parse_month_day(start_month_name, start_day, start_year_full)
+        end_date = parse_month_day(end_month_name, end_day, end_year_full)
+
+        return start_date, end_date
+    return None, None
+
+
+def extract_gas_therms_usage(text):
+    # Look for the therms value in the meter table
+    # The pattern shows: THERMS column with value like "= 10"
+    match = re.search(r'THERMS.*?=\s*(\d+(?:\.\d+)?)', text, re.DOTALL)
+    if match:
+        return float(match.group(1))
+
+    # Alternative pattern in case the format is different
+    match = re.search(r'THERMS\s+(\d+(?:\.\d+)?)', text)
+    if match:
+        return float(match.group(1))
+
+    return None
+
+
 def get_text_from_pdf(source):
     """
     Extract text from a PDF, either from a local file or from a remote URL.
@@ -140,12 +191,23 @@ def get_bill_type(text):
     return None
 
 
+def extract_pdf_data_for_preview(pdf_path):
+    text = get_text_from_pdf(pdf_path)
+    bill_type = get_bill_type(text)
+
+    if bill_type == "Electricity":
+        return get_elec_preview_data(text)
+    elif bill_type == "Gas":
+        return get_gas_preview_data(text)
+    return None
+
+
 def get_elec_preview_data(text):
-    billing_date = extract_billing_date(text)
-    start_date, end_date = extract_service_dates(text, billing_date.year)
-    energy_used = extract_energy_used(text)
-    actual_reading = extract_actual_reading(text)
-    previous_reading = extract_previous_reading(text)
+    billing_date = extract_elec_billing_date(text)
+    start_date, end_date = extract_elec_service_dates(text, billing_date.year)
+    energy_used = extract_elec_energy_used(text)
+    actual_reading = extract_elec_actual_reading(text)
+    previous_reading = extract_elec_previous_reading(text)
     carried_forward_balance = extract_carried_forward_balance(text)
     energy_delivered_to_grid = extract_energy_delivered_to_grid(text)
     delivered_actual_reading = extract_delivered_actual_reading(text)
@@ -158,6 +220,7 @@ def get_elec_preview_data(text):
             raise ValueError(f"Usage mismatch: Meter says {diff}, but reported is {energy_used}")
 
     return {
+        "bill_type": "Electricity",
         "billing_date": billing_date.isoformat(),
         "start_date": start_date.isoformat(),
         "end_date": end_date.isoformat(),
@@ -171,23 +234,14 @@ def get_elec_preview_data(text):
     }
 
 
-def extract_pdf_data_for_preview(pdf_path):
-    text = get_text_from_pdf(pdf_path)
-    bill_type = get_bill_type(text)
-
-    if bill_type == "Electricity":
-        return get_elec_preview_data(text)
-    return None
-
-
-def extract_pdf_data_for_saving(pdf_path):
+def extract_elec_pdf_data_for_saving(pdf_path):
     text = get_text_from_pdf(pdf_path)
 
-    billing_date = extract_billing_date(text)
-    start_date, end_date = extract_service_dates(text, billing_date.year)
-    energy_used = extract_energy_used(text)
-    actual_reading = extract_actual_reading(text)
-    previous_reading = extract_previous_reading(text)
+    billing_date = extract_elec_billing_date(text)
+    start_date, end_date = extract_elec_service_dates(text, billing_date.year)
+    energy_used = extract_elec_energy_used(text)
+    actual_reading = extract_elec_actual_reading(text)
+    previous_reading = extract_elec_previous_reading(text)
     carried_forward_balance = extract_carried_forward_balance(text)
     energy_delivered_to_grid = extract_energy_delivered_to_grid(text)
     delivered_actual_reading = extract_delivered_actual_reading(text)
@@ -200,6 +254,7 @@ def extract_pdf_data_for_saving(pdf_path):
             raise ValueError(f"Usage mismatch: Meter says {diff}, but reported is {energy_used}")
 
     return {
+        "bill_type": "Electricity",
         "billing_date": billing_date,
         "start_date": start_date,
         "end_date": end_date,
@@ -210,4 +265,34 @@ def extract_pdf_data_for_saving(pdf_path):
         "energy_delivered_to_grid": energy_delivered_to_grid,
         "delivered_actual_reading": delivered_actual_reading,
         "delivered_previous_reading": delivered_previous_reading
+    }
+
+
+def get_gas_preview_data(text):
+    billing_date = extract_gas_billing_date(text)
+    start_date, end_date = extract_gas_service_dates(text, billing_date.year)
+    therms_usage = extract_gas_therms_usage(text)
+
+    return {
+        "bill_type": "Gas",
+        "billing_date": billing_date.isoformat(),
+        "start_date": start_date.isoformat(),
+        "end_date": end_date.isoformat(),
+        "therms_usage": therms_usage
+    }
+
+
+def extract_gas_pdf_data_for_saving(pdf_path):
+    text = get_text_from_pdf(pdf_path)
+
+    billing_date = extract_gas_billing_date(text)
+    start_date, end_date = extract_gas_service_dates(text, billing_date.year)
+    therms_usage = extract_gas_therms_usage(text)
+
+    return {
+        "bill_type": "Gas",
+        "billing_date": billing_date,
+        "start_date": start_date,
+        "end_date": end_date,
+        "therms_usage": therms_usage
     }
