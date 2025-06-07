@@ -127,9 +127,14 @@ def get_text_from_pdf(source):
             return "\n".join(page.extract_text() for page in pdf.pages if page.extract_text())
 
 
-def extract_pdf_data_for_preview(pdf_path):
-    text = get_text_from_pdf(pdf_path)
+def get_bill_type(text):
+    text_lower = text.lower()
+    if "duke-energy" in text_lower or "duke energy" in text_lower:
+        return "Electricity"
+    return None
 
+
+def get_elec_preview_data(text):
     billing_date = extract_billing_date(text)
     start_date, end_date = extract_service_dates(text, billing_date.year)
     energy_used = extract_energy_used(text)
@@ -158,6 +163,16 @@ def extract_pdf_data_for_preview(pdf_path):
         "delivered_actual_reading": delivered_actual_reading,
         "delivered_previous_reading": delivered_previous_reading
     }
+
+
+def extract_pdf_data_for_preview(pdf_path):
+    text = get_text_from_pdf(pdf_path)
+    bill_type = get_bill_type(text)
+
+    if bill_type == "Electricity":
+        return get_elec_preview_data(text)
+    return None
+
 
 def extract_pdf_data_for_saving(pdf_path):
     text = get_text_from_pdf(pdf_path)
