@@ -1,8 +1,8 @@
 import logging
 from datetime import datetime
 from data.pdf_utils import (
-    extract_billing_date,
-    extract_service_dates, extract_energy_used, extract_actual_reading, extract_previous_reading,
+    extract_elec_billing_date,
+    extract_elec_service_dates, extract_elec_energy_used, extract_elec_actual_reading, extract_elec_previous_reading,
     extract_energy_delivered_to_grid, extract_delivered_actual_reading, extract_delivered_previous_reading,
     extract_carried_forward_balance, get_text_from_pdf, get_bill_type
 )
@@ -132,32 +132,32 @@ class DataTestCase(TestCase):
     def test_extract_billing_date(self):
         for filename, data in self.expected_data.items():
             text = get_text_from_pdf(filename)
-            result = extract_billing_date(text)
+            result = extract_elec_billing_date(text)
             self.assertEqual(result.isoformat(), data["billing_date"], f"Failed billing_date on {filename}")
 
     def test_extract_service_dates(self):
         for filename, data in self.expected_data.items():
             text = get_text_from_pdf(filename)
-            start, end = extract_service_dates(text, data["billing_year"])
+            start, end = extract_elec_service_dates(text, data["billing_year"])
             self.assertEqual(start.isoformat(), data["service_start"], f"Failed service_start on {filename}")
             self.assertEqual(end.isoformat(), data["service_end"], f"Failed service_end on {filename}")
 
     def test_extract_energy_used(self):
         for filename, data in self.expected_data.items():
             text = get_text_from_pdf(filename)
-            result = extract_energy_used(text)
+            result = extract_elec_energy_used(text)
             self.assertEqual(result, data["energy_used"], msg=f"{filename} failed")
 
     def test_extract_actual_reading(self):
         for filename, data in self.expected_data.items():
             text = get_text_from_pdf(filename)
-            result = extract_actual_reading(text)
+            result = extract_elec_actual_reading(text)
             self.assertEqual(result, data["actual_reading"], msg=f"{filename} failed")
 
     def test_extract_previous_reading(self):
         for filename, data in self.expected_data.items():
             text = get_text_from_pdf(filename)
-            result = extract_previous_reading(text)
+            result = extract_elec_previous_reading(text)
             self.assertEqual(result, data["previous_reading"], msg=f"{filename} failed")
 
     def test_extract_energy_delivered_to_grid(self):

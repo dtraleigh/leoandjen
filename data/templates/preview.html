@@ -2,7 +2,7 @@
 {% block content %}
 <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
   <h2>Preview Extracted Data</h2>
-
+  {% if data.bill_type == "Electricity" %}
   <dl class="row">
     <dt class="col-sm-3">Bill Date</dt><dd class="col-sm-9">{{ data.billing_date }}</dd>
     <dt class="col-sm-3">Service Start Date</dt><dd class="col-sm-9">{{ data.start_date }}</dd>
@@ -15,6 +15,14 @@
     <dt class="col-sm-3">Solar Reading Actual</dt><dd class="col-sm-9">{{ data.delivered_actual_reading }}</dd>
     <dt class="col-sm-3">Solar Reading Previous</dt><dd class="col-sm-9">{{ data.delivered_previous_reading }}</dd>
   </dl>
+  {% elif data.bill_type == "Gas" %}
+  <dl class="row">
+    <dt class="col-sm-3">Bill Date</dt><dd class="col-sm-9">{{ data.billing_date }}</dd>
+    <dt class="col-sm-3">Service Start Date</dt><dd class="col-sm-9">{{ data.start_date }}</dd>
+    <dt class="col-sm-3">Service End Date</dt><dd class="col-sm-9">{{ data.end_date }}</dd>
+    <dt class="col-sm-3">Therms Usage</dt><dd class="col-sm-9">{{ data.therms_usage }}</dd>
+  </dl>
+  {% endif %}
 
   <form method="post">
     {% csrf_token %}
