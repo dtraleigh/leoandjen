@@ -30,7 +30,7 @@ class DataTestCase(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.expected_data = {
-            "data/test_data/elec_bill_dec24.pdf": {
+            "data/test_data/elec_bill_nov24.pdf": {
                 "billing_date": "2024-12-10",
                 "billing_year": 2024,
                 "service_start": "2024-11-09",
@@ -43,7 +43,7 @@ class DataTestCase(TestCase):
                 "delivered_previous_reading": 9985,
                 "carried_forward_balance": 122
             },
-            "data/test_data/elec_bill_jan25.pdf": {
+            "data/test_data/elec_bill_dec24.pdf": {
                 "billing_date": "2025-01-14",
                 "billing_year": 2025,
                 "service_start": "2024-12-08",
@@ -56,7 +56,7 @@ class DataTestCase(TestCase):
                 "delivered_previous_reading": 10345,
                 "carried_forward_balance": 0
             },
-            "data/test_data/elec_bill_feb25.pdf": {
+            "data/test_data/elec_bill_jan25.pdf": {
                 "billing_date": "2025-02-13",
                 "billing_year": 2025,
                 "service_start": "2025-01-11",
@@ -69,7 +69,7 @@ class DataTestCase(TestCase):
                 "delivered_previous_reading": 10686,
                 "carried_forward_balance": 0
             },
-            "data/test_data/elec_bill_mar25.pdf": {
+            "data/test_data/elec_bill_feb25.pdf": {
                 "billing_date": "2025-03-13",
                 "billing_year": 2025,
                 "service_start": "2025-02-12",
@@ -82,7 +82,7 @@ class DataTestCase(TestCase):
                 "delivered_previous_reading": 11078,
                 "carried_forward_balance": 0
             },
-            "data/test_data/elec_bill_apr25.pdf": {
+            "data/test_data/elec_bill_mar25.pdf": {
                 "billing_date": "2025-04-11",
                 "billing_year": 2025,
                 "service_start": "2025-03-12",
@@ -95,7 +95,7 @@ class DataTestCase(TestCase):
                 "delivered_previous_reading": 11513,
                 "carried_forward_balance": 360
             },
-            "data/test_data/elec_bill_may25.pdf": {
+            "data/test_data/elec_bill_apr25.pdf": {
                 "billing_date": "2025-05-13",
                 "billing_year": 2025,
                 "service_start": "2025-04-10",

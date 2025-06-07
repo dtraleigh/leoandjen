@@ -17,6 +17,7 @@ django-extensions==3.2.3
 django-js-asset==2.2.0
 django-storages==1.14.4
 django-widget-tweaks==1.5.0
+djhtml==3.0.8
 djlint==1.35.4
 EditorConfig==0.12.4
 html-tag-names==0.1.2
