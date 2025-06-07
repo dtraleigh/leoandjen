@@ -1,3 +1,4 @@
+import logging
 import tempfile
 from urllib.parse import urlparse
 
@@ -11,6 +12,9 @@ MONTHS = {
     'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6,
     'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12
 }
+
+# Suppress pdfminer warnings
+logging.getLogger("pdfminer").setLevel(logging.ERROR)
 
 def parse_month_day(month_str, day_str, year):
     return datetime(year, MONTHS[month_str], int(day_str)).date()
