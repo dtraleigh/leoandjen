@@ -16,12 +16,13 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
+from django.db.models import F
 
 from data.file_handler import save_uploaded_file_to_temporary, rename_file_on_disk, create_unique_filename
 from data.functions import *
 from data.models import *
 from data.pdf_utils import extract_pdf_data_for_preview, extract_elec_pdf_data_for_saving, \
-    extract_gas_pdf_data_for_saving
+    extract_gas_pdf_data_for_saving, extract_water_pdf_data_for_saving
 from data.year_elec import ElecYear
 from data.year_gas import GasYear
 from data.year_vehicle_miles import VehicleMilesTraveledYear
@@ -266,9 +267,13 @@ def get_cards_for_the_year(model_class):
         month = target_date.month
         year = target_date.year
 
-        bill_count = model_class.objects.filter(
-            service_start_date__year=year,
-            service_start_date__month=month
+        # Add 5 days to service_start_date to account for edge cases where service_start_date is in the month before
+        bill_count = model_class.objects.annotate(
+            adjusted_date=F('service_start_date') + timezone.timedelta(days=5)
+        ).filter(
+            adjusted_date__year=year,
+            adjusted_date__month=month,
+            service_start_date__isnull=False
         ).count()
 
         cards.append(
@@ -336,6 +341,7 @@ def upload_files(request):
                                            "gas_cards": gas_cards,
                                            "water_cards": water_cards})
 
+
 @login_required(login_url="/admin")
 @require_http_methods(["GET", "POST"])
 def preview_pdf(request):
@@ -358,7 +364,8 @@ def preview_pdf(request):
         elif 'save' in request.POST:
             try:
                 if not os.path.exists(temp_file_path):
-                    messages.error(request, f"Temporary file is missing. Please re-upload the PDF. temp_file_path: {temp_file_path}")
+                    messages.error(request,
+                                   f"Temporary file is missing. Please re-upload the PDF. temp_file_path: {temp_file_path}")
                     return redirect("/data/upload/")
 
                 if parsed_data["bill_type"] == "Electricity":
@@ -397,10 +404,28 @@ def preview_pdf(request):
                     start = gas_instance.service_start_date
                     end = gas_instance.service_end_date
 
+                elif parsed_data["bill_type"] == "Water":
+                    model_data = extract_water_pdf_data_for_saving(temp_file_path)
+                    water_instance = Water.objects.create(
+                        bill_date=model_data["billing_date"],
+                        service_start_date=model_data["start_date"],
+                        service_end_date=model_data["end_date"],
+                        avg_gallons_per_day=model_data["avg_gallons_per_day"]
+                    )
+
+                    if os.path.exists(temp_file_path):
+                        with open(temp_file_path, 'rb') as f:
+                            filename = Path(temp_file_path).name
+                            water_instance.uploaded_pdf.save(filename, File(f), save=True)
+
+                    start = water_instance.service_start_date
+                    end = water_instance.service_end_date
+
                 start_str = f"{start.strftime('%B')} {start.day}, {start.year}"
                 end_str = f"{end.strftime('%B')} {end.day}, {end.year}"
 
-                messages.success(request, f"{parsed_data["bill_type"]} bill saved for service dates {start_str} to {end_str}.")
+                messages.success(request,
+                                 f"{parsed_data["bill_type"]} bill saved for service dates {start_str} to {end_str}.")
 
                 return redirect("/data/upload/")
 

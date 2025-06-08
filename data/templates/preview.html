@@ -3,6 +3,7 @@
 <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
   <h2>Preview Extracted Data</h2>
   {% if data.bill_type == "Electricity" %}
+  <h3>Uploaded Electricity Bill</h3>
   <dl class="row">
     <dt class="col-sm-3">Bill Date</dt><dd class="col-sm-9">{{ data.billing_date }}</dd>
     <dt class="col-sm-3">Service Start Date</dt><dd class="col-sm-9">{{ data.start_date }}</dd>
@@ -16,11 +17,20 @@
     <dt class="col-sm-3">Solar Reading Previous</dt><dd class="col-sm-9">{{ data.delivered_previous_reading }}</dd>
   </dl>
   {% elif data.bill_type == "Gas" %}
+  <h3>Uploaded Gas Bill</h3>
   <dl class="row">
     <dt class="col-sm-3">Bill Date</dt><dd class="col-sm-9">{{ data.billing_date }}</dd>
     <dt class="col-sm-3">Service Start Date</dt><dd class="col-sm-9">{{ data.start_date }}</dd>
     <dt class="col-sm-3">Service End Date</dt><dd class="col-sm-9">{{ data.end_date }}</dd>
     <dt class="col-sm-3">Therms Usage</dt><dd class="col-sm-9">{{ data.therms_usage }}</dd>
+  </dl>
+  {% elif data.bill_type == "Water" %}
+  <h3>Uploaded Water Bill</h3>
+  <dl class="row">
+    <dt class="col-sm-3">Bill Date</dt><dd class="col-sm-9">{{ data.billing_date }}</dd>
+    <dt class="col-sm-3">Service Start Date</dt><dd class="col-sm-9">{{ data.start_date }}</dd>
+    <dt class="col-sm-3">Service End Date</dt><dd class="col-sm-9">{{ data.end_date }}</dd>
+    <dt class="col-sm-3">Avg Gallons Per Day</dt><dd class="col-sm-9">{{ data.avg_gallons_per_day }}</dd>
   </dl>
   {% endif %}
 

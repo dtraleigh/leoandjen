@@ -402,3 +402,18 @@ def get_water_preview_data(text):
         "end_date": end_date.isoformat(),
         "avg_gallons_per_day": avg_gallons_per_day
     }
+
+def extract_water_pdf_data_for_saving(pdf_path):
+    text = get_text_from_pdf(pdf_path)
+
+    billing_date = extract_water_billing_date(text)
+    start_date, end_date = extract_water_service_dates(text, billing_date.year)
+    avg_gallons_per_day = extract_water_avg_gallons_per_day(text)
+
+    return {
+        "bill_type": "Gas",
+        "billing_date": billing_date,
+        "start_date": start_date,
+        "end_date": end_date,
+        "avg_gallons_per_day": avg_gallons_per_day
+    }
