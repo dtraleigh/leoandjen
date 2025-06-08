@@ -169,6 +169,14 @@ class DataTestCase(TestCase):
             }
         }
         cls.expected_water_data = {
+            "data/test_data/water_bill_jul24.pdf": {
+                "bill_type": "Water",
+                "billing_date": "2024-08-02",
+                "billing_year": 2024,
+                "service_start": "2024-07-02",
+                "service_end": "2024-08-02",
+                "avg_gallons_per_day": 24.1,
+            },
             "data/test_data/water_bill_nov25.pdf": {
                 "bill_type": "Water",
                 "billing_date": "2024-12-03",
