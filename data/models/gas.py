@@ -1,6 +1,9 @@
 from datetime import timedelta
 
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+
 
 class Gas(models.Model):
     submit_date = models.DateField(auto_now_add=True)
@@ -45,3 +48,8 @@ class Gas(models.Model):
             if date.month == month and date.year == year:
                 day_count += 1
         return day_count
+
+@receiver(post_delete, sender=Gas)
+def delete_uploaded_pdf_from_s3(sender, instance, **kwargs):
+    if instance.uploaded_pdf:
+        instance.uploaded_pdf.delete(save=False)
