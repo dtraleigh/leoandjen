@@ -170,22 +170,6 @@ def extract_water_billing_date(text):
         return parse_month_day(month_name, day, int(year))
     return None
 
-def extract_water_service_dates_og(text, year):
-    # Look for the service period in the meter table
-    # Format: 05/02/2025 to 06/03/2025
-    match = re.search(r'SERVICEPERIOD.*?(\d{2})/(\d{2})/(\d{4})\s+to\s+(\d{2})/(\d{2})/(\d{4})', text, re.DOTALL)
-    if match:
-        start_month, start_day, start_year, end_month, end_day, end_year = match.groups()
-        # Convert month numbers to month names for parse_month_day
-        month_names = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        start_month_name = month_names[int(start_month)]
-        end_month_name = month_names[int(end_month)]
-        start_date = parse_month_day(start_month_name, start_day, int(start_year))
-        end_date = parse_month_day(end_month_name, end_day, int(end_year))
-        return start_date, end_date
-    return None, None
-
 
 def extract_water_service_dates(text, year):
     # Look for the service period in the meter table
