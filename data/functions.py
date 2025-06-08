@@ -503,3 +503,35 @@ def get_money_saved_by_solar_pre_save(parsed_data):
     )
 
     return instance.get_money_saved_by_solar
+
+
+def check_for_duplicates(parsed_data):
+    MODEL_MAP = {
+        'Electricity': Electricity,
+        'Gas': Gas,
+        'Water': Water
+    }
+
+    bill_type = parsed_data.get('bill_type')
+    model_class = MODEL_MAP.get(bill_type)
+
+    if not model_class:
+        return []
+
+    # Convert ISO format dates back to date objects
+    start_date = datetime.fromisoformat(parsed_data['start_date']).date()
+    end_date = datetime.fromisoformat(parsed_data['end_date']).date()
+
+    # Primary check: matching service dates
+    duplicates_qs = model_class.objects.filter(
+        service_start_date=start_date,
+        service_end_date=end_date
+    )
+
+    # Secondary check: matching billing date (if available)
+    if parsed_data.get('billing_date'):
+        billing_date = datetime.fromisoformat(parsed_data['billing_date']).date()
+        billing_date_qs = model_class.objects.filter(bill_date=billing_date)
+        duplicates_qs = duplicates_qs.union(billing_date_qs)
+
+    return list(duplicates_qs)

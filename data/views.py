@@ -352,6 +352,8 @@ def preview_pdf(request):
         messages.error(request, "Missing data. Please upload again.")
         return redirect("/data/upload/")
 
+    duplicates = check_for_duplicates(parsed_data)
+
     if request.method == "POST":
         if 'cancel' in request.POST:
             if os.path.exists(temp_file_path):
@@ -442,4 +444,5 @@ def preview_pdf(request):
                 request.session.pop('parsed_data', None)
                 request.session.pop('temp_file_path', None)
 
-    return render(request, "preview.html", {"data": parsed_data})
+    return render(request, "preview.html", {"data": parsed_data,
+                                            "duplicates": duplicates})

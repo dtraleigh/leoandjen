@@ -1,43 +1,141 @@
 {% extends "data_base.html" %}
 {% block content %}
-<main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-  <h2>Preview Extracted Data</h2>
-  {% if data.bill_type == "Electricity" %}
-  <h3>Uploaded Electricity Bill</h3>
-  <dl class="row">
-    <dt class="col-sm-3">Bill Date</dt><dd class="col-sm-9">{{ data.billing_date }}</dd>
-    <dt class="col-sm-3">Service Start Date</dt><dd class="col-sm-9">{{ data.start_date }}</dd>
-    <dt class="col-sm-3">Service End Date</dt><dd class="col-sm-9">{{ data.end_date }}</dd>
-    <dt class="col-sm-3">kWh Usage</dt><dd class="col-sm-9">{{ data.electricity_usage_kwh }}</dd>
-    <dt class="col-sm-3">Meter Reading Actual</dt><dd class="col-sm-9">{{ data.actual_reading }}</dd>
-    <dt class="col-sm-3">Meter Reading Previous</dt><dd class="col-sm-9">{{ data.previous_reading }}</dd>
-    <dt class="col-sm-3">Carried Forward Balance</dt><dd class="col-sm-9">{{ data.carried_forward_balance }}</dd>
-    <dt class="col-sm-3">Solar Sent to Grid</dt><dd class="col-sm-9">{{ data.energy_delivered_to_grid }}</dd>
-    <dt class="col-sm-3">Solar Reading Actual</dt><dd class="col-sm-9">{{ data.delivered_actual_reading }}</dd>
-    <dt class="col-sm-3">Solar Reading Previous</dt><dd class="col-sm-9">{{ data.delivered_previous_reading }}</dd>
-  </dl>
-  {% elif data.bill_type == "Gas" %}
-  <h3>Uploaded Gas Bill</h3>
-  <dl class="row">
-    <dt class="col-sm-3">Bill Date</dt><dd class="col-sm-9">{{ data.billing_date }}</dd>
-    <dt class="col-sm-3">Service Start Date</dt><dd class="col-sm-9">{{ data.start_date }}</dd>
-    <dt class="col-sm-3">Service End Date</dt><dd class="col-sm-9">{{ data.end_date }}</dd>
-    <dt class="col-sm-3">Therms Usage</dt><dd class="col-sm-9">{{ data.therms_usage }}</dd>
-  </dl>
-  {% elif data.bill_type == "Water" %}
-  <h3>Uploaded Water Bill</h3>
-  <dl class="row">
-    <dt class="col-sm-3">Bill Date</dt><dd class="col-sm-9">{{ data.billing_date }}</dd>
-    <dt class="col-sm-3">Service Start Date</dt><dd class="col-sm-9">{{ data.start_date }}</dd>
-    <dt class="col-sm-3">Service End Date</dt><dd class="col-sm-9">{{ data.end_date }}</dd>
-    <dt class="col-sm-3">Avg Gallons Per Day</dt><dd class="col-sm-9">{{ data.avg_gallons_per_day }}</dd>
-  </dl>
-  {% endif %}
+  <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <h2>Preview Extracted Data</h2>
 
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit" name="cancel" class="btn btn-secondary">Cancel</button>
-    <button type="submit" name="save" class="btn btn-primary">Save</button>
-  </form>
-</main>
+    {% if duplicates %}
+      <div class="alert alert-warning">
+        <h4>⚠️ Potential Duplicates Found:</h4>
+        <p>{{ duplicates|length }} existing bill{{ duplicates|length|pluralize }} may match this upload. Please review the comparison below.</p>
+      </div>
+
+      <!-- Side-by-side comparison for each duplicate -->
+      {% for duplicate in duplicates %}
+        <div class="card mb-4 border-warning">
+          <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">Comparison #{{ forloop.counter }}</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <!-- Left side: New upload -->
+              <div class="col-md-6">
+                <h6 class="text-success">📤 New Upload</h6>
+                {% if data.bill_type == "Electricity" %}
+                  <dl class="row small">
+                    <dt class="col-sm-5">Bill Date</dt><dd class="col-sm-7">{{ data.billing_date }}</dd>
+                    <dt class="col-sm-5">Service Start</dt><dd class="col-sm-7">{{ data.start_date }}</dd>
+                    <dt class="col-sm-5">Service End</dt><dd class="col-sm-7">{{ data.end_date }}</dd>
+                    <dt class="col-sm-5">kWh Usage</dt><dd class="col-sm-7">{{ data.electricity_usage_kwh }}</dd>
+                    <dt class="col-sm-5">Actual Reading</dt><dd class="col-sm-7">{{ data.actual_reading }}</dd>
+                    <dt class="col-sm-5">Previous Reading</dt><dd class="col-sm-7">{{ data.previous_reading }}</dd>
+                    <dt class="col-sm-5">Carried Forward</dt><dd class="col-sm-7">{{ data.carried_forward_balance }}</dd>
+                    <dt class="col-sm-5">Solar to Grid</dt><dd class="col-sm-7">{{ data.energy_delivered_to_grid }}</dd>
+                    <dt class="col-sm-5">Solar Actual</dt><dd class="col-sm-7">{{ data.delivered_actual_reading }}</dd>
+                    <dt class="col-sm-5">Solar Previous</dt><dd class="col-sm-7">{{ data.delivered_previous_reading }}</dd>
+                  </dl>
+                {% elif data.bill_type == "Gas" %}
+                  <dl class="row small">
+                    <dt class="col-sm-5">Bill Date</dt><dd class="col-sm-7">{{ data.billing_date }}</dd>
+                    <dt class="col-sm-5">Service Start</dt><dd class="col-sm-7">{{ data.start_date }}</dd>
+                    <dt class="col-sm-5">Service End</dt><dd class="col-sm-7">{{ data.end_date }}</dd>
+                    <dt class="col-sm-5">Therms Usage</dt><dd class="col-sm-7">{{ data.therms_usage }}</dd>
+                  </dl>
+                {% elif data.bill_type == "Water" %}
+                  <dl class="row small">
+                    <dt class="col-sm-5">Bill Date</dt><dd class="col-sm-7">{{ data.billing_date }}</dd>
+                    <dt class="col-sm-5">Service Start</dt><dd class="col-sm-7">{{ data.start_date }}</dd>
+                    <dt class="col-sm-5">Service End</dt><dd class="col-sm-7">{{ data.end_date }}</dd>
+                    <dt class="col-sm-5">Avg Gallons/Day</dt><dd class="col-sm-7">{{ data.avg_gallons_per_day }}</dd>
+                  </dl>
+                {% endif %}
+              </div>
+
+              <!-- Right side: Existing duplicate -->
+              <div class="col-md-6 border-left">
+                <h6 class="text-danger">📋 Existing Record (ID: {{ duplicate.id }})</h6>
+                {% if data.bill_type == "Electricity" %}
+                  <dl class="row small">
+                    <dt class="col-sm-5">Bill Date</dt><dd class="col-sm-7">{{ duplicate.bill_date|date:"Y-m-d"|default:"Not set" }}</dd>
+                    <dt class="col-sm-5">Service Start</dt><dd class="col-sm-7">{{ duplicate.service_start_date|date:"Y-m-d" }}</dd>
+                    <dt class="col-sm-5">Service End</dt><dd class="col-sm-7">{{ duplicate.service_end_date|date:"Y-m-d" }}</dd>
+                    <dt class="col-sm-5">kWh Usage</dt><dd class="col-sm-7">{{ duplicate.kWh_usage }}</dd>
+                    <dt class="col-sm-5">Actual Reading</dt><dd class="col-sm-7">{{ duplicate.actual_reading|default:"N/A" }}</dd>
+                    <dt class="col-sm-5">Previous Reading</dt><dd class="col-sm-7">{{ duplicate.previous_reading|default:"N/A" }}</dd>
+                    <dt class="col-sm-5">Carried Forward</dt><dd class="col-sm-7">{{ duplicate.net_metering_credit }}</dd>
+                    <dt class="col-sm-5">Solar to Grid</dt><dd class="col-sm-7">{{ duplicate.solar_amt_sent_to_grid }}</dd>
+                    <dt class="col-sm-5">Solar Actual</dt><dd class="col-sm-7">{{ duplicate.delivered_actual_reading|default:"N/A" }}</dd>
+                    <dt class="col-sm-5">Solar Previous</dt><dd class="col-sm-7">{{ duplicate.delivered_previous_reading|default:"N/A" }}</dd>
+                  </dl>
+                {% elif data.bill_type == "Gas" %}
+                  <dl class="row small">
+                    <dt class="col-sm-5">Bill Date</dt><dd class="col-sm-7">{{ duplicate.bill_date|date:"Y-m-d"|default:"Not set" }}</dd>
+                    <dt class="col-sm-5">Service Start</dt><dd class="col-sm-7">{{ duplicate.service_start_date|date:"Y-m-d" }}</dd>
+                    <dt class="col-sm-5">Service End</dt><dd class="col-sm-7">{{ duplicate.service_end_date|date:"Y-m-d" }}</dd>
+                    <dt class="col-sm-5">Therms Usage</dt><dd class="col-sm-7">{{ duplicate.therms_usage }}</dd>
+                  </dl>
+                {% elif data.bill_type == "Water" %}
+                  <dl class="row small">
+                    <dt class="col-sm-5">Bill Date</dt><dd class="col-sm-7">{{ duplicate.bill_date|date:"Y-m-d"|default:"Not set" }}</dd>
+                    <dt class="col-sm-5">Service Start</dt><dd class="col-sm-7">{{ duplicate.service_start_date|date:"Y-m-d" }}</dd>
+                    <dt class="col-sm-5">Service End</dt><dd class="col-sm-7">{{ duplicate.service_end_date|date:"Y-m-d" }}</dd>
+                    <dt class="col-sm-5">Avg Gallons/Day</dt><dd class="col-sm-7">{{ duplicate.avg_gallons_per_day }}</dd>
+                  </dl>
+                {% endif %}
+                <small class="text-muted">Submitted: {{ duplicate.submit_date }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+    {% else %}
+      <!-- No duplicates - show consistent card-style view -->
+      <div class="card mb-4 border-success">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">📤 New Upload - Ready to Save</h5>
+        </div>
+        <div class="card-body">
+          {% if data.bill_type == "Electricity" %}
+            <h6 class="text-success mb-3">Electricity Bill</h6>
+            <dl class="row small">
+              <dt class="col-sm-5">Bill Date</dt><dd class="col-sm-7">{{ data.billing_date }}</dd>
+              <dt class="col-sm-5">Service Start</dt><dd class="col-sm-7">{{ data.start_date }}</dd>
+              <dt class="col-sm-5">Service End</dt><dd class="col-sm-7">{{ data.end_date }}</dd>
+              <dt class="col-sm-5">kWh Usage</dt><dd class="col-sm-7">{{ data.electricity_usage_kwh }}</dd>
+              <dt class="col-sm-5">Actual Reading</dt><dd class="col-sm-7">{{ data.actual_reading }}</dd>
+              <dt class="col-sm-5">Previous Reading</dt><dd class="col-sm-7">{{ data.previous_reading }}</dd>
+              <dt class="col-sm-5">Carried Forward</dt><dd class="col-sm-7">{{ data.carried_forward_balance }}</dd>
+              <dt class="col-sm-5">Solar to Grid</dt><dd class="col-sm-7">{{ data.energy_delivered_to_grid }}</dd>
+              <dt class="col-sm-5">Solar Actual</dt><dd class="col-sm-7">{{ data.delivered_actual_reading }}</dd>
+              <dt class="col-sm-5">Solar Previous</dt><dd class="col-sm-7">{{ data.delivered_previous_reading }}</dd>
+            </dl>
+          {% elif data.bill_type == "Gas" %}
+            <h6 class="text-success mb-3">Gas Bill</h6>
+            <dl class="row small">
+              <dt class="col-sm-5">Bill Date</dt><dd class="col-sm-7">{{ data.billing_date }}</dd>
+              <dt class="col-sm-5">Service Start</dt><dd class="col-sm-7">{{ data.start_date }}</dd>
+              <dt class="col-sm-5">Service End</dt><dd class="col-sm-7">{{ data.end_date }}</dd>
+              <dt class="col-sm-5">Therms Usage</dt><dd class="col-sm-7">{{ data.therms_usage }}</dd>
+            </dl>
+          {% elif data.bill_type == "Water" %}
+            <h6 class="text-success mb-3">Water Bill</h6>
+            <dl class="row small">
+              <dt class="col-sm-5">Bill Date</dt><dd class="col-sm-7">{{ data.billing_date }}</dd>
+              <dt class="col-sm-5">Service Start</dt><dd class="col-sm-7">{{ data.start_date }}</dd>
+              <dt class="col-sm-5">Service End</dt><dd class="col-sm-7">{{ data.end_date }}</dd>
+              <dt class="col-sm-5">Avg Gallons/Day</dt><dd class="col-sm-7">{{ data.avg_gallons_per_day }}</dd>
+            </dl>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    <form method="post" class="mt-4">
+      {% csrf_token %}
+      <button type="submit" name="cancel" class="btn btn-secondary">Cancel</button>
+      <button type="submit" name="save" class="btn btn-primary">
+        {% if duplicates %}Save Anyway{% else %}Save{% endif %}
+      </button>
+    </form>
+  </main>
 {% endblock %}
