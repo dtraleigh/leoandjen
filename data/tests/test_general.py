@@ -5,7 +5,8 @@ from data.pdf_utils import (
     extract_elec_service_dates, extract_elec_energy_used, extract_elec_actual_reading, extract_elec_previous_reading,
     extract_energy_delivered_to_grid, extract_delivered_actual_reading, extract_delivered_previous_reading,
     extract_carried_forward_balance, get_text_from_pdf, get_bill_type, extract_gas_billing_date,
-    extract_gas_service_dates, extract_gas_therms_usage
+    extract_gas_service_dates, extract_gas_therms_usage, extract_water_billing_date, extract_water_service_dates,
+    extract_water_avg_gallons_per_day
 )
 
 from django.test import TestCase
@@ -15,6 +16,7 @@ from data.test_data.create_test_data import *
 
 # Suppress pdfminer warnings
 logging.getLogger("pdfminer").setLevel(logging.ERROR)
+
 
 class DataTestCase(TestCase):
     databases = "__all__"
@@ -32,6 +34,7 @@ class DataTestCase(TestCase):
         super().setUpClass()
         cls.expected_elec_data = {
             "data/test_data/elec_bill_nov24.pdf": {
+                "bill_type": "Electricity",
                 "billing_date": "2024-12-10",
                 "billing_year": 2024,
                 "service_start": "2024-11-09",
@@ -45,6 +48,7 @@ class DataTestCase(TestCase):
                 "carried_forward_balance": 122
             },
             "data/test_data/elec_bill_dec24.pdf": {
+                "bill_type": "Electricity",
                 "billing_date": "2025-01-14",
                 "billing_year": 2025,
                 "service_start": "2024-12-08",
@@ -58,6 +62,7 @@ class DataTestCase(TestCase):
                 "carried_forward_balance": 0
             },
             "data/test_data/elec_bill_jan25.pdf": {
+                "bill_type": "Electricity",
                 "billing_date": "2025-02-13",
                 "billing_year": 2025,
                 "service_start": "2025-01-11",
@@ -71,6 +76,7 @@ class DataTestCase(TestCase):
                 "carried_forward_balance": 0
             },
             "data/test_data/elec_bill_feb25.pdf": {
+                "bill_type": "Electricity",
                 "billing_date": "2025-03-13",
                 "billing_year": 2025,
                 "service_start": "2025-02-12",
@@ -84,6 +90,7 @@ class DataTestCase(TestCase):
                 "carried_forward_balance": 0
             },
             "data/test_data/elec_bill_mar25.pdf": {
+                "bill_type": "Electricity",
                 "billing_date": "2025-04-11",
                 "billing_year": 2025,
                 "service_start": "2025-03-12",
@@ -97,6 +104,7 @@ class DataTestCase(TestCase):
                 "carried_forward_balance": 360
             },
             "data/test_data/elec_bill_apr25.pdf": {
+                "bill_type": "Electricity",
                 "billing_date": "2025-05-13",
                 "billing_year": 2025,
                 "service_start": "2025-04-10",
@@ -112,11 +120,22 @@ class DataTestCase(TestCase):
         }
         cls.expected_gas_data = {
             "data/test_data/gas_bill_apr25.pdf": {
+                "bill_type": "Gas",
                 "billing_date": "2025-05-08",
                 "billing_year": 2025,
                 "service_start": "2025-04-07",
                 "service_end": "2025-05-07",
                 "therms_usage": 10,
+            }
+        }
+        cls.expected_water_data = {
+            "data/test_data/water_bill_may25.pdf": {
+                "bill_type": "Water",
+                "billing_date": "2025-06-03",
+                "billing_year": 2025,
+                "service_start": "2025-05-02",
+                "service_end": "2025-06-03",
+                "avg_gallons_per_day": 70.1,
             }
         }
 
@@ -139,6 +158,22 @@ class DataTestCase(TestCase):
         self.assertEqual(convert_years_string_to_years_list("2020"), [2020])
         self.assertEqual(convert_years_string_to_years_list("202A"), [])
 
+    def test_bill_type_with_real_bills(self):
+        for filename, data in self.expected_elec_data.items():
+            text = get_text_from_pdf(filename)
+            bill_type = get_bill_type(text)
+            self.assertEqual(bill_type, data["bill_type"], f"Failed bill_type for {filename}")
+
+        for filename, data in self.expected_gas_data.items():
+            text = get_text_from_pdf(filename)
+            bill_type = get_bill_type(text)
+            self.assertEqual(bill_type, data["bill_type"], f"Failed bill_type for {filename}")
+
+        for filename, data in self.expected_water_data.items():
+            text = get_text_from_pdf(filename)
+            bill_type = get_bill_type(text)
+            self.assertEqual(bill_type, data["bill_type"], f"Failed bill_type for {filename}")
+
     def test_extract_billing_date(self):
         for filename, data in self.expected_elec_data.items():
             text = get_text_from_pdf(filename)
@@ -148,6 +183,11 @@ class DataTestCase(TestCase):
         for filename, data in self.expected_gas_data.items():
             text = get_text_from_pdf(filename)
             result = extract_gas_billing_date(text)
+            self.assertEqual(result.isoformat(), data["billing_date"], f"Failed billing_date on {filename}")
+
+        for filename, data in self.expected_water_data.items():
+            text = get_text_from_pdf(filename)
+            result = extract_water_billing_date(text)
             self.assertEqual(result.isoformat(), data["billing_date"], f"Failed billing_date on {filename}")
 
     def test_extract_service_dates(self):
@@ -160,6 +200,12 @@ class DataTestCase(TestCase):
         for filename, data in self.expected_gas_data.items():
             text = get_text_from_pdf(filename)
             start, end = extract_gas_service_dates(text, data["billing_year"])
+            self.assertEqual(start.isoformat(), data["service_start"], f"Failed service_start on {filename}")
+            self.assertEqual(end.isoformat(), data["service_end"], f"Failed service_end on {filename}")
+
+        for filename, data in self.expected_water_data.items():
+            text = get_text_from_pdf(filename)
+            start, end = extract_water_service_dates(text, data["billing_year"])
             self.assertEqual(start.isoformat(), data["service_start"], f"Failed service_start on {filename}")
             self.assertEqual(end.isoformat(), data["service_end"], f"Failed service_end on {filename}")
 
@@ -183,7 +229,7 @@ class DataTestCase(TestCase):
 
     def test_extract_energy_delivered_to_grid(self):
         for filename, data in self.expected_elec_data.items():
-            text = get_text_from_pdf( filename)
+            text = get_text_from_pdf(filename)
             result = extract_energy_delivered_to_grid(text)
             self.assertEqual(result, data["energy_delivered"], msg=f"{filename} failed")
 
@@ -210,6 +256,12 @@ class DataTestCase(TestCase):
             text = get_text_from_pdf(filename)
             result = extract_gas_therms_usage(text)
             self.assertEqual(result, data["therms_usage"], msg=f"{filename} failed")
+
+    def test_extract_water_avg_gallons_per_day(self):
+        for filename, data in self.expected_water_data.items():
+            text = get_text_from_pdf(filename)
+            result = extract_water_avg_gallons_per_day(text)
+            self.assertEqual(result, data["avg_gallons_per_day"], msg=f"{filename} failed")
 
     def test_get_bill_type(self):
         # Test cases that should return "Electricity"
@@ -254,6 +306,29 @@ class DataTestCase(TestCase):
             result = get_bill_type(text)
             self.assertEqual(result, "Gas", f"Failed for text: {text[:50]}...")
 
+        # Test cases that should return "Water"
+        water_text_strings = [
+            "This is a bill from city of raleigh for water service.",
+            "This is a bill from CITY OF RALEIGH for water service.",
+            "This is a bill from City of Raleigh for water service.",
+            "city of raleigh is your water provider.",
+            "Your water bill is from city of raleigh",
+            "Bill statement from: CITY OF RALEIGH water department. Thank you.",
+            "Water and sewer services provided by city of raleigh.",
+            "city of raleigh water utilities - monthly statement",
+            """
+            Water Utility Bill
+            Provider: City of Raleigh
+            Service: Water and Sewer
+            Account Number: 555444333
+            """,
+            "Your monthly water usage from the city of raleigh water department."
+        ]
+
+        for text in water_text_strings:
+            result = get_bill_type(text)
+            self.assertEqual(result, "Water", f"Failed for text: {text[:50]}...")
+
         # Test cases that should return None
         none_text_strings = [
             "This is a bill from another utility company.",
@@ -262,6 +337,9 @@ class DataTestCase(TestCase):
             "This is a bill from duke-power or energy-duke company.",
             "This is a bill from enbridge gas virginia.",  # Different state
             "This is a bill from enbridge north carolina.",  # Missing "gas"
+            "This is a bill from city of raleigh for trash service.",  # Missing "water"
+            "This is a bill from city of durham for water service.",  # Different city
+            "This is a water bill from another city.",  # Missing "city of raleigh"
             "",
             "   \n\t  "
         ]
