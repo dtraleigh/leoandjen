@@ -186,16 +186,63 @@ def extract_water_service_dates(text, year):
         return start_date, end_date
     return None, None
 
+
 def extract_water_avg_gallons_per_day(text):
     # Look for the average gallons per day value in the meter table
-    # The pattern shows: AVGGALLONS/DAY column with value like "70.1"
-    match = re.search(r'AVGGALLONS/DAY.*?(\d+(?:\.\d+)?)', text, re.DOTALL)
+    # The table format is:
+    # METER # AVGGALLONS/DAY SERVICEPERIOD CURRENTREAD PREVIOUSREAD USAGE
+    # 16378319 93.5 11/01/2024 to 12/03/2024 11 7 4
+
+    # Method 1: Match the specific table row pattern
+    # Look for meter number, then capture the next numeric value which should be avg gallons/day
+    match = re.search(r'(\d{7,9})\s+(\d+(?:\.\d+)?)\s+\d{2}/\d{2}/\d{4}\s+to\s+\d{2}/\d{2}/\d{4}', text)
     if match:
-        return float(match.group(1))
-    # Alternative pattern in case there are spaces in the header
-    match = re.search(r'AVG\s*GALLONS\s*/\s*DAY.*?(\d+(?:\.\d+)?)', text, re.DOTALL)
-    if match:
-        return float(match.group(1))
+        avg_gallons = float(match.group(2))
+        # Validate that the value is in a reasonable range (1-200)
+        if 1 <= avg_gallons <= 200:
+            return avg_gallons
+
+    # Method 2: Look for the header and then find the value in the correct column position
+    # Find the header line and the data line
+    lines = text.split('\n')
+    header_line_idx = None
+
+    for i, line in enumerate(lines):
+        if 'AVGGALLONS/DAY' in line or 'AVG GALLONS/DAY' in line.replace(' ', ''):
+            header_line_idx = i
+            break
+
+    if header_line_idx is not None and header_line_idx + 1 < len(lines):
+        header_line = lines[header_line_idx]
+        data_line = lines[header_line_idx + 1]
+
+        # Find the position of the AVGGALLONS/DAY column
+        if 'AVGGALLONS/DAY' in header_line:
+            avg_col_start = header_line.find('AVGGALLONS/DAY')
+        else:
+            # Handle spaced version
+            avg_col_start = header_line.find('AVG')
+            if avg_col_start == -1:
+                return None
+
+        # Find the next column to determine the end position
+        next_col_start = header_line.find('SERVICEPERIOD', avg_col_start)
+        if next_col_start == -1:
+            next_col_start = len(header_line)
+
+        # Extract the value from the corresponding position in the data line
+        if len(data_line) > avg_col_start:
+            # Get the substring that corresponds to the AVGGALLONS/DAY column
+            col_data = data_line[avg_col_start:next_col_start].strip()
+
+            # Extract the first number from this column data
+            match = re.search(r'(\d+(?:\.\d+)?)', col_data)
+            if match:
+                avg_gallons = float(match.group(1))
+                # Validate that the value is in a reasonable range (1-200)
+                if 1 <= avg_gallons <= 200:
+                    return avg_gallons
+
     return None
 
 
@@ -227,7 +274,7 @@ def get_bill_type(text):
     text_lower = text.lower()
     if "duke-energy" in text_lower or "duke energy" in text_lower:
         return "Electricity"
-    elif "enbridge gas north carolina" in text_lower:
+    elif "enbridge gas north carolina" in text_lower or "dominion energy" in text_lower:
         return "Gas"
     elif "city of raleigh" in text_lower and "water" in text_lower:
         return "Water"

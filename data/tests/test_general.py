@@ -119,6 +119,46 @@ class DataTestCase(TestCase):
             },
         }
         cls.expected_gas_data = {
+            "data/test_data/gas_bill_nov24.pdf": {
+                "bill_type": "Gas",
+                "billing_date": "2024-12-10",
+                "billing_year": 2024,
+                "service_start": "2024-11-06",
+                "service_end": "2024-12-09",
+                "therms_usage": 37,
+            },
+            "data/test_data/gas_bill_dec24.pdf": {
+                "bill_type": "Gas",
+                "billing_date": "2025-01-10",
+                "billing_year": 2025,
+                "service_start": "2024-12-09",
+                "service_end": "2025-01-09",
+                "therms_usage": 49,
+            },
+            "data/test_data/gas_bill_jan25.pdf": {
+                "bill_type": "Gas",
+                "billing_date": "2025-02-10",
+                "billing_year": 2025,
+                "service_start": "2025-01-09",
+                "service_end": "2025-02-07",
+                "therms_usage": 58,
+            },
+            "data/test_data/gas_bill_feb25.pdf": {
+                "bill_type": "Gas",
+                "billing_date": "2025-03-10",
+                "billing_year": 2025,
+                "service_start": "2025-02-07",
+                "service_end": "2025-03-07",
+                "therms_usage": 46,
+            },
+            "data/test_data/gas_bill_mar25.pdf": {
+                "bill_type": "Gas",
+                "billing_date": "2025-04-08",
+                "billing_year": 2025,
+                "service_start": "2025-03-07",
+                "service_end": "2025-04-07",
+                "therms_usage": 17,
+            },
             "data/test_data/gas_bill_apr25.pdf": {
                 "bill_type": "Gas",
                 "billing_date": "2025-05-08",
@@ -129,13 +169,53 @@ class DataTestCase(TestCase):
             }
         }
         cls.expected_water_data = {
-            "data/test_data/water_bill_may25.pdf": {
+            "data/test_data/water_bill_nov25.pdf": {
                 "bill_type": "Water",
-                "billing_date": "2025-06-03",
+                "billing_date": "2024-12-03",
+                "billing_year": 2024,
+                "service_start": "2024-11-01",
+                "service_end": "2024-12-03",
+                "avg_gallons_per_day": 93.5,
+            },
+            "data/test_data/water_bill_dec25.pdf": {
+                "bill_type": "Water",
+                "billing_date": "2025-01-02",
                 "billing_year": 2025,
-                "service_start": "2025-05-02",
-                "service_end": "2025-06-03",
-                "avg_gallons_per_day": 70.1,
+                "service_start": "2024-12-03",
+                "service_end": "2025-01-02",
+                "avg_gallons_per_day": 49.9,
+            },
+            "data/test_data/water_bill_jan25.pdf": {
+                "bill_type": "Water",
+                "billing_date": "2025-01-31",
+                "billing_year": 2025,
+                "service_start": "2025-01-02",
+                "service_end": "2025-01-31",
+                "avg_gallons_per_day": 77.4,
+            },
+            "data/test_data/water_bill_feb25.pdf": {
+                "bill_type": "Water",
+                "billing_date": "2025-03-03",
+                "billing_year": 2025,
+                "service_start": "2025-01-31",
+                "service_end": "2025-03-03",
+                "avg_gallons_per_day": 48.3,
+            },
+            "data/test_data/water_bill_mar25.pdf": {
+                "bill_type": "Water",
+                "billing_date": "2025-04-02",
+                "billing_year": 2025,
+                "service_start": "2025-03-03",
+                "service_end": "2025-04-02",
+                "avg_gallons_per_day": 74.8,
+            },
+            "data/test_data/water_bill_apr25.pdf": {
+                "bill_type": "Water",
+                "billing_date": "2025-05-02",
+                "billing_year": 2025,
+                "service_start": "2025-04-02",
+                "service_end": "2025-05-02",
+                "avg_gallons_per_day": 49.9,
             }
         }
 
