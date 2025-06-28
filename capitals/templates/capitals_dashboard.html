@@ -1,49 +1,129 @@
 <div class="row" id="top-section">
-  <div class="col-lg-5 col-md-8 col-sm-12 col-xs-12">
-    <h2 class="text-center">Map of the USA</h2>
-    <div class="map_embed" id="map"></div>
-    <div class="col-md-5 col-sm-12 col-xs-12">
-      <h4>Countries</h4>
-      <div class="btn-group-vertical" role="group">
-        {% for capital in other_capitals %}
-          <a class="btn btn-info" href="/capitals/capital/{{ capital.name }}">{{ capital.name }}</a>
-        {% endfor %}
+  <!-- Left Column: Map and Countries -->
+  <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
+    <!-- Map Section -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title text-center">Map of the USA</h3>
+      </div>
+      <div class="panel-body">
+        <div class="map_embed" id="map"></div>
+      </div>
+    </div>
+
+    <!-- Countries Section -->
+    <div class="panel panel-default" style="margin-top: 15px;">
+      <div class="panel-heading">
+        <h4 class="panel-title">International Capitals</h4>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          {% for capital in other_capitals %}
+            <div class="col-lg-12 col-md-6 col-sm-4 col-xs-6" style="margin-bottom: 5px;">
+              <a class="btn btn-info btn-block btn-sm" href="/capitals/capital/{{ capital.name }}">{{ capital.name }}</a>
+            </div>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-lg-7 col-md-8 col-sm-12 col-xs-12">
-    <h4>US Capitals</h4>
-    <div class="progress">
-      <div aria-valuemax="100"
-           aria-valuemin="0"
-           aria-valuenow="{{ us_capitals_visited_percent }}"
-           class="progress-bar"
-           role="progressbar"
-           style="width: {{ us_capitals_visited_percent }}%">{{ us_capitals_visited }} / 50</div>
+
+  <!-- Right Column: US Capitals and States -->
+  <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+    <!-- Progress Section -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">US Capitals Progress</h4>
+      </div>
+      <div class="panel-body">
+        <div class="progress" style="height: 25px; margin-bottom: 10px;">
+          <div aria-valuemax="100"
+               aria-valuemin="0"
+               aria-valuenow="{{ us_capitals_visited_percent }}"
+               class="progress-bar progress-bar-success"
+               role="progressbar"
+               style="width: {{ us_capitals_visited_percent }}%; line-height: 25px;">
+            <strong>{{ us_capitals_visited }} / 50 ({{ us_capitals_visited_percent|floatformat:1 }}%)</strong>
+          </div>
+        </div>
+        <p class="text-muted text-center">
+          <small>You've visited {{ us_capitals_visited }} out of 50 state capitals</small>
+        </p>
+      </div>
     </div>
-    <div class="row">
-      <div id="content col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <h1>States</h1>
-        <div class="columns">
-          <ul>
-            {% for capital_city in us_states_list %}
-              <li>
-                <div class="btn-group-vertical" role="group">
-                  {% if capital_city.visited %}
-                    <a class="btn btn-success"
-                       href="/capitals/capital/{{ capital_city.name }}"
-                       id="btn-custom1">
-                    ({{ capital_city.visited_order_position }}) {{ capital_city.name }}, {{ capital_city.state_abbr }}</a>
-                  {% else %}
-                    <a class="btn btn-default inactiveLink" href="/" id="btn-custom1">
-                    {{ capital_city.name }}, {{ capital_city.state_abbr }}</a>
-                  {% endif %}
-                </div>
-              </li>
-            {% endfor %}
-          </ul>
+
+    <!-- States List Section -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">State Capitals</h4>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          {% for capital_city in us_states_list %}
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin-bottom: 8px;">
+              {% if capital_city.visited %}
+                <a class="btn btn-success btn-block btn-sm"
+                   href="/capitals/capital/{{ capital_city.name }}"
+                   title="Visited on order #{{ capital_city.visited_order_position }}">
+                  <span class="badge pull-left">{{ capital_city.visited_order_position }}</span>
+                  {{ capital_city.name }}, {{ capital_city.state_abbr }}
+                  <span class="glyphicon glyphicon-ok pull-right" style="margin-top: 2px;"></span>
+                </a>
+              {% else %}
+                <button class="btn btn-default btn-block btn-sm"
+                        disabled
+                        title="Not yet visited">
+                  {{ capital_city.name }}, {{ capital_city.state_abbr }}
+                </button>
+              {% endif %}
+            </div>
+          {% endfor %}
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+/* Custom CSS for better mobile experience */
+@media (max-width: 768px) {
+  .panel {
+    margin-bottom: 15px;
+  }
+
+  .panel-title {
+    font-size: 16px;
+  }
+
+  .btn-sm {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .progress {
+    height: 20px !important;
+  }
+
+  .progress-bar {
+    line-height: 20px !important;
+    font-size: 12px;
+  }
+
+  .badge {
+    font-size: 10px;
+  }
+}
+
+/* Improve button spacing and alignment */
+.btn-block {
+  text-align: left;
+  position: relative;
+}
+
+.badge {
+  background-color: rgba(255,255,255,0.3);
+  margin-right: 8px;
+}
+</style>

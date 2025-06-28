@@ -84,8 +84,14 @@ def get_leaflet_footer_vars():
 
 
 def home(request):
+    sort_order = request.GET.get('sort', 'newest')
+
     # All visited capitals
-    all_capitals = Capital.objects.all().select_related("country")
+    if sort_order == 'oldest':
+        all_capitals = Capital.objects.all().select_related("country").order_by("date_visited")
+    else:
+        all_capitals = Capital.objects.all().select_related("country").order_by("-date_visited")
+
     all_photos = Photo.objects.all().select_related("capital")
 
     # Pagination
@@ -110,7 +116,8 @@ def home(request):
                                                  "us_visited_states": us_visited_states,
                                                  "us_visited_cities": us_visited_cities,
                                                  "other_capitals_json": other_capitals_json,
-                                                 "page_obj": page_obj})
+                                                 "page_obj": page_obj,
+                                                 "current_sort": sort_order})
 
 
 def map_page(request):

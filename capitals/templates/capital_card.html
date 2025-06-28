@@ -1,57 +1,79 @@
 <div class="row">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      {% if capital.us_state %}
-        <a name="{{ capital.us_state }}"></a>
-      {% else %}
-        <a name="{{ capital.id }}"></a>
-      {% endif %}
-      <img src="{{ capital.country.flag.url }}"
-           class="country-flag-img">
-      <h1 class="panel-title capital-title">{{ capital.name }}</h1>
-      <p class="text-right">
-        <a href="#top">Back to top</a>
-      </p>
-    </div>
-    <div class="panel-body">
-      <div class="col-sm-4 col-xs-12">
-        <img src="{{ capital.flag.url }}" class="flag-img">
-        <small>{{ capital.flag_caption }}</small>
-        <h3>Date Visited: {{ capital.date_visited }}</h3>
-        <p>{{ capital.description }}</p>
-        {% if capital.photo_album_url %}
-          <p>
-            More photos in our <a href="{{ capital.photo_album_url }}">Photo Album</a>.
-          </p>
+  <div class="col-xs-12">
+    <div class="panel panel-default">
+      <div class="panel-heading clearfix">
+        {% if capital.us_state %}
+          <a name="{{ capital.us_state }}"></a>
+        {% else %}
+          <a name="{{ capital.id }}"></a>
         {% endif %}
-        <p>
-          <a href="https://www.google.com/maps/@{{ capital.lat }},{{ capital.lon }},12z"
-             target='_blank'
-             class="btn btn-primary btn-lg active"
-             role="button">Map it</a>
-        </p>
+        <div class="pull-left">
+          <img src="{{ capital.country.flag.url }}"
+               class="country-flag-img img-responsive"
+               alt="{{ capital.country.name }} flag">
+          <h1 class="panel-title capital-title">{{ capital.name }}</h1>
+        </div>
+        <div class="pull-right">
+          <a href="#top" class="btn btn-default btn-xs">
+            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+            Back to top
+          </a>
+        </div>
       </div>
-      <div class="col-sm-8 col-xs-12">
-        <div id="photos{{ capital.id }}"
-             class="my-gallery"
-             itemscope
-             itemtype="https://schema.org/ImageGallery">
-          {% for photo in all_photos %}
-            {% if photo.capital == capital %}
-              <figure itemprop="associatedMedia"
-                      itemscope
-                      itemtype="https://schema.org/ImageObject">
-                <a href="{{ photo.photo_file.url }}"
-                   itemprop="contentUrl"
-                   data-size="{{ photo.photo_width }}x{{ photo.photo_height }}">
-                  <img src="{{ photo.photo_file.url }}"
-                       itemprop="thumbnail"
-                       alt="Image description" />
-                </a>
-                <figcaption itemprop="caption description">{{ capital.name }} - {{ capital.date_visited }}</figcaption>
-              </figure>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-4 col-xs-12">
+            <div class="text-center">
+              <img src="{{ capital.flag.url }}"
+                   class="flag-img img-responsive img-thumbnail center-block"
+                   alt="{{ capital.name }} flag">
+              <small class="text-muted">{{ capital.flag_caption }}</small>
+            </div>
+            <h3 class="h4">
+              <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+              Date Visited:
+              <small>{{ capital.date_visited }}</small>
+            </h3>
+            <p>{{ capital.description }}</p>
+            {% if capital.photo_album_url %}
+              <div class="alert alert-info" role="alert">
+                <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+                More photos in our <a href="{{ capital.photo_album_url }}" class="alert-link">Photo Album</a>.
+              </div>
             {% endif %}
-          {% endfor %}
+            <p class="text-center">
+              <a href="https://www.google.com/maps/@{{ capital.lat }},{{ capital.lon }},12z"
+                 target='_blank'
+                 class="btn btn-primary btn-block"
+                 role="button">
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                View on Map
+              </a>
+            </p>
+          </div>
+          <div class="col-sm-8 col-xs-12">
+            <div id="photos{{ capital.id }}"
+                 class="my-gallery"
+                 itemscope
+                 itemtype="https://schema.org/ImageGallery">
+              {% for photo in all_photos %}
+                {% if photo.capital == capital %}
+                  <figure itemprop="associatedMedia"
+                          itemscope
+                          itemtype="https://schema.org/ImageObject">
+                    <a href="{{ photo.photo_file.url }}"
+                       itemprop="contentUrl"
+                       data-size="{{ photo.photo_width }}x{{ photo.photo_height }}">
+                      <img src="{{ photo.photo_file.url }}"
+                           itemprop="thumbnail"
+                           alt="Image description" />
+                    </a>
+                    <figcaption itemprop="caption description">{{ capital.name }} - {{ capital.date_visited }}</figcaption>
+                  </figure>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
         </div>
       </div>
     </div>

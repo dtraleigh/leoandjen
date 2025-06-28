@@ -2,32 +2,143 @@
 {% block content %}
   <div class="container">
     {% include "capitals_dashboard.html" %}
-    <div class="pagination">
-      <span class="step-links">
-        {% load static %}
-        {% if page_obj.has_previous %}
-          <a href="?page={{ page_obj.previous_page_number }}"><img src="{% static "img/back.png" %}" class="pagination-nav-icon"></a>
-        {% endif %}
-        <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-        {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}"><img src="{% static "img/next.png" %}" class="pagination-nav-icon"></a>
-        {% endif %}
-      </span>
+
+    <!-- Combined Control Bar -->
+    <div class="row" id="controls-anchor" style="margin-bottom: 20px;">
+      <div class="col-md-12">
+        <div class="pagination-controls" style="margin: 0; padding: 10px 15px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
+          <!-- Sort options -->
+          <div class="pagination-sort" style="text-align: center; margin-bottom: 10px;">
+            <span style="margin-right: 10px; color: #666; font-size: 13px;">Sort:</span>
+            <div class="btn-group btn-group-xs" role="group">
+              {% if current_sort == 'newest' %}
+                <a href="?sort=newest&page=1#controls-anchor" class="btn btn-primary btn-xs">Newest</a>
+                <a href="?sort=oldest&page=1#controls-anchor" class="btn btn-default btn-xs">Oldest</a>
+              {% else %}
+                <a href="?sort=newest&page=1#controls-anchor" class="btn btn-default btn-xs">Newest</a>
+                <a href="?sort=oldest&page=1#controls-anchor" class="btn btn-primary btn-xs">Oldest</a>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Pagination controls -->
+          <div class="pagination-nav-container" style="display: flex; align-items: center; justify-content: space-between;">
+            <!-- Left: Previous button -->
+            <div class="pagination-prev">
+              {% load static %}
+              {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&sort={{ current_sort }}#controls-anchor"><img src="{% static "img/back.png" %}" class="pagination-nav-icon"></a>
+              {% else %}
+                <span style="opacity: 0.3;"><img src="{% static "img/back.png" %}" class="pagination-nav-icon"></span>
+              {% endif %}
+            </div>
+
+            <!-- Center: Page info -->
+            <div class="pagination-info">
+              <span class="current" style="color: #666; font-size: 13px;">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </div>
+
+            <!-- Right: Next button -->
+            <div class="pagination-next">
+              {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&sort={{ current_sort }}#controls-anchor"><img src="{% static "img/next.png" %}" class="pagination-nav-icon"></a>
+              {% else %}
+                <span style="opacity: 0.3;"><img src="{% static "img/next.png" %}" class="pagination-nav-icon"></span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <style>
+    /* Responsive stacking for mobile */
+    @media (max-width: 450px) {
+      .pagination-controls {
+        text-align: center;
+      }
+
+      .pagination-sort {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px !important;
+        margin-bottom: 10px !important;
+      }
+
+      .pagination-nav-container {
+        justify-content: center !important;
+        flex-wrap: wrap;
+      }
+
+      .pagination-prev, .pagination-next {
+        flex: 0 0 auto;
+      }
+
+      .pagination-info {
+        flex: 1;
+        text-align: center;
+        margin: 0 15px;
+      }
+    }
+
+    /* Smooth scrolling for anchor links */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Add some offset to account for any fixed headers if needed */
+    #controls-anchor {
+      scroll-margin-top: 20px;
+    }
+    </style>
     {% for capital in page_obj %}
       {% include "capital_card.html" %}
     {% endfor %}
-    <div class="pagination">
-      <span class="step-links">
-        {% load static %}
-        {% if page_obj.has_previous %}
-          <a href="?page={{ page_obj.previous_page_number }}"><img src="{% static "img/back.png" %}" class="pagination-nav-icon"></a>
-        {% endif %}
-        <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-        {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}"><img src="{% static "img/next.png" %}" class="pagination-nav-icon"></a>
-        {% endif %}
-      </span>
+    <!-- Bottom Control Bar -->
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-md-12">
+        <div class="pagination-controls" style="margin: 0; padding: 10px 15px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
+          <!-- Sort options -->
+          <div class="pagination-sort" style="text-align: center; margin-bottom: 10px;">
+            <span style="margin-right: 10px; color: #666; font-size: 13px;">Sort:</span>
+            <div class="btn-group btn-group-xs" role="group">
+              {% if current_sort == 'newest' %}
+                <a href="?sort=newest&page=1#controls-anchor" class="btn btn-primary btn-xs">Newest</a>
+                <a href="?sort=oldest&page=1#controls-anchor" class="btn btn-default btn-xs">Oldest</a>
+              {% else %}
+                <a href="?sort=newest&page=1#controls-anchor" class="btn btn-default btn-xs">Newest</a>
+                <a href="?sort=oldest&page=1#controls-anchor" class="btn btn-primary btn-xs">Oldest</a>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Pagination controls -->
+          <div class="pagination-nav-container" style="display: flex; align-items: center; justify-content: space-between;">
+            <!-- Left: Previous button -->
+            <div class="pagination-prev">
+              {% load static %}
+              {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&sort={{ current_sort }}#controls-anchor"><img src="{% static "img/back.png" %}" class="pagination-nav-icon"></a>
+              {% else %}
+                <span style="opacity: 0.3;"><img src="{% static "img/back.png" %}" class="pagination-nav-icon"></span>
+              {% endif %}
+            </div>
+
+            <!-- Center: Page info -->
+            <div class="pagination-info">
+              <span class="current" style="color: #666; font-size: 13px;">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </div>
+
+            <!-- Right: Next button -->
+            <div class="pagination-next">
+              {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&sort={{ current_sort }}#controls-anchor"><img src="{% static "img/next.png" %}" class="pagination-nav-icon"></a>
+              {% else %}
+                <span style="opacity: 0.3;"><img src="{% static "img/next.png" %}" class="pagination-nav-icon"></span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}
