@@ -9,61 +9,73 @@
     <link rel="shortcut icon" type="image/png" href="{% static "img/capitals_favicon.png" %}">
     <title>Leo and Jen - Capitals Journey</title>
     <style>
-          #alert {
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 16px;
-            background-color: #ddd;
-            color: #333;
-            padding: 5px;
+      #alert {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      background-color: #ddd;
+      color: #333;
+      padding: 5px;
+      font-weight: bold;
+      }
+      .pagination-nav-icon{
+      width: 40px;
+      margin: 10px;
+      }
+      .navbar-brand {
             font-weight: bold;
+            font-size: 18px;
+      }
+      @media (max-width: 767px) {
+          .navbar-nav {
+              margin: 7.5px -15px;
           }
-          .pagination-nav-icon{
-            width: 40px;
-            margin: 10px;
+          .navbar-nav > li > a {
+              padding: 10px 15px;
           }
-            {%for capital in all_capitals%}
-            #photos{{capital.id}} {
-               line-height: 0;
-               -webkit-column-count: 2;
-               -webkit-column-gap:   0px;
-               -moz-column-count:    2;
-               -moz-column-gap:      0px;
-               column-count:         2;
-               column-gap:           0px;
-            }
-            #photos{{capital.id}} img {
-              width: 100% !important;
-              height: auto !important;
-            }
-            @media (max-width: 1200px) {
-              #photos{{capital.id}} {
-              -moz-column-count:    2;
-              -webkit-column-count: 2;
-              column-count:         2;
-              }
-            }
-            @media (max-width: 1000px) {
-              #photos{{capital.id}} {
-              -moz-column-count:    2;
-              -webkit-column-count: 2;
-              column-count:         2;
-              }
-            }
-            @media (max-width: 800px) {
-              #photos{{capital.id}} {
-              -moz-column-count:    2;
-              -webkit-column-count: 2;
-              column-count:         2;
-              }
-            }
-            @media (max-width: 400px) {
-              #photos{{capital.id}} {
-              -moz-column-count:    1;
-              -webkit-column-count: 1;
-              column-count:         1;
-              }
-            }
-        {%endfor%}
+      }
+      {%for capital in all_capitals%}
+      #photos{{capital.id}} {
+      line-height: 0;
+      -webkit-column-count: 2;
+      -webkit-column-gap:   0px;
+      -moz-column-count:    2;
+      -moz-column-gap:      0px;
+      column-count:         2;
+      column-gap:           0px;
+      }
+      #photos{{capital.id}} img {
+      width: 100% !important;
+      height: auto !important;
+      }
+      @media (max-width: 1200px) {
+      #photos{{capital.id}} {
+      -moz-column-count:    2;
+      -webkit-column-count: 2;
+      column-count:         2;
+      }
+      }
+      @media (max-width: 1000px) {
+      #photos{{capital.id}} {
+      -moz-column-count:    2;
+      -webkit-column-count: 2;
+      column-count:         2;
+      }
+      }
+      @media (max-width: 800px) {
+      #photos{{capital.id}} {
+      -moz-column-count:    2;
+      -webkit-column-count: 2;
+      column-count:         2;
+      }
+      }
+      @media (max-width: 400px) {
+      #photos{{capital.id}} {
+      -moz-column-count:    1;
+      -webkit-column-count: 1;
+      column-count:         1;
+      }
+      }
+      {%endfor%}
     </style>
     <link href="{% static "bootstrap3.3.7/bootstrap.min.css" %}" rel="stylesheet">
     <link href="{% static "PhotoSwipe-4.1.3/dist/photoswipe.css" %}" rel="stylesheet">
@@ -75,19 +87,30 @@
     <a name="top"></a>
     <nav class="navbar navbar-default">
       <div class="container">
-        <p class="navbar-text">Leo and Jen - Capitals Journey</p>
-        <div id="navbar" class="navbar-collapse collapse">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Leo and Jen - Capitals Journey</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li>
-              <a href="/capitals">Home</a>
+            <li class="active">
+              <a href="/capitals">Home <span class="sr-only">(current)</span></a>
             </li>
             <li>
               <a href="/capitals/map">Map</a>
             </li>
           </ul>
         </div>
-        <!--/.nav-collapse -->
+        <!-- /.navbar-collapse -->
       </div>
+      <!-- /.container -->
     </nav>
     {% block content %}{% endblock %}
     {% include "capitals_leaflet_foot.html" %}
@@ -96,7 +119,7 @@
     <script src="{% static "PhotoSwipe-4.1.3/dist/photoswipe-ui-default.min.js"%}"></script>
     <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
       <!-- Background of PhotoSwipe.
-         It's a separate element, as animating opacity is faster than rgba(). -->
+        It's a separate element, as animating opacity is faster than rgba(). -->
       <div class="pswp__bg"></div>
       <!-- Slides wrapper with overflow:hidden. -->
       <div class="pswp__scroll-wrap">
@@ -130,9 +153,9 @@
             <div class="pswp__share-tooltip"></div>
           </div>
           <button class="pswp__button pswp__button--arrow--left"
-                  title="Previous (arrow left)"></button>
+            title="Previous (arrow left)"></button>
           <button class="pswp__button pswp__button--arrow--right"
-                  title="Next (arrow right)"></button>
+            title="Next (arrow right)"></button>
           <div class="pswp__caption">
             <div class="pswp__caption__center"></div>
           </div>
@@ -140,5 +163,7 @@
       </div>
     </div>
     <script src="{% static "js/photo_swipe_custom.js"%}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </body>
 </html>
