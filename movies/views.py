@@ -308,13 +308,13 @@ def add_movie(request):
             collections = form.cleaned_data["collections"]
 
             new_movie, output_message = add_movie_from_form(
-                                                                imdb_id,
-                                                                is_tv_movie,
-                                                                letterboxd_slug,
-                                                                formats,
-                                                                sort_title,
-                                                                collections
-                                                            )
+                                                            imdb_id,
+                                                            is_tv_movie,
+                                                            letterboxd_slug,
+                                                            formats,
+                                                            sort_title,
+                                                            collections
+                                                        )
             messages.info(request, output_message)
 
             return HttpResponseRedirect("/movies/add-movie/")
@@ -350,6 +350,9 @@ def edit_movie(request, movie_id):
             movie.collection_set.clear()
             for collection_name in collections:
                 Collection.objects.get(name=collection_name).movies.add(movie)
+
+            update_directors(movie)
+            update_characters(movie)
 
             messages.info(request, f"{movie.title} was updated successfully.")
             return HttpResponseRedirect(f"/movies/movie/{movie.themoviedb_id}/")

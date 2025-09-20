@@ -174,7 +174,6 @@ def update_directors(movie):
     directors = get_directors_by_tmdb_id(movie.themoviedb_id)
 
     for director in directors:
-        # Check that this director doesn't already exist
         director_tmdb_id = director["id"]
         if not Director.objects.filter(themoviedb_id=director_tmdb_id).exists():
             new_director = Director.objects.create(themoviedb_id=director["id"],
