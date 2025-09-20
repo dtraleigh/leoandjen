@@ -24,7 +24,7 @@
       <h2>Movies at Home</h2>
       <div class="row">
         {% for movie in movie_list_at_home %}
-        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-8 col-8">
+        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-8 col-6">
           {% include 'card.html' %}
         </div>
         {% endfor %}
@@ -32,7 +32,7 @@
       <h2>Other Movies</h2>
       <div class="row">
         {% for movie in movie_list_other %}
-        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-8 col-8">
+        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-8 col-6">
           <div class="card">
             <a href="https://www.justwatch.com/us/search?q={{movie.title}}">
               <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
