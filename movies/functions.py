@@ -189,8 +189,7 @@ def update_directors(movie):
 def update_characters(movie):
     cast_list = get_cast_by_tmdb_id(movie.themoviedb_id)
 
-    # Only interested in the top 10
-    for person in cast_list[:12]:
+    for person in cast_list[:36]:
         credit_id = person["credit_id"]
         if not Character.objects.filter(credit_id=credit_id).exists():
             new_character = Character.objects.create(themoviedb_actor_id=person["id"],
