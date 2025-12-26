@@ -21,6 +21,21 @@
           {% if query %}
             <input type="hidden" name="q" value="{{ query }}">
           {% endif %}
+
+          <!-- Quick Year Filter -->
+          <div class="form-group">
+            <label for="year">Quick Year:</label>
+            <select class="form-control" id="year" name="year">
+              <option value="">All Years</option>
+              {% for y, count in available_years %}
+                <option value="{{ y }}" {% if year == y|stringformat:"s" %}selected{% endif %}>{{ y }} ({{ count }})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <span class="text-muted" style="margin: 0 10px;">OR</span>
+
+          <!-- Custom Date Range -->
           <div class="form-group">
             <label for="date_after">After:</label>
             <input type="date" class="form-control" id="date_after" name="date_after" value="{{ date_after }}">
@@ -29,11 +44,15 @@
             <label for="date_before">Before:</label>
             <input type="date" class="form-control" id="date_before" name="date_before" value="{{ date_before }}">
           </div>
+
           <button type="submit" class="btn btn-primary">Apply Filter</button>
-          {% if date_after or date_before %}
+          {% if date_after or date_before or year %}
             <a href="?{% if query %}q={{ query }}{% endif %}" class="btn btn-default">Clear Filter</a>
           {% endif %}
         </form>
+        <p class="help-block" style="margin-top: 10px;">
+          Select a year for quick filtering, or use the date range for more precise control.
+        </p>
       </div>
     </div>
   </div>

@@ -125,6 +125,30 @@ def get_shot(shot_type, shot_id):
     return this_shot
 
 
+def get_available_years_with_counts(videos_queryset, externals_queryset):
+    """
+    Get a list of years with video counts from the provided querysets.
+    Returns a list of tuples: [(year, count), ...]
+    Sorted in descending order by year.
+    """
+    from collections import Counter
+
+    year_counts = Counter()
+
+    # Count videos by year
+    for video in videos_queryset:
+        if video.date_shot:
+            year_counts[video.date_shot.year] += 1
+
+    # Count external videos by year
+    for external in externals_queryset:
+        if external.date_shot:
+            year_counts[external.date_shot.year] += 1
+
+    # Return as sorted list of tuples (year, count)
+    return sorted(year_counts.items(), reverse=True)
+
+
 @login_required(redirect_field_name="next")
 def main(request):
     albums = Album.objects.all()
@@ -231,74 +255,6 @@ def shot_view(request, album_id, shot_type, shot_id):
                                          "video_map_data": video_map_data,
                                          "external_map_data": external_map_data,
                                          "show_nav": True})
-
-
-@login_required(redirect_field_name="next")
-def album_view(request, album_id):
-    all_albums = Album.objects.get(id=album_id)
-    date_after = request.GET.get('date_after', '').strip()
-    date_before = request.GET.get('date_before', '').strip()
-
-    album_videos = all_albums.videos.all()
-    album_externals = all_albums.external_videos.all()
-
-    # Apply date filters
-    if date_after:
-        album_videos = album_videos.filter(date_shot__gte=date_after)
-        album_externals = album_externals.filter(date_shot__gte=date_after)
-
-    if date_before:
-        album_videos = album_videos.filter(date_shot__lte=date_before)
-        album_externals = album_externals.filter(date_shot__lte=date_before)
-
-    combined_videos = combine_and_sort(list(album_videos), list(album_externals))
-
-    return render(request, "videos_results.html", {
-        "videos": combined_videos,
-        "show_nav": True,
-        "page_title": all_albums.name,
-        "page_subtitle": "Sorted by Most Recent Date Taken.",
-        "url_pattern": "album",
-        "url_context": album_id,
-        "query": None,
-        "date_after": date_after,
-        "date_before": date_before
-    })
-
-
-@login_required(redirect_field_name="next")
-def tag_view(request, tag_name):
-    date_after = request.GET.get('date_after', '').strip()
-    date_before = request.GET.get('date_before', '').strip()
-
-    videos_w_tag = Video.objects.filter(tags__name=tag_name)
-    externals_w_tag = ExternalVideo.objects.filter(tags__name=tag_name)
-
-    # Apply date filters
-    if date_after:
-        videos_w_tag = videos_w_tag.filter(date_shot__gte=date_after)
-        externals_w_tag = externals_w_tag.filter(date_shot__gte=date_after)
-
-    if date_before:
-        videos_w_tag = videos_w_tag.filter(date_shot__lte=date_before)
-        externals_w_tag = externals_w_tag.filter(date_shot__lte=date_before)
-
-    # All the shots with this tag
-    videos_w_tag = combine_and_sort(videos_w_tag, externals_w_tag)
-
-    tag_obj = Tag.objects.get(name=tag_name)
-
-    return render(request, "videos_results.html", {
-        "videos": videos_w_tag,
-        "show_nav": True,
-        "page_title": f'Videos tagged "{tag_obj.name}"',
-        "page_subtitle": "Sorted by Most Recent.",
-        "url_pattern": "tag",
-        "url_context": tag_name,
-        "query": None,
-        "date_after": date_after,
-        "date_before": date_before
-    })
 
 
 @login_required(redirect_field_name="next")
@@ -443,10 +399,103 @@ def map_shot(request, shot_type, shot_id):
 
 
 @login_required(redirect_field_name="next")
+def album_view(request, album_id):
+    all_albums = Album.objects.get(id=album_id)
+    date_after = request.GET.get('date_after', '').strip()
+    date_before = request.GET.get('date_before', '').strip()
+    year = request.GET.get('year', '').strip()
+
+    # Get all videos in album (without date filters first)
+    album_videos = all_albums.videos.all()
+    album_externals = all_albums.external_videos.all()
+
+    # Get available years from the album videos (before applying year/date filters)
+    available_years = get_available_years_with_counts(album_videos, album_externals)
+
+    # Apply year filter (takes precedence over date range)
+    if year:
+        album_videos = album_videos.filter(date_shot__year=year)
+        album_externals = album_externals.filter(date_shot__year=year)
+    else:
+        # Apply date range filters only if no year is selected
+        if date_after:
+            album_videos = album_videos.filter(date_shot__gte=date_after)
+            album_externals = album_externals.filter(date_shot__gte=date_after)
+
+        if date_before:
+            album_videos = album_videos.filter(date_shot__lte=date_before)
+            album_externals = album_externals.filter(date_shot__lte=date_before)
+
+    combined_videos = combine_and_sort(list(album_videos), list(album_externals))
+
+    return render(request, "videos_results.html", {
+        "videos": combined_videos,
+        "show_nav": True,
+        "page_title": all_albums.name,
+        "page_subtitle": "Sorted by Most Recent Date Taken.",
+        "url_pattern": "album",
+        "url_context": album_id,
+        "query": None,
+        "date_after": date_after,
+        "date_before": date_before,
+        "year": year,
+        "available_years": available_years
+    })
+
+
+@login_required(redirect_field_name="next")
+def tag_view(request, tag_name):
+    date_after = request.GET.get('date_after', '').strip()
+    date_before = request.GET.get('date_before', '').strip()
+    year = request.GET.get('year', '').strip()
+
+    # Get all videos with tag (without date filters first)
+    videos_w_tag = Video.objects.filter(tags__name=tag_name)
+    externals_w_tag = ExternalVideo.objects.filter(tags__name=tag_name)
+
+    # Get available years from the tagged videos (before applying year/date filters)
+    available_years = get_available_years_with_counts(videos_w_tag, externals_w_tag)
+
+    # Apply year filter (takes precedence over date range)
+    if year:
+        videos_w_tag = videos_w_tag.filter(date_shot__year=year)
+        externals_w_tag = externals_w_tag.filter(date_shot__year=year)
+    else:
+        # Apply date range filters only if no year is selected
+        if date_after:
+            videos_w_tag = videos_w_tag.filter(date_shot__gte=date_after)
+            externals_w_tag = externals_w_tag.filter(date_shot__gte=date_after)
+
+        if date_before:
+            videos_w_tag = videos_w_tag.filter(date_shot__lte=date_before)
+            externals_w_tag = externals_w_tag.filter(date_shot__lte=date_before)
+
+    # All the shots with this tag
+    videos_w_tag = combine_and_sort(videos_w_tag, externals_w_tag)
+
+    tag_obj = Tag.objects.get(name=tag_name)
+
+    return render(request, "videos_results.html", {
+        "videos": videos_w_tag,
+        "show_nav": True,
+        "page_title": f'Videos tagged "{tag_obj.name}"',
+        "page_subtitle": "Sorted by Most Recent.",
+        "url_pattern": "tag",
+        "url_context": tag_name,
+        "query": None,
+        "date_after": date_after,
+        "date_before": date_before,
+        "year": year,
+        "available_years": available_years
+    })
+
+
+@login_required(redirect_field_name="next")
 def search_view(request):
     query = request.GET.get('q', '').strip()
     date_after = request.GET.get('date_after', '').strip()
     date_before = request.GET.get('date_before', '').strip()
+    year = request.GET.get('year', '').strip()
 
     if not query:
         # No search query provided
@@ -459,31 +508,41 @@ def search_view(request):
             "url_context": None,
             "query": query,
             "date_after": date_after,
-            "date_before": date_before
+            "date_before": date_before,
+            "year": year,
+            "available_years": []
         })
 
-    # Search in Video model
+    # Search in Video model (without date filters first)
     videos_results = Video.objects.filter(
         Q(name__icontains=query) |
         Q(description__icontains=query) |
         Q(tags__name__icontains=query)
     ).distinct()
 
-    # Search in ExternalVideo model
+    # Search in ExternalVideo model (without date filters first)
     externals_results = ExternalVideo.objects.filter(
         Q(name__icontains=query) |
         Q(description__icontains=query) |
         Q(tags__name__icontains=query)
     ).distinct()
 
-    # Apply date filters
-    if date_after:
-        videos_results = videos_results.filter(date_shot__gte=date_after)
-        externals_results = externals_results.filter(date_shot__gte=date_after)
+    # Get available years from the search results (before applying year/date filters)
+    available_years = get_available_years_with_counts(videos_results, externals_results)
 
-    if date_before:
-        videos_results = videos_results.filter(date_shot__lte=date_before)
-        externals_results = externals_results.filter(date_shot__lte=date_before)
+    # Now apply year filter (takes precedence over date range)
+    if year:
+        videos_results = videos_results.filter(date_shot__year=year)
+        externals_results = externals_results.filter(date_shot__year=year)
+    else:
+        # Apply date range filters only if no year is selected
+        if date_after:
+            videos_results = videos_results.filter(date_shot__gte=date_after)
+            externals_results = externals_results.filter(date_shot__gte=date_after)
+
+        if date_before:
+            videos_results = videos_results.filter(date_shot__lte=date_before)
+            externals_results = externals_results.filter(date_shot__lte=date_before)
 
     # Combine and sort results
     all_results = combine_and_sort(videos_results, externals_results)
@@ -497,7 +556,9 @@ def search_view(request):
         "url_context": None,
         "query": query,
         "date_after": date_after,
-        "date_before": date_before
+        "date_before": date_before,
+        "year": year,
+        "available_years": available_years
     })
 
 
