@@ -1,172 +1,242 @@
 {% extends "videos_base.html" %}
 {% block content %}
+  {% load static %}
   {% load widget_tweaks %}
   {{ upload_form.media }}
-  <!-- Start Video Upload section -->
+
   {% if messages %}
-    <div class="alert alert-success" role="alert">
+    <div class="alert alert-success alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
       {% for message in messages %}
         <p {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</p>
       {% endfor %}
     </div>
   {% endif %}
-  <div class="row well well-lg" id="video_form_section">
+
+  <h2>Upload a New Video</h2>
+
+  <div class="row well well-lg">
     <div class="col-md-12 col-sm-12 col-xs-12">
-      <p>
-        <a href="https://www.latlong.net/" target="_blank">Latitude/Longtiude Help</a>
-      </p>
       <form class="form-horizontal"
             action=""
             method="post"
             enctype="multipart/form-data">
-        <div class="well">
-          {% csrf_token %}
-          {% if upload_form.non_field_errors %}
-            <div class="alert alert-danger" role="alert">{{ upload_form.non_field_errors }}</div>
-          {% endif %}
-          <div class="form-group">
-            {% if upload_form.tags.errors %}
-              <div class="alert alert-danger" role="alert">{{ upload_form.tags.errors }}</div>
-            {% endif %}
-            <div class="fieldWrapper">
-              {{ upload_form.tags.errors }}
-              <label class="col-sm-2 control-label"
-                     for="{{ upload_form.tags.id_for_label }}">Tags</label>
-              <div class="col-sm-6">{{ upload_form.tags|add_class:"form-control multi-selects" }}</div>
-            </div>
-            <a href="#"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
-          </div>
-          <div class="form-group">
-            {% if upload_form.album.errors %}
-              <div class="alert alert-danger" role="alert">{{ upload_form.album.errors }}</div>
-            {% endif %}
-            <div class="fieldWrapper">
-              {{ upload_form.album.errors }}
-              <label class="col-sm-2 control-label"
-                     for="{{ upload_form.album.id_for_label }}">Albums</label>
-              <div class="col-sm-6">{{ upload_form.album|add_class:"form-control multi-selects" }}</div>
-            </div>
-            <a href="#"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
-          </div>
-          <div class="form-group">
-            {% if upload_form.name.errors %}
-              <div class="alert alert-danger" role="alert">{{ upload_form.name.errors }}</div>
-            {% endif %}
-            <label class="col-sm-2 control-label"
-                   for="{{ upload_form.name.id_for_label }}">Name</label>
-            <div class="col-sm-6">{{ upload_form.name|add_class:"form-control" }}</div>
-          </div>
-          <div class="form-group">
-            {% if upload_form.date_shot.errors %}
-              <div class="alert alert-danger" role="alert">{{ upload_form.date_shot.errors }}</div>
-            {% endif %}
-            <label class="col-sm-2 control-label"
-                   for="{{ upload_form.date_shot.id_for_label }}">
-              Date
-              Taken
-            </label>
-            <div class="col-sm-6">{{ upload_form.date_shot }}</div>
-          </div>
-          <!--
-                <div class="form-group">
-                    {%if upload_form.description.errors%}
-                    <div class="alert alert-danger" role="alert">
-                        {{ upload_form.description.errors }}
-                    </div>
-                    {% endif %}
-                    <label class="col-sm-2 control-label" for="{{ upload_form.description.id_for_label }}">Description</label>
-                    <div class="col-sm-6">
-                        {{ upload_form.description|add_class:"form-control" }}
-                    </div>
-                </div>-->
-          <div class="form-group">
-            {% if upload_form.description.errors %}
-              <div class="alert alert-danger" role="alert">{{ upload_form.description.errors }}</div>
-            {% endif %}
-            <label class="col-sm-2 control-label"
-                   for="{{ upload_form.description.id_for_label }}">Description</label>
-            <div class="col-sm-6">{{ upload_form.description|add_class:"form-control" }}</div>
-          </div>
-          <div class="form-group">
-            {% if upload_form.lat.errors %}
-              <div class="alert alert-danger" role="alert">{{ upload_form.lat.errors }}</div>
-            {% endif %}
-            <label class="col-sm-2 control-label"
-                   for="{{ upload_form.lat.id_for_label }}">Latitude</label>
-            <div class="col-sm-6">{{ upload_form.lat }}</div>
-          </div>
-          <div class="form-group">
-            {% if upload_form.lon.errors %}
-              <div class="alert alert-danger" role="alert">{{ upload_form.lon.errors }}</div>
-            {% endif %}
-            <label class="col-sm-2 control-label"
-                   for="{{ upload_form.lon.id_for_label }}">Longitude</label>
-            <div class="col-sm-6">{{ upload_form.lon }}</div>
-          </div>
-          <div class="row" id="qloc-row">
-            {% for qloc in quick_locations %}
-              <button type="button" id="{{ qloc.html_id }}" class="btn btn-default">{{ qloc.label }}</button>
-            {% endfor %}
-          </div>
-          <div class="form-group">
-            {% if upload_form.poster.errors %}
-              <div class="alert alert-danger" role="alert">{{ upload_form.poster.errors }}</div>
-            {% endif %}
-            <label class="col-sm-2 control-label"
-                   for="{{ upload_form.poster.id_for_label }}">Poster</label>
-            <div class="col-sm-6">{{ upload_form.poster }}</div>
-          </div>
-          <div class="form-group">
-            {% if upload_form.video_file.errors %}
-              <div class="alert alert-danger" role="alert">{{ upload_form.video_file.errors }}</div>
-            {% endif %}
-            <label class="col-sm-2 control-label"
-                   for="{{ upload_form.video_file.id_for_label }}">
-              Video
-              File
-            </label>
-            <div class="col-sm-6">{{ upload_form.video_file }}</div>
+        {% csrf_token %}
+
+        {% if upload_form.non_field_errors %}
+          <div class="alert alert-danger" role="alert">{{ upload_form.non_field_errors }}</div>
+        {% endif %}
+
+        <!-- File Upload Section -->
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <h4>Video Files</h4>
           </div>
         </div>
-        <input class="btn btn-primary btn-lg"
-               type="submit"
-               name="save_video"
-               value="Save and Add Another" />
-        <input class="btn btn-primary btn-lg"
-               type="submit"
-               name="save_video_and_main"
-               value="Save and Back to Main" />
+
+        <div class="form-group {% if upload_form.video_file.errors %}has-error{% endif %}">
+          <label class="col-sm-2 control-label" for="{{ upload_form.video_file.id_for_label }}">
+            Video File <span class="text-danger">*</span>
+          </label>
+          <div class="col-sm-10">
+            {{ upload_form.video_file }}
+            {% if upload_form.video_file.errors %}
+              <span class="help-block">{{ upload_form.video_file.errors }}</span>
+            {% endif %}
+            <span class="help-block">Select the video file to upload (MP4, MOV, etc.)</span>
+          </div>
+        </div>
+
+        <div class="form-group {% if upload_form.poster.errors %}has-error{% endif %}">
+          <label class="col-sm-2 control-label" for="{{ upload_form.poster.id_for_label }}">
+            Poster Image <span class="text-danger">*</span>
+          </label>
+          <div class="col-sm-10">
+            {{ upload_form.poster }}
+            {% if upload_form.poster.errors %}
+              <span class="help-block">{{ upload_form.poster.errors }}</span>
+            {% endif %}
+            <span class="help-block">Thumbnail image for the video (JPG, PNG)</span>
+          </div>
+        </div>
+
+        <!-- Video Details Section -->
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <h4>Video Details</h4>
+          </div>
+        </div>
+
+        <div class="form-group {% if upload_form.name.errors %}has-error{% endif %}">
+          <label class="col-sm-2 control-label" for="{{ upload_form.name.id_for_label }}">
+            Name <span class="text-danger">*</span>
+          </label>
+          <div class="col-sm-10">
+            {{ upload_form.name|add_class:"form-control" }}
+            {% if upload_form.name.errors %}
+              <span class="help-block">{{ upload_form.name.errors }}</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="form-group {% if upload_form.date_shot.errors %}has-error{% endif %}">
+          <label class="col-sm-2 control-label" for="{{ upload_form.date_shot.id_for_label }}">
+            Date Taken <span class="text-danger">*</span>
+          </label>
+          <div class="col-sm-10">
+            {{ upload_form.date_shot|add_class:"form-control"|attr:"type:date" }}
+            {% if upload_form.date_shot.errors %}
+              <span class="help-block">{{ upload_form.date_shot.errors }}</span>
+            {% endif %}
+            <span class="help-block">The date this video was recorded</span>
+          </div>
+        </div>
+
+        <div class="form-group {% if upload_form.description.errors %}has-error{% endif %}">
+          <label class="col-sm-2 control-label" for="{{ upload_form.description.id_for_label }}">
+            Description
+          </label>
+          <div class="col-sm-10">
+            {{ upload_form.description|add_class:"form-control"|attr:"rows:4" }}
+            {% if upload_form.description.errors %}
+              <span class="help-block">{{ upload_form.description.errors }}</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Organization Section -->
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <h4>Organization</h4>
+          </div>
+        </div>
+
+        <div class="form-group {% if upload_form.album.errors %}has-error{% endif %}">
+          <label class="col-sm-2 control-label" for="{{ upload_form.album.id_for_label }}">
+            Albums
+          </label>
+          <div class="col-sm-10">
+            {{ upload_form.album|add_class:"form-control" }}
+            {% if upload_form.album.errors %}
+              <span class="help-block">{{ upload_form.album.errors }}</span>
+            {% endif %}
+            <span class="help-block">Hold Ctrl (Cmd on Mac) to select multiple albums</span>
+          </div>
+        </div>
+
+        <div class="form-group {% if upload_form.tags.errors %}has-error{% endif %}">
+          <label class="col-sm-2 control-label" for="{{ upload_form.tags.id_for_label }}">
+            Tags
+          </label>
+          <div class="col-sm-10">
+            {{ upload_form.tags|add_class:"form-control" }}
+            {% if upload_form.tags.errors %}
+              <span class="help-block">{{ upload_form.tags.errors }}</span>
+            {% endif %}
+            <span class="help-block">Hold Ctrl (Cmd on Mac) to select multiple tags</span>
+          </div>
+        </div>
+
+        <!-- Location Section -->
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <h4>Location Information</h4>
+            <p class="text-muted">
+              <a href="https://www.latlong.net/" target="_blank">
+                <span class="glyphicon glyphicon-map-marker"></span> Need help finding coordinates?
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="form-group {% if upload_form.lat.errors %}has-error{% endif %}">
+          <label class="col-sm-2 control-label" for="{{ upload_form.lat.id_for_label }}">
+            Latitude
+          </label>
+          <div class="col-sm-10">
+            {{ upload_form.lat|add_class:"form-control"|attr:"placeholder:e.g., 35.7796" }}
+            {% if upload_form.lat.errors %}
+              <span class="help-block">{{ upload_form.lat.errors }}</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="form-group {% if upload_form.lon.errors %}has-error{% endif %}">
+          <label class="col-sm-2 control-label" for="{{ upload_form.lon.id_for_label }}">
+            Longitude
+          </label>
+          <div class="col-sm-10">
+            {{ upload_form.lon|add_class:"form-control"|attr:"placeholder:e.g., -78.6382" }}
+            {% if upload_form.lon.errors %}
+              <span class="help-block">{{ upload_form.lon.errors }}</span>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if quick_locations %}
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Quick Locations</label>
+            <div class="col-sm-10">
+              <div class="btn-group" role="group">
+                {% for qloc in quick_locations %}
+                  <button type="button"
+                          id="{{ qloc.html_id }}"
+                          class="btn btn-default"
+                          title="Set to {{ qloc.label }}">
+                    <span class="glyphicon glyphicon-map-marker"></span> {{ qloc.label }}
+                  </button>
+                {% endfor %}
+              </div>
+              <span class="help-block">
+                Click to quickly set coordinates to a saved location
+                {% if upload_form.lat.value and upload_form.lon.value %}
+                  <span class="text-success">
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                    Location pre-filled from your last upload
+                  </span>
+                {% endif %}
+              </span>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" name="save_video" class="btn btn-primary btn-lg">
+              <span class="glyphicon glyphicon-floppy-disk"></span> Save &amp; Add Another
+            </button>
+            <button type="submit" name="save_video_and_main" class="btn btn-success btn-lg">
+              <span class="glyphicon glyphicon-floppy-disk"></span> Save &amp; Return to Main
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   </div>
-  <!-- End Video Upload section -->
 {% endblock content %}
+
 {% block post_js %}
-    <script>
-      var now = new Date();
-      var currentyear = now.getFullYear();
-      $(function() {
-        $(".datepicker").datepicker({
-          changeMonth: true,
-          changeYear: true,
-          yearRange: ("1980:" + currentyear),
-        });
+  <script>
+  $(document).ready(function(){
+    // Quick location buttons
+    {% for qloc in quick_locations %}
+      $("#{{ qloc.html_id }}").click(function() {
+        $("#id_lon").val({{ qloc.lon }});
+        $("#id_lat").val({{ qloc.lat }});
+
+        // Visual feedback
+        $(this).addClass('btn-success').removeClass('btn-default');
+        setTimeout(function() {
+          $("#{{ qloc.html_id }}").addClass('btn-default').removeClass('btn-success');
+        }, 1000);
       });
-    </script>
-    <script>
-      $(document).ready(function(){
-      {%for qloc in quick_locations%}
-        $("#{{qloc.html_id}}").click(function() {
-          $("#id_lon").val({{qloc.lon}});
-          $("#id_lat").val({{qloc.lat}});
-        });
-      {%endfor%}
-      });
-    </script>
-    <script>
-      $(document).ready(function () {
-        $(".nav li").removeClass("active");
-        $('#upload').addClass('active');
-      });
-    </script>
+    {% endfor %}
+
+    // Highlight active nav item
+    $(".nav li").removeClass("active");
+    $('#upload').addClass('active');
+  });
+  </script>
 {% endblock post_js %}

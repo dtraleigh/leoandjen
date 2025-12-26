@@ -8,9 +8,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
-from django.db.models import Max
+from django.db.models import Max, Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils import timezone
 
 from videos.forms import *
@@ -190,18 +190,6 @@ def upload(request):
 
 
 @login_required(redirect_field_name="next")
-def album_view(request, album_id):
-    all_albums = Album.objects.get(id=album_id)
-
-    album_videos = [v for v in all_albums.videos.all()]
-    album_externals = [ex for ex in all_albums.external_videos.all()]
-
-    return render(request, "videos_album.html", {"album": all_albums,
-                                                 "album_videos": combine_and_sort(album_videos, album_externals),
-                                                 "show_nav": True})
-
-
-@login_required(redirect_field_name="next")
 def shot_view(request, album_id, shot_type, shot_id):
     this_shot = get_shot(shot_type, shot_id)
 
@@ -246,16 +234,71 @@ def shot_view(request, album_id, shot_type, shot_id):
 
 
 @login_required(redirect_field_name="next")
+def album_view(request, album_id):
+    all_albums = Album.objects.get(id=album_id)
+    date_after = request.GET.get('date_after', '').strip()
+    date_before = request.GET.get('date_before', '').strip()
+
+    album_videos = all_albums.videos.all()
+    album_externals = all_albums.external_videos.all()
+
+    # Apply date filters
+    if date_after:
+        album_videos = album_videos.filter(date_shot__gte=date_after)
+        album_externals = album_externals.filter(date_shot__gte=date_after)
+
+    if date_before:
+        album_videos = album_videos.filter(date_shot__lte=date_before)
+        album_externals = album_externals.filter(date_shot__lte=date_before)
+
+    combined_videos = combine_and_sort(list(album_videos), list(album_externals))
+
+    return render(request, "videos_results.html", {
+        "videos": combined_videos,
+        "show_nav": True,
+        "page_title": all_albums.name,
+        "page_subtitle": "Sorted by Most Recent Date Taken.",
+        "url_pattern": "album",
+        "url_context": album_id,
+        "query": None,
+        "date_after": date_after,
+        "date_before": date_before
+    })
+
+
+@login_required(redirect_field_name="next")
 def tag_view(request, tag_name):
+    date_after = request.GET.get('date_after', '').strip()
+    date_before = request.GET.get('date_before', '').strip()
+
     videos_w_tag = Video.objects.filter(tags__name=tag_name)
     externals_w_tag = ExternalVideo.objects.filter(tags__name=tag_name)
+
+    # Apply date filters
+    if date_after:
+        videos_w_tag = videos_w_tag.filter(date_shot__gte=date_after)
+        externals_w_tag = externals_w_tag.filter(date_shot__gte=date_after)
+
+    if date_before:
+        videos_w_tag = videos_w_tag.filter(date_shot__lte=date_before)
+        externals_w_tag = externals_w_tag.filter(date_shot__lte=date_before)
 
     # All the shots with this tag
     videos_w_tag = combine_and_sort(videos_w_tag, externals_w_tag)
 
-    return render(request, "tag.html", {"videos_w_tag": videos_w_tag,
-                                        "the_tag": Tag.objects.get(name=tag_name),
-                                        "show_nav": True})
+    tag_obj = Tag.objects.get(name=tag_name)
+
+    return render(request, "videos_results.html", {
+        "videos": videos_w_tag,
+        "show_nav": True,
+        "page_title": f'Videos tagged "{tag_obj.name}"',
+        "page_subtitle": "Sorted by Most Recent.",
+        "url_pattern": "tag",
+        "url_context": tag_name,
+        "query": None,
+        "date_after": date_after,
+        "date_before": date_before
+    })
 
 
 @login_required(redirect_field_name="next")
@@ -397,3 +440,120 @@ def map_shot(request, shot_type, shot_id):
                                              "video_map_data": video_map_data,
                                              "external_map_data": external_map_data,
                                              "show_nav": True})
+
+
+@login_required(redirect_field_name="next")
+def search_view(request):
+    query = request.GET.get('q', '').strip()
+    date_after = request.GET.get('date_after', '').strip()
+    date_before = request.GET.get('date_before', '').strip()
+
+    if not query:
+        # No search query provided
+        return render(request, "videos_results.html", {
+            "videos": [],
+            "show_nav": True,
+            "page_title": "Search Results",
+            "page_subtitle": f'Please enter a search term',
+            "url_pattern": "search",
+            "url_context": None,
+            "query": query,
+            "date_after": date_after,
+            "date_before": date_before
+        })
+
+    # Search in Video model
+    videos_results = Video.objects.filter(
+        Q(name__icontains=query) |
+        Q(description__icontains=query) |
+        Q(tags__name__icontains=query)
+    ).distinct()
+
+    # Search in ExternalVideo model
+    externals_results = ExternalVideo.objects.filter(
+        Q(name__icontains=query) |
+        Q(description__icontains=query) |
+        Q(tags__name__icontains=query)
+    ).distinct()
+
+    # Apply date filters
+    if date_after:
+        videos_results = videos_results.filter(date_shot__gte=date_after)
+        externals_results = externals_results.filter(date_shot__gte=date_after)
+
+    if date_before:
+        videos_results = videos_results.filter(date_shot__lte=date_before)
+        externals_results = externals_results.filter(date_shot__lte=date_before)
+
+    # Combine and sort results
+    all_results = combine_and_sort(videos_results, externals_results)
+
+    return render(request, "videos_results.html", {
+        "videos": all_results,
+        "show_nav": True,
+        "page_title": "Search Results",
+        "page_subtitle": f'Found {len(all_results)} result{"s" if len(all_results) != 1 else ""} for "{query}"',
+        "url_pattern": "search",
+        "url_context": None,
+        "query": query,
+        "date_after": date_after,
+        "date_before": date_before
+    })
+
+
+@login_required(redirect_field_name="next")
+def search_shot_view(request, shot_type, shot_id):
+    """
+    Display an individual video from search results.
+    Maintains search context for navigation.
+    """
+    query = request.GET.get('q', '')
+
+    this_shot = get_shot(shot_type, shot_id)
+
+    # Get all search results to enable prev/next navigation
+    videos_results = Video.objects.filter(
+        Q(name__icontains=query) |
+        Q(description__icontains=query) |
+        Q(tags__name__icontains=query)
+    ).distinct()
+
+    externals_results = ExternalVideo.objects.filter(
+        Q(name__icontains=query) |
+        Q(description__icontains=query) |
+        Q(tags__name__icontains=query)
+    ).distinct()
+
+    search_results = combine_and_sort(videos_results, externals_results)
+
+    # Determine prev/next videos
+    if not is_most_recent(this_shot, search_results):
+        next_video = get_next_shot(this_shot, search_results)
+        no_next = False
+    else:
+        next_video = this_shot
+        no_next = True
+
+    if not is_oldest(this_shot, search_results):
+        prev_video = get_prev_shot(this_shot, search_results)
+        no_prev = False
+    else:
+        prev_video = this_shot
+        no_prev = True
+
+    video_map_data, external_map_data = get_map_data()
+
+    return render(request, "shot.html", {
+        "video": this_shot,
+        "album_videos": search_results,
+        "video_tags": [t for t in this_shot.tags.all()],
+        "search_view": True,
+        "search_query": query,
+        "next_video": next_video,
+        "no_next": no_next,
+        "no_prev": no_prev,
+        "prev_video": prev_video,
+        "video_map_data": video_map_data,
+        "external_map_data": external_map_data,
+        "show_nav": True
+    })

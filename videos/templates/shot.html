@@ -21,6 +21,11 @@
       <li>
         <a href="/videos/tag/{{ the_tag.name }}">{{ the_tag.name }}</a>
       </li>
+    {% elif search_view %}
+      <li>Search</li>
+      <li>
+        <a href="/videos/search/?q={{ search_query }}">{{ search_query }}</a>
+      </li>
     {% elif recent_view %}
       <li>Recent</li>
     {% endif %}

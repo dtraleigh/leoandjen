@@ -1,0 +1,89 @@
+{% extends "videos_base.html" %}
+{% block content %}
+  {% load static %}
+  <h1>{{ page_title }}</h1>
+  <p class="text-right">
+    <span class="label label-info">{{ page_subtitle }}</span>
+  </p>
+
+  <!-- Date Filter -->
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#dateFilter">
+          <span class="glyphicon glyphicon-calendar"></span> Filter by Date
+        </a>
+      </h4>
+    </div>
+    <div id="dateFilter" class="panel-collapse collapse">
+      <div class="panel-body">
+        <form method="get" class="form-inline">
+          {% if query %}
+            <input type="hidden" name="q" value="{{ query }}">
+          {% endif %}
+          <div class="form-group">
+            <label for="date_after">After:</label>
+            <input type="date" class="form-control" id="date_after" name="date_after" value="{{ date_after }}">
+          </div>
+          <div class="form-group">
+            <label for="date_before">Before:</label>
+            <input type="date" class="form-control" id="date_before" name="date_before" value="{{ date_before }}">
+          </div>
+          <button type="submit" class="btn btn-primary">Apply Filter</button>
+          {% if date_after or date_before %}
+            <a href="?{% if query %}q={{ query }}{% endif %}" class="btn btn-default">Clear Filter</a>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% if videos %}
+    <div class="row">
+      {% for video in videos %}
+        <div class="col-sm-6 col-xs-12">
+          <div class="well well-lg">
+            {% if video.get_cname == "Video" %}
+              {% if url_pattern == "album" %}
+                <a href="/videos/album/{{ url_context }}/video/{{ video.id }}">
+              {% elif url_pattern == "tag" %}
+                <a href="/videos/tag/{{ url_context }}/video/{{ video.id }}">
+              {% elif url_pattern == "search" %}
+                <a href="/videos/search/video/{{ video.id }}?q={{ query }}">
+              {% endif %}
+                <div class="album-poster"
+                     style="background-image:url({{ video.poster.url }})"></div>
+              </a>
+            {% elif video.get_cname == "ExternalVideo" %}
+              {% if url_pattern == "album" %}
+                <a href="/videos/album/{{ url_context }}/external/{{ video.id }}">
+              {% elif url_pattern == "tag" %}
+                <a href="/videos/tag/{{ url_context }}/external/{{ video.id }}">
+              {% elif url_pattern == "search" %}
+                <a href="/videos/search/external/{{ video.id }}?q={{ query }}">
+              {% endif %}
+                <div class="album-poster"
+                     style="background-image:url({{ video.poster.url }})"></div>
+              </a>
+            {% endif %}
+            <h4>{{ video.name }}</h4>
+            {% autoescape off %}
+              <p>{{ video.description }}</p>
+              <p>
+                <strong>Date Taken:</strong> {{ video.date_shot }}
+              </p>
+            {% endautoescape %}
+          </div>
+        </div>
+        {% if forloop.counter|divisibleby:2 %}
+        </div>
+        <div class="row">
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info">
+      <strong>No results found.</strong> Try a different search term.
+    </div>
+  {% endif %}
+{% endblock content %}

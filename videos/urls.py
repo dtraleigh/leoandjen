@@ -7,6 +7,7 @@ urlpatterns = [
     path("", views.video_login),
     path("main/", views.main),
     path("map/", views.map_view),
+    path("search/", views.search_view, name="search"),
     path("main/upload/", views.upload),
     path("random/", views.random_shot_view),
     path("logout/", views.video_logout),
@@ -17,4 +18,5 @@ urlpatterns = [
     path("recent/<str:shot_type>/<int:shot_id>/", views.recent_view, name="recent_shot"),
     path("edit/<str:shot_type>/<int:shot_id>/", views.shot_edit_view),
     path("map/<str:shot_type>/<int:shot_id>/", views.map_shot),
+    path("search/<str:shot_type>/<int:shot_id>/", views.search_shot_view, name="search_shot"),
 ]
