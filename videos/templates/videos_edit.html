@@ -75,7 +75,6 @@
             {% if edit_form.tags.errors %}
               <span class="help-block">{{ edit_form.tags.errors }}</span>
             {% endif %}
-            <span class="help-block">Hold Ctrl (Cmd on Mac) to select multiple tags</span>
           </div>
         </div>
 
@@ -84,33 +83,23 @@
           <div class="col-sm-offset-2 col-sm-10">
             <h4>Location Information</h4>
             <p class="text-muted">
-              <a href="https://www.latlong.net/" target="_blank">
-                <span class="glyphicon glyphicon-map-marker"></span> Need help finding coordinates?
+              <a href="https://www.google.com/maps" target="_blank">
+                <span class="glyphicon glyphicon-map-marker"></span> Right-click on Google Maps to copy coordinates
               </a>
             </p>
           </div>
         </div>
 
-        <div class="form-group {% if edit_form.lat.errors %}has-error{% endif %}">
-          <label class="col-sm-2 control-label" for="{{ edit_form.lat.id_for_label }}">
-            Latitude
+        <div class="form-group {% if edit_form.coordinates.errors %}has-error{% endif %}">
+          <label class="col-sm-2 control-label" for="{{ edit_form.coordinates.id_for_label }}">
+            Coordinates
           </label>
           <div class="col-sm-10">
-            {{ edit_form.lat|add_class:"form-control"|attr:"placeholder:e.g., 35.7796" }}
-            {% if edit_form.lat.errors %}
-              <span class="help-block">{{ edit_form.lat.errors }}</span>
-            {% endif %}
-          </div>
-        </div>
-
-        <div class="form-group {% if edit_form.lon.errors %}has-error{% endif %}">
-          <label class="col-sm-2 control-label" for="{{ edit_form.lon.id_for_label }}">
-            Longitude
-          </label>
-          <div class="col-sm-10">
-            {{ edit_form.lon|add_class:"form-control"|attr:"placeholder:e.g., -78.6382" }}
-            {% if edit_form.lon.errors %}
-              <span class="help-block">{{ edit_form.lon.errors }}</span>
+            {{ edit_form.coordinates }}
+            {% if edit_form.coordinates.errors %}
+              <span class="help-block">{{ edit_form.coordinates.errors }}</span>
+            {% else %}
+              <span class="help-block">{{ edit_form.coordinates.help_text }}</span>
             {% endif %}
           </div>
         </div>
@@ -123,7 +112,9 @@
                 {% for qloc in quick_locations %}
                   <button type="button"
                           id="{{ qloc.html_id }}"
-                          class="btn btn-default"
+                          class="btn btn-default quick-location-btn"
+                          data-lat="{{ qloc.lat }}"
+                          data-lon="{{ qloc.lon }}"
                           title="Set to {{ qloc.label }}">
                     <span class="glyphicon glyphicon-map-marker"></span> {{ qloc.label }}
                   </button>
@@ -169,18 +160,25 @@
   <script>
   $(document).ready(function(){
     // Quick location buttons
-    {% for qloc in quick_locations %}
-      $("#{{ qloc.html_id }}").click(function() {
-        $("#id_lon").val({{ qloc.lon }});
-        $("#id_lat").val({{ qloc.lat }});
+    $('.quick-location-btn').on('click', function() {
+      var lat = $(this).data('lat');
+      var lon = $(this).data('lon');
+      var coordinatesField = $('#{{ edit_form.coordinates.id_for_label }}');
+
+      if (lat && lon && coordinatesField.length) {
+        coordinatesField.val(lat + ', ' + lon);
 
         // Visual feedback
         $(this).addClass('btn-success').removeClass('btn-default');
+        var button = $(this);
         setTimeout(function() {
-          $("#{{ qloc.html_id }}").addClass('btn-default').removeClass('btn-success');
+          button.addClass('btn-default').removeClass('btn-success');
         }, 1000);
-      });
-    {% endfor %}
+
+        // Mark form as changed
+        formChanged = true;
+      }
+    });
 
     // Confirm navigation away if form has changes
     var formChanged = false;
@@ -196,5 +194,5 @@
       }
     });
   });
-  </script>
+</script>
 {% endblock post_js %}
