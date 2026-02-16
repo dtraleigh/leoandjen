@@ -5,6 +5,7 @@ from django.core.management import call_command
 from django.test import TestCase
 
 from data.models import Electricity
+from data.models.electricity import ElectricRateSchedule
 # from data.test_data.create_test_data import create_test_data_elec_rates, create_test_data_elec
 from data.year_elec import ElecYear
 
@@ -291,3 +292,104 @@ class ElectricityTestCase(TestCase):
         elec.calculate_and_set_money_saved()
         self.assertIsNotNone(elec.calculated_money_saved_by_solar)
         self.assertIsInstance(elec.calculated_money_saved_by_solar, Decimal)
+
+    def test_bill_is_lacking_rates_false_when_all_rates_present(self):
+        """Bill has an energy rate schedule linked AND storm recovery covers all days."""
+        bill = Electricity.objects.create(
+            service_start_date=date(2023, 3, 1),
+            service_end_date=date(2023, 3, 31),
+            bill_date=date(2023, 4, 1),
+            kWh_usage=500,
+            solar_amt_sent_to_grid=100,
+            net_metering_credit=Decimal("0.00"),
+        )
+        # post_save signal auto-associates the bill with overlapping rate schedules.
+        # The fixture has Storm Recovery Costs covering 2023-02-09 to 2023-06-30
+        # and Energy Costs covering 2023-01-01 to 2023-06-30, so March is fully covered.
+        # However, .get(electricity_bills=self) requires exactly one linked schedule.
+        # Multiple schedules get linked by the signal, so we need to ensure only one
+        # energy rate schedule is linked. Let's clear and set exactly one.
+        bill.electricrateschedule_set.clear()
+        energy_schedule = ElectricRateSchedule.objects.get(pk=4)  # Energy Costs 2023-01-01 to 2023-06-30
+        energy_schedule.electricity_bills.add(bill)
+
+        self.assertFalse(bill.bill_is_lacking_rates)
+
+    def test_bill_is_lacking_rates_true_when_no_energy_rate_linked(self):
+        """Bill has no energy rate schedule linked via M2M."""
+        bill = Electricity.objects.create(
+            service_start_date=date(2023, 3, 1),
+            service_end_date=date(2023, 3, 31),
+            bill_date=date(2023, 4, 1),
+            kWh_usage=500,
+            solar_amt_sent_to_grid=100,
+            net_metering_credit=Decimal("0.00"),
+        )
+        # Remove all linked rate schedules so the first .get() fails
+        bill.electricrateschedule_set.clear()
+
+        self.assertTrue(bill.bill_is_lacking_rates)
+
+    def test_bill_is_lacking_rates_true_when_no_storm_recovery(self):
+        """Bill has an energy rate linked but no Storm Recovery Costs schedule covers the dates."""
+        # Create a bill in a date range with no storm recovery coverage
+        bill = Electricity.objects.create(
+            service_start_date=date(2022, 6, 1),
+            service_end_date=date(2022, 6, 30),
+            bill_date=date(2022, 7, 1),
+            kWh_usage=400,
+            solar_amt_sent_to_grid=80,
+            net_metering_credit=Decimal("0.00"),
+        )
+        # Manually link one energy rate schedule
+        bill.electricrateschedule_set.clear()
+        energy_schedule = ElectricRateSchedule.objects.create(
+            name="Energy Costs",
+            schedule_start_date=date(2022, 1, 1),
+            schedule_end_date=date(2022, 12, 31),
+            energy_charge_per_kwh=Decimal("0.12000000"),
+        )
+        energy_schedule.electricity_bills.add(bill)
+        # No Storm Recovery Costs schedule exists for 2022
+
+        self.assertTrue(bill.bill_is_lacking_rates)
+
+    def test_bill_is_lacking_rates_true_when_storm_recovery_partial_coverage(self):
+        """Storm recovery only covers part of the bill's service period."""
+        bill = Electricity.objects.create(
+            service_start_date=date(2023, 2, 1),
+            service_end_date=date(2023, 2, 28),
+            bill_date=date(2023, 3, 1),
+            kWh_usage=300,
+            solar_amt_sent_to_grid=50,
+            net_metering_credit=Decimal("0.00"),
+        )
+        # Clear auto-linked schedules and set up partial coverage
+        bill.electricrateschedule_set.clear()
+        energy_schedule = ElectricRateSchedule.objects.get(pk=4)
+        energy_schedule.electricity_bills.add(bill)
+        # Fixture has Storm Recovery pk=1 covering 2023-01-01 to 2023-02-08
+        # and pk=2 covering 2023-02-09 to 2023-06-30.
+        # Delete pk=2 so storm recovery only covers Feb 1-8, not Feb 9-28.
+        ElectricRateSchedule.objects.filter(pk=2).delete()
+
+        self.assertTrue(bill.bill_is_lacking_rates)
+
+    def test_bill_is_lacking_rates_with_perpetual_storm_recovery(self):
+        """Storm recovery schedule with perpetual end date covers the bill."""
+        bill = Electricity.objects.create(
+            service_start_date=date(2023, 8, 1),
+            service_end_date=date(2023, 8, 31),
+            bill_date=date(2023, 9, 1),
+            kWh_usage=600,
+            solar_amt_sent_to_grid=200,
+            net_metering_credit=Decimal("0.00"),
+        )
+        # Clear and link exactly one energy rate schedule
+        bill.electricrateschedule_set.clear()
+        energy_schedule = ElectricRateSchedule.objects.get(pk=5)  # Energy Costs 2023-07-01 to 2023-10-31
+        energy_schedule.electricity_bills.add(bill)
+        # Fixture pk=3 is Storm Recovery Costs starting 2023-07-01, perpetual=True
+        # So August is fully covered.
+
+        self.assertFalse(bill.bill_is_lacking_rates)
