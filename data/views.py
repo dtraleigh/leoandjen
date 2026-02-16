@@ -1,7 +1,7 @@
 import csv
 import logging
 import os
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 from pathlib import Path
 from collections import namedtuple
@@ -16,7 +16,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
-from django.db.models import F
+from django.db.models import F, Q
 
 from data.file_handler import save_uploaded_file_to_temporary, rename_file_on_disk, create_unique_filename
 from data.functions import *
@@ -444,5 +444,47 @@ def preview_pdf(request):
                 request.session.pop('parsed_data', None)
                 request.session.pop('temp_file_path', None)
 
+    rate_warnings = []
+    if parsed_data.get("bill_type") == "Electricity":
+        try:
+            start = date.fromisoformat(parsed_data["start_date"])
+            end = date.fromisoformat(parsed_data["end_date"])
+
+            if start.year >= 2023:
+                # Check for at least one non-Storm-Recovery rate schedule overlapping the service period
+                has_energy_rate = ElectricRateSchedule.objects.filter(
+                    ~Q(name__iexact="Storm Recovery Costs")
+                ).filter(
+                    Q(schedule_start_date__lte=end, schedule_end_date__gte=start) |
+                    Q(schedule_start_date__lte=end, schedule_end_date_perpetual=True)
+                ).exists()
+
+                if not has_energy_rate:
+                    rate_warnings.append(
+                        f"No energy rate schedule covers this bill's service period ({start} to {end})."
+                    )
+
+                # Check Storm Recovery Costs coverage for every day in the service period
+                increment_date = start
+                storm_missing = False
+                while increment_date <= end:
+                    has_storm = ElectricRateSchedule.objects.filter(
+                        Q(name__iexact="Storm Recovery Costs"),
+                        Q(schedule_start_date__lte=increment_date, schedule_end_date__gte=increment_date) |
+                        Q(schedule_start_date__lte=increment_date, schedule_end_date_perpetual=True)
+                    ).exists()
+                    if not has_storm:
+                        storm_missing = True
+                        break
+                    increment_date += timedelta(days=1)
+
+                if storm_missing:
+                    rate_warnings.append(
+                        f"Storm Recovery Costs rate is missing for some days in this bill's service period ({start} to {end})."
+                    )
+        except (KeyError, ValueError):
+            pass
+
     return render(request, "preview.html", {"data": parsed_data,
-                                            "duplicates": duplicates})
+                                            "duplicates": duplicates,
+                                            "rate_warnings": rate_warnings})
