@@ -161,7 +161,7 @@ def electricity(request):
         if not dataset.readings:
             requested_yearly_datasets.remove(dataset)
             continue
-        if dataset.is_lacking_energy_rates() and int(dataset.year) >= 2023:
+        if dataset.is_lacking_energy_rates():
             dataset_lacking_energy_rates.append(dataset)
 
     if dataset_lacking_energy_rates:
