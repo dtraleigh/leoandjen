@@ -159,7 +159,8 @@ class Electricity(models.Model):
         increment_date = self.service_start_date
         while increment_date != self.service_end_date + timedelta(days=1):
             try:
-                energy_rate_schedule = ElectricRateSchedule.objects.get(electricity_bills=self)
+                if not ElectricRateSchedule.objects.filter(electricity_bills=self).exists():
+                    raise ElectricRateSchedule.DoesNotExist("No energy rate schedule linked to this bill")
                 storm_rec_schedule = ElectricRateSchedule.objects.get(Q(schedule_start_date__lte=increment_date,
                                                                         schedule_end_date__gte=increment_date,
                                                                         name__iexact="Storm Recovery Costs") |
