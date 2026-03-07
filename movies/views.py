@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 
@@ -291,6 +291,41 @@ def collection(request, collection_id):
                                                "sort": sort,
                                                "sort_arrow": sort_arrow,
                                                "sort_label": sort_label})
+
+
+@login_required(login_url="/admin")
+def search_movie(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid request"}, status=400)
+
+    title = request.POST.get("title", "").strip()
+    if not title:
+        return JsonResponse({"results": [], "message": "Please enter a title."})
+
+    data = search_tmdb_by_title(title)
+    raw_results = data.get("results", [])
+
+    results = []
+    for m in raw_results[:10]:
+        release_date = m.get("release_date", "")
+        results.append({
+            "tmdb_id": m.get("id"),
+            "title": m.get("title"),
+            "year": release_date[:4] if release_date else "Unknown",
+            "overview": m.get("overview", "")[:200],
+            "poster_path": m.get("poster_path"),
+        })
+
+    return JsonResponse({"results": results})
+
+
+@login_required(login_url="/admin")
+def get_movie_imdb(request, tmdb_id):
+    try:
+        imdb_id = get_imdb_id(tmdb_id)
+        return JsonResponse({"imdb_id": imdb_id})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 
 @login_required(login_url="/admin")

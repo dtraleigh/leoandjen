@@ -18,5 +18,7 @@ urlpatterns = [
     path("collection/<int:collection_id>/", views.collection, name="collection"),
     path("actor/<int:themoviedb_actor_id>/", views.actor, name="actor"),
     path("add-movie/", views.add_movie, name="add_movie"),
+    path("search-movie/", views.search_movie, name="search_movie"),
+    path("movie-imdb/<int:tmdb_id>/", views.get_movie_imdb, name="get_movie_imdb"),
     path("edit-movie/<int:movie_id>", views.edit_movie, name="edit_movie"),
 ]

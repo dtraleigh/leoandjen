@@ -1,6 +1,7 @@
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+from urllib.parse import quote_plus
 
 from movies.models import APIUser
 
@@ -51,6 +52,19 @@ def search_tmdb(title, year):
         f"https://api.themoviedb.org/3/search/movie"
         f"?api_key={api_user.api_key}&language=en-US"
         f"&query={title}&page=1&include_adult=false&primary_release_year={str(year)}"
+    )
+
+    response = query_url_with_retries(url)
+
+    return response.json()
+
+
+def search_tmdb_by_title(title):
+    api_user = APIUser.objects.get(name="Leo")
+    url = (
+        f"https://api.themoviedb.org/3/search/movie"
+        f"?api_key={api_user.api_key}&language=en-US"
+        f"&query={quote_plus(title)}&page=1&include_adult=false"
     )
 
     response = query_url_with_retries(url)

@@ -18,7 +18,25 @@
           {% endfor %}
         </div>
       {% endif %}
-      <form action="/movies/add-movie/" method="post">
+
+      <!-- Search Section -->
+      <h5>Search by Title</h5>
+      <div class="input-group mb-2">
+        <input type="text" id="movie-search-input" class="form-control" placeholder="Enter movie title...">
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="button" id="search-btn">Search</button>
+        </div>
+      </div>
+      <div id="search-results" class="mb-3"></div>
+
+      <hr>
+
+      <!-- Add Movie Form -->
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">Add Movie</h5>
+        <button class="btn btn-sm btn-outline-secondary" type="button" id="clear-btn">Clear</button>
+      </div>
+      <form id="add-movie-form" action="/movies/add-movie/" method="post">
         {% csrf_token %}
         {{ form.non_field_errors }}
         <div class="fieldWrapper">
@@ -35,6 +53,7 @@
           {{ form.letterboxd_slug.errors }}
           <label for="{{ form.letterboxd_slug.id_for_label }}">Letterboxd slug:</label>
           {{ form.letterboxd_slug }}
+          <a id="letterboxd-search-link" href="https://letterboxd.com/search/" target="_blank" style="margin-left:8px;">Search Letterboxd</a>
         </div>
         <div class="fieldWrapper">
           {{ form.sort_title.errors }}
@@ -55,4 +74,130 @@
       </form>
     </div>
   </div>
+
+  <script>
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/w92';
+
+    function computeSortTitle(title) {
+      const lower = title.toLowerCase();
+      if (lower.startsWith('the ')) return title.substring(4) + ', The';
+      if (lower.startsWith('a ')) return title.substring(2) + ', A';
+      if (lower.startsWith('an ')) return title.substring(3) + ', An';
+      return title;
+    }
+
+    function updateLetterboxdLink(title) {
+      const link = document.getElementById('letterboxd-search-link');
+      if (title) {
+        link.href = 'https://letterboxd.com/search/' + title.replace(/ /g, '+') + '/';
+      } else {
+        link.href = 'https://letterboxd.com/search/';
+      }
+    }
+
+    function populateForm(tmdbId, title) {
+      updateLetterboxdLink(title);
+      fetch('/movies/movie-imdb/' + tmdbId + '/', {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.imdb_id) {
+          document.getElementById('id_imdb_id').value = data.imdb_id;
+        }
+        const sortTitleField = document.getElementById('id_sort_title');
+        if (!sortTitleField.value) {
+          sortTitleField.value = computeSortTitle(title);
+        }
+      })
+      .catch(err => console.error('Error fetching IMDB ID:', err));
+    }
+
+    function renderResults(results, searchTitle) {
+      const container = document.getElementById('search-results');
+
+      if (results.length === 0) {
+        container.innerHTML = '<div class="alert alert-warning">No movies found for &ldquo;<strong>' + searchTitle + '</strong>&rdquo;.</div>';
+        return;
+      }
+
+      let html = '<p><strong>' + results.length + ' result' + (results.length > 1 ? 's' : '') + ' found:</strong></p>';
+      html += '<div class="list-group mb-2">';
+
+      results.forEach(function(movie) {
+        const poster = movie.poster_path
+          ? '<img src="' + TMDB_IMG_BASE + movie.poster_path + '" alt="poster" style="height:60px;margin-right:10px;flex-shrink:0;">'
+          : '<span style="width:40px;display:inline-block;flex-shrink:0;"></span>';
+        const overview = movie.overview
+          ? '<small class="text-muted d-block">' + movie.overview + (movie.overview.length >= 200 ? '&hellip;' : '') + '</small>'
+          : '';
+        const escapedTitle = movie.title.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+
+        html += '<div class="list-group-item d-flex align-items-center" style="gap:8px;">'
+          + poster
+          + '<div style="flex:1;min-width:0;">'
+          + '<strong>' + escapedTitle + '</strong> (' + (movie.year || 'Unknown') + ')'
+          + overview
+          + '</div>'
+          + '<button class="btn btn-sm btn-success select-movie-btn" style="flex-shrink:0;" '
+          + 'data-tmdb-id="' + movie.tmdb_id + '" data-title="' + escapedTitle + '">Select</button>'
+          + '</div>';
+      });
+
+      html += '</div>';
+      container.innerHTML = html;
+
+      if (results.length === 1) {
+        populateForm(results[0].tmdb_id, results[0].title);
+      }
+    }
+
+    document.getElementById('search-results').addEventListener('click', function(e) {
+      const btn = e.target.closest('.select-movie-btn');
+      if (!btn) return;
+
+      const tmdbId = btn.dataset.tmdbId;
+      const title = btn.dataset.title;
+
+      populateForm(tmdbId, title);
+
+      document.getElementById('search-results').innerHTML =
+        '<div class="alert alert-info">Selected: <strong>' + title + '</strong>. IMDB ID is being filled in below.</div>';
+    });
+
+    document.getElementById('search-btn').addEventListener('click', function() {
+      const title = document.getElementById('movie-search-input').value.trim();
+      if (!title) return;
+
+      const container = document.getElementById('search-results');
+      container.innerHTML = '<p><em>Searching&hellip;</em></p>';
+
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('csrfmiddlewaretoken', csrfToken);
+
+      fetch('/movies/search-movie/', {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+      .then(response => response.json())
+      .then(data => renderResults(data.results || [], title))
+      .catch(function() {
+        container.innerHTML = '<div class="alert alert-danger">Search failed. Please try again.</div>';
+      });
+    });
+
+    document.getElementById('movie-search-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') document.getElementById('search-btn').click();
+    });
+
+    document.getElementById('clear-btn').addEventListener('click', function() {
+      document.getElementById('movie-search-input').value = '';
+      document.getElementById('search-results').innerHTML = '';
+      document.getElementById('add-movie-form').reset();
+      updateLetterboxdLink(null);
+    });
+  </script>
 {% endblock %}
