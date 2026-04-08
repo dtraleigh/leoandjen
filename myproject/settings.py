@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "capitals",
     "data",
     "videos",
+    "game_randomizer",
 ]
 
 MIDDLEWARE = [
