@@ -1,0 +1,111 @@
+{% extends "randomizer_base.html" %}
+{% load static %}
+
+{% block title %}{{ game.title }} - Game Randomizer{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <a href="{% url 'game_randomizer:randomizer' %}" class="btn btn-sm btn-outline-secondary mb-3">
+        &larr; Back to Randomizer
+    </a>
+
+    <div class="row">
+        <!-- Left: Game image -->
+        <div class="col-lg-4 mb-4">
+            <img
+                src="{{ game.image_url|default:'' }}"
+                alt="{{ game.title }}"
+                class="game-image mb-3"
+                onerror="this.src='{% static 'img/no-image.svg' %}'"
+            >
+            {% if not game.image_url %}
+            <script>
+                document.querySelector('.game-image').src = "{% static 'img/no-image.svg' %}";
+            </script>
+            {% endif %}
+        </div>
+
+        <!-- Middle: Game info -->
+        <div class="col-lg-4 mb-4">
+            <h1 class="game-title">{{ game.title }}</h1>
+
+            <p class="game-developer">
+                by <a href="{{ game.developer_url }}" target="_blank" rel="noopener">{{ game.developer }}</a>
+            </p>
+
+            {% if game.description %}
+            <p class="game-description">{{ game.description }}</p>
+            {% endif %}
+
+            {% if game.category_tag %}
+            <span class="badge badge-tag">{{ game.category_tag }}</span>
+            {% endif %}
+
+            {% if game.platforms %}
+            <div class="game-platforms mt-2">
+                {% for platform in game.platforms %}
+                <span class="badge badge-platform">{{ platform }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if game.bundles.all %}
+            <div class="game-bundles mt-3">
+                <small class="text-muted">From bundle{{ game.bundles.count|pluralize }}:</small>
+                {% for bundle in game.bundles.all %}
+                <br><small><a href="{{ bundle.url }}" target="_blank" rel="noopener" class="bundle-link">{{ bundle.name }}</a></small>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="mt-3">
+                <a href="{{ game.game_url }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">
+                    View on itch.io
+                </a>
+            </div>
+        </div>
+
+        <!-- Right: Review section -->
+        <div class="col-lg-4 mb-4">
+            <div class="review-section">
+                <h3 class="review-heading">Your Review</h3>
+
+                <div class="star-rating mb-3" id="starRating">
+                    <span class="star" data-value="1">&#9733;</span>
+                    <span class="star" data-value="2">&#9733;</span>
+                    <span class="star" data-value="3">&#9733;</span>
+                    <span class="rating-label" id="ratingLabel">
+                        {% if review and review.rating %}
+                            {{ review.rating }} / 3
+                        {% else %}
+                            Not rated
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <label for="reviewNotes" class="text-muted">Notes</label>
+                    <textarea
+                        id="reviewNotes"
+                        class="form-control review-textarea"
+                        rows="4"
+                        placeholder="What did you think of this game?"
+                    >{% if review %}{{ review.notes }}{% endif %}</textarea>
+                </div>
+
+                <button id="saveReviewBtn" class="btn btn-primary mt-2">Save Review</button>
+                <span id="saveStatus" class="save-status ml-2"></span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const SAVE_URL = "{% url 'game_randomizer:save_review' game.id %}";
+    const CSRF_TOKEN = "{{ csrf_token }}";
+    const INITIAL_RATING = {{ review.rating|default:"null" }};
+</script>
+<script src="{% static 'js/game_detail.js' %}"></script>
+{% endblock %}

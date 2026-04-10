@@ -67,7 +67,7 @@ User notes and rating for a game.
 
 **Usage:**
 ```bash
-python manage.py scrape_bundle <bundle_url> [--limit N] [--dry-run] [--no-headless]
+python manage.py scrape_bundle <bundle_url> [--limit N] [--dry-run] [--no-headless] [--update]
 ```
 
 **Arguments:**
@@ -77,6 +77,7 @@ python manage.py scrape_bundle <bundle_url> [--limit N] [--dry-run] [--no-headle
 | `--limit N`    | Optional. Only scrape the first N games (for testing).             |
 | `--dry-run`    | Optional. Parse and print games but don't write to the database.   |
 | `--no-headless`| Optional. Launch the browser visibly so you can watch Playwright scrape. Headless by default. |
+| `--update`     | Optional. Update existing games with freshly scraped data (e.g. to backfill missing images). |
 
 **Behavior:**
 1. Launch Playwright browser (Chromium). Headless by default; pass `--no-headless` to open a visible browser window for debugging.
@@ -97,20 +98,21 @@ python manage.py scrape_bundle <bundle_url> [--limit N] [--dry-run] [--no-headle
      ...
      Scroll pass 48: 1,439 games loaded. No new games after scroll — grid complete.
      ```
-7. For each game cell, extract:
+6b. **Image loading scroll:** After all game cells are loaded, scroll back through the page in viewport-sized steps to trigger lazy loading on all images. Without this, images below the initial viewport have empty `src` attributes.
+7. For each game cell, extract (via a single `page.evaluate()` JS call for performance):
    - `data-game_id` → `itch_game_id`
-   - `.title` text and href → `title`, `game_url`
+   - `a.title` text and href → `title`, `game_url`
    - `.user_link` text and href → `developer`, `developer_url`
-   - `.sub.short_text` text → `description`
-   - `.sub.cell_tags a` text → `category_tag` (if present; not all games have one)
-   - `img` src → `image_url`
-   - Platform icons (`.icon-windows8`, `.icon-apple`, `.icon-tux`, etc.) → `platforms` list
+   - `.sub.short_text, .short_text` text → `description`
+   - `.cell_tags a` text → `category_tag` (if present; not all games have one)
+   - `img` src → `image_url` (note: browser decodes `%23` to `#` in URLs; re-encode after extraction)
+   - Platform icons (`[class*="icon-"]`, dynamically collected) → `platforms` list
    - **Per-game error handling:** If any required field (`itch_game_id`, `title`, `game_url`) is missing or unparseable, log a warning with as much identifying info as possible and skip the game:
      ```
      [WARNING] Skipped game cell — missing title (data-game_id: 366363)
      [WARNING] Skipped game cell — could not parse data-game_id (position 247 in grid)
      ```
-8. **Deduplication:** Use `itch_game_id` to `get_or_create`. If the game already exists, just add the current bundle to its M2M `bundles` field.
+8. **Deduplication:** Use `itch_game_id` to `get_or_create`. If the game already exists, just add the current bundle to its M2M `bundles` field. With `--update`, existing games are compared field-by-field and saved if any field changed.
 9. **Final summary with verification:**
    ```
    === Scrape Summary ===
@@ -118,9 +120,17 @@ python manage.py scrape_bundle <bundle_url> [--limit N] [--dry-run] [--no-headle
    Expected items:   1,439
    Games scraped:    1,439
    New games added:  1,204
-   Already existed:  235
+   Updated:          50
+   Already existed:  185
    Skipped (errors): 0
+   Missing images:   7
+
+   Games missing images:
+     - "Some Game" by Developer (ID: 12345)
+     ...
+
    Status:           ✓ OK — scraped count matches expected.
+   Time taken:       3m 45s
    ```
    If the counts don't match:
    ```
@@ -220,12 +230,19 @@ Local machine                          Shared host (server)
 ```
 
 ### Phase 1 Deliverables
-- [ ] Models with migrations
-- [ ] Admin registrations with search/filter
-- [ ] Working `scrape_bundle` command with `--limit`, `--dry-run`, and `--no-headless`
-- [ ] `export_games` management command
-- [ ] `import_games` management command with `--dry-run`
-- [ ] Requirements: add `playwright` to `requirements_local.txt` only (not `requirements_server.txt`). Run `playwright install chromium` locally after install.
+- [x] Models with migrations
+- [x] Admin registrations with search/filter
+- [x] Working `scrape_bundle` command with `--limit`, `--dry-run`, and `--no-headless`
+- [x] `export_games` management command
+- [x] `import_games` management command with `--dry-run`
+- [x] Requirements: add `playwright` to `requirements_local.txt` only (not `requirements_server.txt`). Run `playwright install chromium` locally after install.
+
+### Phase 1 Implementation Notes
+- Game data extraction uses a single `page.evaluate()` JS call for performance (avoids per-cell Playwright IPC round-trips).
+- `DJANGO_ALLOW_ASYNC_UNSAFE` is set in the scrape command to work around Playwright's event loop conflicting with Django's async safety check.
+- Browser launches maximized (`--start-maximized` + `no_viewport=True`) for reliable rendering.
+- Scraper waits for `.game_cell` selector (30s timeout) before starting scroll loop to handle lazy-loaded pages.
+- All output lines are timestamped; final summary includes total elapsed time.
 
 ---
 
@@ -238,28 +255,50 @@ Local machine                          Shared host (server)
 
 ### User Flow
 1. User visits the randomizer page (`/randomizer/`).
-2. User selects how many games to pick: **1**, **2**, or **3** (toggle buttons or selector).
-3. Optionally, user can toggle **"Unplayed only"** to exclude games that already have a rating.
-4. User clicks **"Spin!"** (or equivalent).
-5. A slot-machine-style animation plays:
-   - Game thumbnails scroll rapidly through a visible "reel."
-   - The reel(s) decelerate and land on the selected game(s).
-   - If picking multiple games, show multiple reels side by side.
-6. The selected game(s) are revealed with their title, image, developer, and description.
-7. Each result card links to the game's detail/review page.
+2. A **dashboard panel** at the top shows total games, reviewed count, unplayed count, and 1/2/3-star rating distribution.
+3. The page always picks **3** games (no count selector).
+4. Optionally, user can toggle **"Unplayed only"** to exclude games that already have a rating.
+5. Optionally, user can click **category pills** to exclude one or more categories from the random pool. All categories are included by default; clicking a pill toggles it to an excluded (dashed border, strikethrough) state.
+6. User clicks **"Spin!"**.
+7. A slot-machine-style animation plays:
+   - Three large side-by-side reels scroll rapidly through game thumbnails.
+   - The reels decelerate in a staggered cascade and land on the selected games.
+8. The selected games are revealed in a distinct **"Your Picks"** results panel (purple-bordered, gradient background) below the reels, with each card aligned beneath its corresponding reel.
+9. Each result card links to the game's detail/review page and to itch.io.
 
 ### Technical Approach
-- **Backend:** A simple Django view serves the page. An API endpoint (`/randomizer/api/spin/`) accepts a `count` (1–3) and `unplayed_only` (bool), returns that many random `Game` records as JSON.
+- **Backend:** A simple Django view serves the page. An API endpoint (`/randomizer/api/spin/`) accepts a `count` (1–3), `unplayed_only` (bool), and zero or more `exclude_category` query params, returns that many random `Game` records as JSON.
 - **Frontend:** Vanilla JS + CSS animations for the slot machine effect. The page pre-fetches a pool of game images/titles on load to populate the reel animation, then swaps in the real results at the end.
-- **Randomization:** Use `Game.objects.order_by('?')[:count]` or `random.sample()` on IDs for better performance on large sets.
+- **Randomization:** Use `random.sample()` on a filtered ID list (avoids `ORDER BY RANDOM()` on large sets).
 
 ### Deliverables
-- [ ] Randomizer page view + template
-- [ ] `/api/spin/` JSON endpoint
-- [ ] Slot machine animation (CSS + JS)
-- [ ] Selection UI for 1/2/3 games
-- [ ] "Unplayed only" filter toggle
-- [ ] Responsive layout
+- [x] Randomizer page view + template
+- [x] `/api/spin/` JSON endpoint
+- [x] Slot machine animation (CSS + JS)
+- [x] Fixed 3-reel layout
+- [x] "Unplayed only" filter toggle
+- [x] Category exclusion pills
+- [x] Dashboard stats panel
+- [x] Distinct "Your Picks" results section
+- [x] Responsive layout
+
+### Phase 2 Implementation Notes
+- Spin endpoint uses GET (idempotent read, no CSRF needed). Randomization via `random.sample()` on ID list.
+- "Unplayed" filter: `Q(review__isnull=True) | Q(review__rating__isnull=True)`.
+- Category exclusion: API reads `request.GET.getlist("exclude_category")` and applies `.exclude(category_tag__in=excluded)`.
+- Filler pool: 20 random games with images pre-fetched on page load, embedded as JSON in template context.
+- Slot machine animation is three-phase per reel: accelerate (3s), cruise at constant speed (2s), decelerate with cubic ease-out (remaining time). Reel 1 = 10s, Reel 2 = 15s, Reel 3 = 20s. Strip wraps continuously to keep tiles visible.
+- Layout uses a fluid container with three large flex reels that share most of the page width (`max-width: 480px` per reel on desktop, scaling down via CSS breakpoints at 992px and 768px). Reel count is hard-coded to 3 — no count selector.
+- Tile height is read dynamically from rendered DOM at spin time so the animation works correctly across all responsive breakpoints. Reels rebuild on window resize (debounced 200ms) to keep tile geometry in sync.
+- Unplayed toggle and category pills are disabled during spin.
+- Custom-styled pill toggle replaces Bootstrap's `custom-switch` for the unplayed control — larger 56×30 track with glow on active.
+- Category pills sit on a single non-wrapping row. Active pills are solid purple; excluded pills use a transparent background with dashed dark-red border, strikethrough text, and reduced opacity for clear visual contrast.
+- Page layout below the heading: dashboard stats (centered), Spin button, unplayed toggle, category pills, reels, results section.
+- Games with no image use a placeholder SVG (`static/img/no-image.svg`); also used as `onerror` fallback.
+- Results section is wrapped in a `<section>` with its own gradient background, purple border, and "YOUR PICKS" heading. Result cards use the same flex layout as the reels (`flex: 1 1 0`, `max-width: 480px`) so each card aligns vertically under its reel.
+- Result cards link to the game detail page and to itch.io.
+- Dark theme with purple accent (#6c63ff) matching the reel styling.
+- Bootstrap 4.6.2 loaded from data app's static files (no duplication).
 
 ---
 
@@ -288,11 +327,16 @@ Local machine                          Shared host (server)
 - **Frontend:** Interactive star rating using CSS + minimal JS (no heavy libraries). Stars visually highlight on hover and lock on click.
 
 ### Deliverables
-- [ ] Game detail view + template
-- [ ] Star rating widget (interactive, 3-star)
-- [ ] Notes textarea with save functionality
-- [ ] Visual indicators for rated vs. unrated games
-- [ ] Link to itch.io game page
+- [x] Game detail view + template
+- [x] Star rating widget (interactive, 3-star)
+- [x] Notes textarea with save functionality
+- [x] Visual indicators for rated vs. unrated games
+- [x] Link to itch.io game page
+
+### Phase 3 Implementation Notes
+- Three-column layout: image (left), info (middle), review form (right) — stacks vertically on small screens.
+- Star widget uses click handlers to set rating; clicking the active star clears it.
+- Save uses AJAX POST to `/randomizer/game/<id>/review/` with CSRF token; status indicator fades in/out.
 
 ---
 
@@ -304,12 +348,11 @@ Local machine                          Shared host (server)
 
 ### Features
 - **Game list page** (`/randomizer/games/`):
-  - Grid view showing game thumbnails, titles, and rating status
+  - Sortable table with columns: #, Title, Developer (linked), Category, Platform (icons), Rating
   - Search by title or developer
-  - Filter by: bundle, rating status (unrated / 1 / 2 / 3 stars), platform
-  - Sort by: title, date added, rating
-  - Pagination or infinite scroll
-- **Dashboard stats** (optional, on the main randomizer page):
+  - Filter by: bundle, category, rating status (unrated / 1 / 2 / 3 stars), platform
+  - All columns sortable by clicking the header
+- **Dashboard stats** on the main randomizer page:
   - Total games in DB
   - Games reviewed vs. unreviewed
   - Rating distribution
@@ -319,11 +362,27 @@ Local machine                          Shared host (server)
   - Loading states and error handling
 
 ### Deliverables
-- [ ] Game list view with search and filters
-- [ ] Pagination
-- [ ] Dashboard stats widget
-- [ ] Responsive styling pass
-- [ ] Error/empty states
+- [x] Game list view with search and filters
+- [x] Sortable table columns
+- [x] Category dropdown filter
+- [x] Platform icons (Windows / macOS / Linux / Android)
+- [x] Dashboard stats widget on randomizer page
+- [x] Responsive styling pass
+- [x] Error/empty states
+
+### Phase 4 Implementation Notes
+- Game list page is a sortable table with columns: #, Title, Developer, Category, Platform, Rating.
+- Title links to the game detail page; Developer links to the developer's itch.io profile.
+- Platform column renders SVG icons for `windows`/`windows8`, `apple`/`osx`/`macos`, `tux`/`linux`, and `android`. Unknown platform values fall back to displaying the raw string. Games with no platform data show a hyphen.
+- Rating column shows three gold/dark stars or "No Rating".
+- All columns sort client-side; rating sorts by numeric value (using `data-rating` attribute on the row), the rest sort alphabetically. The `#` column re-numbers visible rows after each sort.
+- Search filters by title or developer (case-insensitive substring).
+- Filter dropdowns: **bundle**, **category**, **rating** (any/unrated/1/2/3), **platform**. A Clear button resets all filters.
+- All filtering/sorting happens client-side over the full row set — no pagination needed at current scale (~1.5k rows).
+- Distinct category list for the dropdown is built with `.order_by().values_list().distinct()` — the explicit `.order_by()` is required to clear `Game.Meta.ordering = ["title"]`, otherwise Django includes `title` in the SELECT and breaks the distinct.
+- Empty state shows when filters return no rows; visible row count updates live ("Showing X of Y games").
+- Dashboard stats on randomizer page show: total games, reviewed, unplayed, and 1/2/3-star rating distribution. Centered with `width: fit-content` + `margin: auto`.
+- Top nav bar links to the Game List page. The "Game Randomizer" brand acts as the link back to the randomizer, so a separate Randomizer nav link is unnecessary.
 
 ---
 

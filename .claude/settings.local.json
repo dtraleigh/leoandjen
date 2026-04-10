@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python manage.py makemigrations game_randomizer)",
+      "Bash(python manage.py migrate)",
+      "Bash(python manage.py scrape_bundle --help)",
+      "Bash(python manage.py export_games --help)",
+      "Bash(python manage.py import_games --help)",
+      "Bash(python manage.py check)",
+      "Bash(python:*)"
+    ]
+  }
+}

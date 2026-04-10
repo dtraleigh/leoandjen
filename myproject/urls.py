@@ -15,4 +15,5 @@ urlpatterns = [
     path("capitals/", include("capitals.urls")),
     path("data/", include("data.urls")),
     path("videos/", include("videos.urls")),
+    path("randomizer/", include("game_randomizer.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

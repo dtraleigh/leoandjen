@@ -1,0 +1,101 @@
+{% extends "randomizer_base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid mt-4 px-4">
+    <div class="text-center mb-4">
+        <h1 class="mb-3">Game Randomizer</h1>
+
+        <div class="dashboard-stats mb-3">
+            <div class="stat-row">
+                <div class="stat-item">
+                    <span class="stat-value">{{ total_games }}</span>
+                    <span class="stat-label">Total games</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">{{ reviewed_count }}</span>
+                    <span class="stat-label">Reviewed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">{{ unplayed_count }}</span>
+                    <span class="stat-label">Unplayed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">
+                        <span class="rating-bar"><span class="star-filled">&#9733;</span> {{ rating_distribution.one }}</span>
+                    </span>
+                    <span class="stat-label">1 star</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">
+                        <span class="rating-bar"><span class="star-filled">&#9733;&#9733;</span> {{ rating_distribution.two }}</span>
+                    </span>
+                    <span class="stat-label">2 stars</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">
+                        <span class="rating-bar"><span class="star-filled">&#9733;&#9733;&#9733;</span> {{ rating_distribution.three }}</span>
+                    </span>
+                    <span class="stat-label">3 stars</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <button id="spinBtn" class="btn btn-primary btn-lg px-5 spin-btn">
+                Spin!
+            </button>
+        </div>
+
+        <!-- Unplayed toggle -->
+        <div class="unplayed-toggle-wrap mb-2">
+            <label class="toggle-switch" for="unplayedToggle">
+                <input type="checkbox" id="unplayedToggle">
+                <span class="toggle-track">
+                    <span class="toggle-thumb"></span>
+                </span>
+                <span class="toggle-label">Unplayed only</span>
+            </label>
+        </div>
+
+        <!-- Category exclusion filter -->
+        {% if categories %}
+        <div class="category-filter-wrap mb-2">
+            <div class="category-filter-label text-muted small mb-2">
+                Click a category to exclude it
+            </div>
+            <div class="category-pills" id="categoryPills">
+                {% for c in categories %}
+                <button type="button" class="category-pill active" data-category="{{ c }}">
+                    {{ c }}
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Reels -->
+    <div id="reelsContainer" class="reels-container mb-4">
+        <!-- Reel windows are created dynamically by JS -->
+    </div>
+
+    <!-- Results (shown after spin) -->
+    <section id="resultsSection" class="results-section mb-5" style="display: none;">
+        <h2 class="results-heading">Your Picks</h2>
+        <div id="resultsContainer" class="results-container">
+            <!-- Result cards injected by JS -->
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const FILLER_POOL = {{ filler_pool_json|safe }};
+    const SPIN_URL = "{% url 'game_randomizer:api_spin' %}";
+    const PLACEHOLDER_IMG = "{% static 'img/no-image.svg' %}";
+    const DETAIL_URL_BASE = "/randomizer/game/";
+</script>
+<script src="{% static 'js/randomizer.js' %}"></script>
+{% endblock %}

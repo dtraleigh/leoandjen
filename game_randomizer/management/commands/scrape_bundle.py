@@ -29,6 +29,11 @@ class Command(BaseCommand):
             action="store_true",
             help="Launch the browser visibly so you can watch Playwright scrape",
         )
+        parser.add_argument(
+            "--update",
+            action="store_true",
+            help="Update existing games with freshly scraped data",
+        )
 
     def handle(self, *args, **options):
         from playwright.sync_api import sync_playwright
@@ -45,11 +50,11 @@ class Command(BaseCommand):
             page = browser.new_page(no_viewport=True)
 
             try:
-                self._scrape(page, bundle_url, limit, dry_run)
+                self._scrape(page, bundle_url, limit, dry_run, options["update"])
             finally:
                 browser.close()
 
-    def _scrape(self, page, bundle_url, limit, dry_run):
+    def _scrape(self, page, bundle_url, limit, dry_run, update):
         self._start_time = time.monotonic()
 
         page.goto(bundle_url, wait_until="domcontentloaded")
@@ -111,6 +116,12 @@ class Command(BaseCommand):
         # Process results
         new_count = 0
         existing_count = 0
+        updated_count = 0
+
+        fields_to_update = [
+            "title", "developer", "developer_url", "description",
+            "category_tag", "image_url", "game_url", "platforms",
+        ]
 
         for data in games_data:
             if dry_run:
@@ -140,8 +151,23 @@ class Command(BaseCommand):
                 game.bundles.add(bundle)
                 if created:
                     new_count += 1
+                elif update:
+                    changed = False
+                    for field in fields_to_update:
+                        if getattr(game, field) != data[field]:
+                            setattr(game, field, data[field])
+                            changed = True
+                    if changed:
+                        game.save()
+                        updated_count += 1
+                    else:
+                        existing_count += 1
                 else:
                     existing_count += 1
+
+        games_missing_images = [
+            d for d in games_data if not d.get("image_url")
+        ]
 
         # Print summary
         self._print_summary(
@@ -150,7 +176,9 @@ class Command(BaseCommand):
             total_scraped=len(games_data),
             new_count=new_count,
             existing_count=existing_count,
+            updated_count=updated_count,
             skipped=skipped,
+            games_missing_images=games_missing_images,
             dry_run=dry_run,
             limit=limit,
         )
@@ -189,6 +217,19 @@ class Command(BaseCommand):
             page.evaluate("window.scrollBy(0, document.body.scrollHeight)")
             page.wait_for_timeout(2000)
 
+        # Scroll back through the page to trigger lazy loading on all images
+        self._log("Scrolling back through page to load all images...")
+        page.evaluate("window.scrollTo(0, 0)")
+        page.wait_for_timeout(500)
+        total_height = page.evaluate("document.body.scrollHeight")
+        scroll_step = page.evaluate("window.innerHeight") or 800
+        position = 0
+        while position < total_height:
+            position += scroll_step
+            page.evaluate(f"window.scrollTo(0, {position})")
+            page.wait_for_timeout(300)
+        self._log("Image loading scroll complete.")
+
         return
 
     def _extract_all_games(self, page, limit):
@@ -224,7 +265,7 @@ class Command(BaseCommand):
                     developer_url: userEl ? userEl.getAttribute('href') || '' : '',
                     description: descEl ? descEl.innerText.trim() : '',
                     category_tag: tagEl ? tagEl.innerText.trim() : '',
-                    image_url: imgEl ? imgEl.getAttribute('src') || '' : '',
+                    image_url: imgEl ? imgEl.getAttribute('data-lazy_src') || imgEl.getAttribute('src') || '' : '',
                     platforms: platforms,
                 };
             });
@@ -262,10 +303,13 @@ class Command(BaseCommand):
         total_scraped,
         new_count,
         existing_count,
+        updated_count,
         skipped,
+        games_missing_images,
         dry_run,
         limit,
     ):
+        missing_images = len(games_missing_images)
         elapsed = time.monotonic() - self._start_time
         minutes, seconds = divmod(int(elapsed), 60)
 
@@ -280,6 +324,7 @@ class Command(BaseCommand):
             self._log(f"Would create:     {new_count:,}")
             self._log(f"Already in DB:    {existing_count:,}")
             self._log(f"Skipped (errors): {skipped:,}")
+            self._log(f"Missing images:   {missing_images:,}")
         else:
             self._log("=== Scrape Summary ===")
             self._log(f'Bundle:           "{bundle_name}"')
@@ -287,8 +332,10 @@ class Command(BaseCommand):
                 self._log(f"Expected items:   {expected_count:,}")
             self._log(f"Games scraped:    {total_scraped:,}")
             self._log(f"New games added:  {new_count:,}")
+            self._log(f"Updated:          {updated_count:,}")
             self._log(f"Already existed:  {existing_count:,}")
             self._log(f"Skipped (errors): {skipped:,}")
+            self._log(f"Missing images:   {missing_images:,}")
 
             if expected_count and not limit:
                 if total_scraped == expected_count:
@@ -313,5 +360,19 @@ class Command(BaseCommand):
                     self._log(
                         "                  warnings above for skipped games."
                     )
+
+        if games_missing_images:
+            shown = games_missing_images[:10]
+            self._log("")
+            self._log("Games missing images:")
+            for g in shown:
+                self._log(
+                    f"  - \"{g['title']}\" by {g['developer']} "
+                    f"(ID: {g['itch_game_id']})"
+                )
+            if len(games_missing_images) > 10:
+                self._log(
+                    f"  ... and {len(games_missing_images) - 10} more"
+                )
 
         self._log(f"Time taken:       {minutes}m {seconds}s")

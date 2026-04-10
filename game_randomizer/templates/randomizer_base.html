@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}Game Randomizer{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'bootstrap4.6.2/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/randomizer.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="{% url 'game_randomizer:randomizer' %}">
+            Game Randomizer
+        </a>
+        <ul class="navbar-nav px-3 flex-row">
+            <li class="nav-item text-nowrap px-2">
+                <a class="nav-link" href="{% url 'game_randomizer:game_list' %}">Game List</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav px-3 ml-auto flex-row">
+            {% if user.is_authenticated %}
+            <li class="nav-item text-nowrap px-2">
+                <span class="nav-link text-muted">{{ user.username }}</span>
+            </li>
+            <li class="nav-item text-nowrap px-2">
+                <a class="nav-link" href="/admin/">Admin</a>
+            </li>
+            {% else %}
+            <li class="nav-item text-nowrap px-2">
+                <a class="nav-link" href="/admin/">Login</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <script src="{% static 'js/jquery3.5.1/jquery-3.5.1.slim.min.js' %}"></script>
+    <script src="{% static 'bootstrap4.6.2/bootstrap.min.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
