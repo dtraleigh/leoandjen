@@ -31,7 +31,7 @@
       {% if movie.comments %}<p>Additional: {{ movie.comments }}</p>{% endif %}
       <p>
         {% for format in movie.formats.all %}
-          <img src="{% static "img" %}/{{ format.name }}.png" style="width:48px;">
+          {% if format.image %}<img src="{{ format.image.url }}" style="width:48px;">{% endif %}
         {% endfor %}
       </p>
       <p>

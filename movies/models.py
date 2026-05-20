@@ -46,6 +46,7 @@ class Format(models.Model):
     name = models.CharField(max_length=50, unique=True)
     is_physical = models.BooleanField(default=False)
     is_streaming = models.BooleanField(default=False)
+    image = models.ImageField(upload_to="format_icons/", blank=True, null=True)
 
     def __str__(self):
         return self.name

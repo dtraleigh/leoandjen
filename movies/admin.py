@@ -10,7 +10,7 @@ class MovieAdmin(admin.ModelAdmin):
 
 
 class FormatAdmin(admin.ModelAdmin):
-    list_display = ("name",)
+    list_display = ("name", "image")
 
 
 class APIUserAdmin(admin.ModelAdmin):

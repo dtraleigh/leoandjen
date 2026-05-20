@@ -11,7 +11,7 @@
   </div>
   <div class="card-body formats">
     {% for format in movie.formats.all %}
-      <img src="{% static "img" %}/{{ format.name }}.png" style="width:25px;">
+      {% if format.image %}<img src="{{ format.image.url }}" style="width:25px;">{% endif %}
     {% endfor %}
   </div>
 </div>
