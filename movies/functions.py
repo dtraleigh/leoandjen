@@ -75,7 +75,7 @@ def get_movies(search, sort, movie_format_filter, order_by=None):
 
     if search:
         if search.lower() == "3d":
-            movie_list = movie_list.filter(formats__name="3d")
+            movie_list = movie_list.filter(formats__name__icontains="3d").distinct()
         else:
             movie_list = movie_list.filter(Q(title__icontains=search) | Q(comments__icontains=search))
 

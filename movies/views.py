@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import Q
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
@@ -66,10 +65,7 @@ def filter_bd(request):
 
 def filter_streaming(request):
     streaming_movies = Movie.objects.filter(
-        Q(formats__name="amz") |
-        Q(formats__name="vudu") |
-        Q(formats__name="ma") |
-        Q(formats__name="g_play")).distinct().order_by("sort_title")
+        formats__is_streaming=True).distinct().order_by("sort_title")
     breadcrumb = "Streaming Titles (" + str(len(streaming_movies)) + ")"
     sort_label = "Alphabetical"
 

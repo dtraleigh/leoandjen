@@ -142,43 +142,7 @@ def gas(request):
                                          "warning": warning})
 
 
-def electricity(request):
-    # Create a list of years based on the string the user provides or use default
-    years_range_request_str = request.GET.get("years")
-    years_range_str = clean_year_range_request(years_range_request_str, "Electricity")
-    years_list = convert_years_string_to_years_list(years_range_str)
 
-    # Only support 8 years so if there are more, send the user a warning and only send the most recent 8.
-    warning = ""
-    if len(years_list) > 8:
-        years_list = years_list[-8:]
-        warning += "More than 8 years requested. Only showing most recent 8.\n"
-
-    # Make a class for each year then remove classes that have no data
-    requested_yearly_datasets = [ElecYear(year, colors[count]) for count, year in enumerate(years_list)]
-    dataset_lacking_energy_rates = []
-    for dataset in list(requested_yearly_datasets):
-        if not dataset.readings:
-            requested_yearly_datasets.remove(dataset)
-            continue
-        if dataset.is_lacking_energy_rates():
-            dataset_lacking_energy_rates.append(dataset)
-
-    if dataset_lacking_energy_rates:
-        warning = f"Some years are lacking energy rates: {str(dataset_lacking_energy_rates)}"
-
-    # Add the average line
-    elec_avg_line = create_avg_line_data("Electricity")
-
-    most_recent = Electricity.objects.latest("service_end_date")
-    solar_savings_total = f"${sum([s.get_solar_savings_sum() for s in requested_yearly_datasets])}"
-
-    return render(request, "elec.html", {"years_range": years_range_str,
-                                         "yearly_datasets": requested_yearly_datasets,
-                                         "avg_line": elec_avg_line,
-                                         "most_recent": most_recent,
-                                         "solar_savings_total": solar_savings_total,
-                                         "warning": warning})
 
 
 def car_miles(request):
