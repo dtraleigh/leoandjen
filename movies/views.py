@@ -39,7 +39,7 @@ def home(request):
 
 def filter_4k(request):
     sort = request.GET.get("sort")
-    uhd_movies, search, sort, sort_arrow = get_movies(None, sort, "4k", None)
+    uhd_movies, search, sort, sort_arrow = get_movies(None, sort, "4K Blu-Ray", None)
     breadcrumb = "4K Titles (" + str(len(uhd_movies)) + ")"
     sort_label = "Alphabetical"
 
@@ -52,7 +52,7 @@ def filter_4k(request):
 
 def filter_bd(request):
     sort = request.GET.get("sort")
-    bd_movies, search, sort, sort_arrow = get_movies(None, sort, "blu_ray", None)
+    bd_movies, search, sort, sort_arrow = get_movies(None, sort, "Blu-Ray", None)
     breadcrumb = "Blu-Ray Titles (" + str(len(bd_movies)) + ")"
     sort_label = "Alphabetical"
 
@@ -76,7 +76,7 @@ def filter_streaming(request):
 
 def filter_plex(request):
     sort = request.GET.get("sort")
-    plex_movies, search, sort, sort_arrow = get_movies(None, sort, "plex", None)
+    plex_movies, search, sort, sort_arrow = get_movies(None, sort, "Plex", None)
     breadcrumb = "Titles on Plex (" + str(len(plex_movies)) + ")"
     sort_label = "Alphabetical"
 
