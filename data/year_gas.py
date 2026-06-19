@@ -65,7 +65,7 @@ class GasYear:
         # YTD should be total between Jan 1 and first of the current month
         # - Since we get data in chunks (the bills), not worrying about YTD daily values
         # - Therefore, YTD range is from Jan 1 up to current_month or the latest bill we have
-        datapoints = self.get_data_points()
+        datapoints = self.data_points
 
         ytd_total = 0
         for datapoint in datapoints:

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>LeoandJen Data</title>
+    
+    <link rel="shortcut icon" type="image/png" href="/static/img/data_favicon.png">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap4.6.2/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/static/css/data_dashboard.css" rel="stylesheet">
+    <link href="/static/DataTables/datatables.min.css" rel="stylesheet">
+    <style>
+    .card {
+      margin-bottom: 20px;
+    }
+    .card-green {
+      background-color: #d4edda;
+      border-color: #c3e6cb;
+    }
+    .card-gray {
+      background-color: #e2e3e5;
+      border-color: #d6d8db;
+    }
+    .card-red {
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
+    }
+  </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0 text-light" href="/data">Leo and Jen</a>
+      <ul class="d-flex ml-auto mb-0 list-unstyled">
+        <li class="nav-item text-nowrap px-2">
+          <a class="nav-link text-muted" href="/admin/">Login</a>
+        </li>
+        
+      </ul>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+  <div class="sidebar-sticky">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" href="/data">
+          <span data-feather="bar-chart-2"></span>
+          Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data/water">
+          <span data-feather="bar-chart-2"></span>
+          Water
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data/gas">
+          <span data-feather="bar-chart-2"></span>
+          Gas
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data/electricity">
+          <span data-feather="bar-chart-2"></span>
+          Electricity
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data/car_miles">
+          <span data-feather="bar-chart-2"></span>
+          Car Miles
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+        
+  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <h2>Overview</h2>
+    <div class="table-responsive">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>
+              <a href="/data/water">Water (Gallons)</a>
+            </th>
+            <th>
+              <a href="/data/gas">Gas (Therms)</a>
+            </th>
+            <th>
+              <a href="/data/electricity">Electricity (kWh)</a>**
+            </th>
+            <th>
+              <a href="/data/car_miles">VMT (miles)</a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Trending*</td>
+            
+              <td>
+                <span data-feather="arrow-down-right"></span>
+              </td>
+            
+            
+              <td>
+                <span data-feather="arrow-down-right"></span>
+              </td>
+            
+            
+              <td>
+                <span data-feather="arrow-down-right"></span>
+              </td>
+            
+            
+              <td>
+                <span data-feather="arrow-down-right"></span>
+              </td>
+            
+          </tr>
+          <tr>
+            <td>YTD Range</td>
+            <td>Jan 1 - Dec 2</td>
+            <td>Jan 1 - Dec 7</td>
+            <td>Jan 1 - Aug 8</td>
+            <td>Jan - Jan</td>
+          </tr>
+          <tr>
+            <td>YTD</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>617</td>
+          </tr>
+          <tr>
+            <td>Prev YTD</td>
+            <td>22583</td>
+            <td>183</td>
+            <td>5485</td>
+            <td>391</td>
+          </tr>
+          <tr>
+            <td>Prev YTD (all avg.)</td>
+            <td>25495</td>
+            <td>214</td>
+            <td>4682</td>
+            <td>831</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        *Trending is the direction against the current year's YTD value against all historical averages. "Prev YTD (all avg.)"
+      </p>
+      <p>
+        **Electricity shown is what we use regardless of solar. Total House energy = Grid Energy Consumed + Solar Produced - Solar energy sent to grid
+      </p>
+    </div>
+    <div class="row">
+      <div class="col col-xl-6">
+        <h3>Top Solar Production Days (All Time)</h3>
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Watts Produced</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>1</td>
+                <td>June 20, 2023</td>
+                <td>32000</td>
+              </tr>
+            
+              <tr>
+                <td>2</td>
+                <td>June 21, 2023</td>
+                <td>31999</td>
+              </tr>
+            
+              <tr>
+                <td>3</td>
+                <td>June 19, 2023</td>
+                <td>31997</td>
+              </tr>
+            
+              <tr>
+                <td>4</td>
+                <td>June 22, 2023</td>
+                <td>31995</td>
+              </tr>
+            
+              <tr>
+                <td>5</td>
+                <td>June 18, 2023</td>
+                <td>31991</td>
+              </tr>
+            
+              <tr>
+                <td>6</td>
+                <td>June 23, 2023</td>
+                <td>31987</td>
+              </tr>
+            
+              <tr>
+                <td>7</td>
+                <td>June 17, 2023</td>
+                <td>31981</td>
+              </tr>
+            
+              <tr>
+                <td>8</td>
+                <td>June 24, 2023</td>
+                <td>31975</td>
+              </tr>
+            
+              <tr>
+                <td>9</td>
+                <td>June 16, 2023</td>
+                <td>31968</td>
+              </tr>
+            
+              <tr>
+                <td>10</td>
+                <td>June 25, 2023</td>
+                <td>31960</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+      <div class="col col-xl-6">
+      <h3>Top Solar Production Days this Year</h3>
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Watts Produced</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </main>
+
+      </div>
+    </div>
+    <!-- Bootstrap -->
+    <script src="/static/js/jquery3.5.1/jquery-3.5.1.slim.min.js"></script>
+    <script src="/static/js/popper1.16.1/popper.min.js"></script>
+    <script src="/static/bootstrap4.6.2/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="/static/DataTables/datatables.min.js"></script>
+    <!-- Icons -->
+    <script src="/static/feather-icons4.29.0/feather.min.js"></script>
+    <script>feather.replace()</script>
+    <!-- Graphs -->
+    <script src="/static/js/chart.js3.7.1/chart.min.js"></script>
+    <script src="/static/js/moment2.29.4/moment%40%5E2.js"></script>
+    <script src="/static/js/moment2.29.4/chartjs-adapter-moment%40%5E1.js"></script>
+    <script type="text/javascript">
+      var chart_data = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+      datasets: [
+        
+        {
+          label: '',
+          fill: false,
+          type: "line",
+          borderColor: '',
+          borderWidth: '',
+          tension: 0.2,
+          data: []
+        }
+      ]
+    }
+    </script>
+    <script src="/static/js/myChart.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.7/sorting/natural.js"></script>
+    <script>
+      $(document).ready(function () {
+        $('#data_table_main').DataTable({
+        "order": [],
+        columnDefs: [
+          { type: 'natural', targets: '_all' }
+        ]
+        });
+        $('.dataTables_length').addClass('bs-select');
+      });
+    </script>
+  </body>
+</html>

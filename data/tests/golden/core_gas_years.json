@@ -1,0 +1,197 @@
+{
+  "2020": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": 31.0
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": 31.03
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": 31.93
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": 9.9
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": 7.13
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": 6.9
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": 3.1
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": 4.03
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": 3.0
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": 4.03
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": 6.9
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": 20.15
+      }
+    ],
+    "ytd_total": 159.1
+  },
+  "2021": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": 69.57
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": 30.22
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": 25.46
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": 35.05
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": 48.64
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": 16.51
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": 2.97
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": 3.76
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": 3.37
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": 6.7
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": 27.15
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": 31.04
+      }
+    ],
+    "ytd_total": 300.44
+  },
+  "2022": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": 56.04
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": 35.13
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": 25.52
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": 12.31
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": 4.77
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": 2.35
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": 2.72
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": 3.57
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": 4.82
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": 8.19
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": 22.45
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": 5.53
+      }
+    ],
+    "ytd_total": 183.4
+  }
+}

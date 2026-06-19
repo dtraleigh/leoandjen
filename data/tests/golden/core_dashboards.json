@@ -1,0 +1,38 @@
+{
+  "elec": {
+    "all_ytd_avg": 4682,
+    "measurement": "Kilowatt hours used (Grid)",
+    "overall_trend": "down",
+    "prev_ytd": 5485,
+    "title": "Electricity",
+    "ytd_range": "Jan 1 - Aug 8",
+    "ytd_total": 0
+  },
+  "gas": {
+    "all_ytd_avg": 214,
+    "measurement": "Therms per month",
+    "overall_trend": "down",
+    "prev_ytd": 183,
+    "title": "Natural Gas",
+    "ytd_range": "Jan 1 - Dec 7",
+    "ytd_total": 0
+  },
+  "vmt": {
+    "all_ytd_avg": 831,
+    "measurement": "Miles / Month",
+    "overall_trend": "down",
+    "prev_ytd": 391,
+    "title": "Vehicle Miles Traveled",
+    "ytd_range": "Jan - Jan",
+    "ytd_total": 617
+  },
+  "water": {
+    "all_ytd_avg": 25495,
+    "measurement": "Gallons per month",
+    "overall_trend": "down",
+    "prev_ytd": 22583,
+    "title": "Water",
+    "ytd_range": "Jan 1 - Dec 2",
+    "ytd_total": 0
+  }
+}

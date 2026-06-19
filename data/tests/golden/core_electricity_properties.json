@@ -1,0 +1,833 @@
+{
+  "1": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:13.54",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:28d0s",
+    "get_previous_month_bill_pk": 74,
+    "get_total_solar_produced": 0.0
+  },
+  "10": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:9.90",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 9,
+    "get_total_solar_produced": 0.0
+  },
+  "100": {
+    "bill_is_lacking_rates": false,
+    "get_daily_grid_usage": "Decimal:7.93",
+    "get_daily_solar_send": "Decimal:22.21",
+    "get_money_saved_by_solar": "Decimal:26.84",
+    "get_number_of_days": "timedelta:28d0s",
+    "get_previous_month_bill_pk": 99,
+    "get_total_solar_produced": 746.211
+  },
+  "101": {
+    "bill_is_lacking_rates": false,
+    "get_daily_grid_usage": "Decimal:8.77",
+    "get_daily_solar_send": "Decimal:15.68",
+    "get_money_saved_by_solar": "Decimal:32.89",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 100,
+    "get_total_solar_produced": 947.9
+  },
+  "109": {
+    "bill_is_lacking_rates": false,
+    "get_daily_grid_usage": "Decimal:13.91",
+    "get_daily_solar_send": "Decimal:13.66",
+    "get_money_saved_by_solar": "Decimal:54.35",
+    "get_number_of_days": "timedelta:32d0s",
+    "get_previous_month_bill_pk": 101,
+    "get_total_solar_produced": 1018.153
+  },
+  "11": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:14.74",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 10,
+    "get_total_solar_produced": 0.0
+  },
+  "110": {
+    "bill_is_lacking_rates": false,
+    "get_daily_grid_usage": "Decimal:16.41",
+    "get_daily_solar_send": "Decimal:13.83",
+    "get_money_saved_by_solar": "Decimal:52.94",
+    "get_number_of_days": "timedelta:29d0s",
+    "get_previous_month_bill_pk": 109,
+    "get_total_solar_produced": 864.598
+  },
+  "12": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:15.35",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 11,
+    "get_total_solar_produced": 0.0
+  },
+  "13": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:13.48",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:29d0s",
+    "get_previous_month_bill_pk": 12,
+    "get_total_solar_produced": 0.0
+  },
+  "14": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:13.87",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 13,
+    "get_total_solar_produced": 0.0
+  },
+  "15": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:11.97",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 14,
+    "get_total_solar_produced": 0.0
+  },
+  "16": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:13.48",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 15,
+    "get_total_solar_produced": 0.0
+  },
+  "17": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:15.87",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 16,
+    "get_total_solar_produced": 0.0
+  },
+  "18": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:24.16",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 17,
+    "get_total_solar_produced": 0.0
+  },
+  "19": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:25.87",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 18,
+    "get_total_solar_produced": 0.0
+  },
+  "2": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:8.23",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 1,
+    "get_total_solar_produced": 0.0
+  },
+  "20": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:26.83",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 19,
+    "get_total_solar_produced": 0.0
+  },
+  "21": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:18.84",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 20,
+    "get_total_solar_produced": 0.0
+  },
+  "22": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:13.20",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 21,
+    "get_total_solar_produced": 0.0
+  },
+  "23": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:11.26",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 22,
+    "get_total_solar_produced": 0.0
+  },
+  "24": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:16.10",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 23,
+    "get_total_solar_produced": 0.0
+  },
+  "25": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:14.89",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:28d0s",
+    "get_previous_month_bill_pk": 24,
+    "get_total_solar_produced": 0.0
+  },
+  "26": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:11.55",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 25,
+    "get_total_solar_produced": 0.0
+  },
+  "27": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:15.87",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 26,
+    "get_total_solar_produced": 0.0
+  },
+  "28": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:15.87",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 27,
+    "get_total_solar_produced": 0.0
+  },
+  "29": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:19.10",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 28,
+    "get_total_solar_produced": 0.0
+  },
+  "3": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:6.73",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 2,
+    "get_total_solar_produced": 0.0
+  },
+  "30": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:24.74",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 29,
+    "get_total_solar_produced": 0.0
+  },
+  "31": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:23.87",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 30,
+    "get_total_solar_produced": 0.0
+  },
+  "32": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:22.37",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 31,
+    "get_total_solar_produced": 0.0
+  },
+  "33": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:18.29",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 32,
+    "get_total_solar_produced": 0.0
+  },
+  "34": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:14.10",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 33,
+    "get_total_solar_produced": 0.0
+  },
+  "35": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:13.90",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 34,
+    "get_total_solar_produced": 0.0
+  },
+  "36": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:17.48",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 35,
+    "get_total_solar_produced": 0.0
+  },
+  "37": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:15.64",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:28d0s",
+    "get_previous_month_bill_pk": 36,
+    "get_total_solar_produced": 0.0
+  },
+  "38": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:11.77",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 37,
+    "get_total_solar_produced": 0.0
+  },
+  "39": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:14.63",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 38,
+    "get_total_solar_produced": 0.0
+  },
+  "4": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:12.19",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 3,
+    "get_total_solar_produced": 0.0
+  },
+  "40": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:11.39",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 39,
+    "get_total_solar_produced": 0.0
+  },
+  "41": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:21.13",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 40,
+    "get_total_solar_produced": 0.0
+  },
+  "42": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:25.65",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 41,
+    "get_total_solar_produced": 0.0
+  },
+  "43": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:24.61",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 42,
+    "get_total_solar_produced": 0.0
+  },
+  "44": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:27.47",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 43,
+    "get_total_solar_produced": 0.0
+  },
+  "45": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:21.81",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 44,
+    "get_total_solar_produced": 0.0
+  },
+  "46": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:13.17",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 45,
+    "get_total_solar_produced": 0.0
+  },
+  "47": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:13.84",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 46,
+    "get_total_solar_produced": 0.0
+  },
+  "48": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:16.42",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 47,
+    "get_total_solar_produced": 0.0
+  },
+  "49": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:15.68",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:28d0s",
+    "get_previous_month_bill_pk": 48,
+    "get_total_solar_produced": 0.0
+  },
+  "5": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:22.90",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 4,
+    "get_total_solar_produced": 0.0
+  },
+  "50": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:15.55",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 49,
+    "get_total_solar_produced": 0.0
+  },
+  "51": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:16.97",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 50,
+    "get_total_solar_produced": 0.0
+  },
+  "52": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:25.23",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 51,
+    "get_total_solar_produced": 0.0
+  },
+  "53": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:27.50",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 52,
+    "get_total_solar_produced": 0.0
+  },
+  "54": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:32.39",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 53,
+    "get_total_solar_produced": 0.0
+  },
+  "55": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:33.06",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 54,
+    "get_total_solar_produced": 0.0
+  },
+  "56": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:26.23",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 55,
+    "get_total_solar_produced": 0.0
+  },
+  "57": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:10.29",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 56,
+    "get_total_solar_produced": 0.0
+  },
+  "58": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:16.53",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 57,
+    "get_total_solar_produced": 0.0
+  },
+  "59": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:15.71",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 58,
+    "get_total_solar_produced": 0.0
+  },
+  "6": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:26.00",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 5,
+    "get_total_solar_produced": 0.0
+  },
+  "60": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:17.74",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 59,
+    "get_total_solar_produced": 0.0
+  },
+  "61": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:16.28",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:29d0s",
+    "get_previous_month_bill_pk": 60,
+    "get_total_solar_produced": 0.0
+  },
+  "62": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:16.16",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 61,
+    "get_total_solar_produced": 0.0
+  },
+  "63": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:17.00",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 62,
+    "get_total_solar_produced": 0.0
+  },
+  "64": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:24.10",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 63,
+    "get_total_solar_produced": 0.0
+  },
+  "65": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:27.60",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 64,
+    "get_total_solar_produced": 0.0
+  },
+  "66": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:36.45",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 65,
+    "get_total_solar_produced": 0.0
+  },
+  "67": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:26.74",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 66,
+    "get_total_solar_produced": 0.0
+  },
+  "68": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:19.33",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 67,
+    "get_total_solar_produced": 0.0
+  },
+  "69": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:20.58",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 68,
+    "get_total_solar_produced": 0.0
+  },
+  "7": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:30.42",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 6,
+    "get_total_solar_produced": 0.0
+  },
+  "70": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:16.17",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 69,
+    "get_total_solar_produced": 0.0
+  },
+  "71": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:8.32",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 70,
+    "get_total_solar_produced": 0.0
+  },
+  "72": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:2.94",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 71,
+    "get_total_solar_produced": 0.0
+  },
+  "73": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:1.95",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:37d0s",
+    "get_previous_month_bill_pk": 72,
+    "get_total_solar_produced": 0.0
+  },
+  "74": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:14.68",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": null,
+    "get_total_solar_produced": 0.0
+  },
+  "75": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:2.70",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 73,
+    "get_total_solar_produced": 0.0
+  },
+  "76": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:3.88",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:32d0s",
+    "get_previous_month_bill_pk": 75,
+    "get_total_solar_produced": 0.0
+  },
+  "77": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:9.41",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:29d0s",
+    "get_previous_month_bill_pk": 76,
+    "get_total_solar_produced": 0.0
+  },
+  "78": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:25.72",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:32d0s",
+    "get_previous_month_bill_pk": 79,
+    "get_total_solar_produced": 0.0
+  },
+  "79": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:25.60",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 77,
+    "get_total_solar_produced": 0.0
+  },
+  "8": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:22.00",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 7,
+    "get_total_solar_produced": 0.0
+  },
+  "80": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:33.87",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 78,
+    "get_total_solar_produced": 0.0
+  },
+  "81": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:14.73",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 82,
+    "get_total_solar_produced": 0.0
+  },
+  "82": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:13.90",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 83,
+    "get_total_solar_produced": 0.0
+  },
+  "83": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:19.33",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 80,
+    "get_total_solar_produced": 0.0
+  },
+  "84": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:23.18",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:34d0s",
+    "get_previous_month_bill_pk": 81,
+    "get_total_solar_produced": 0.0
+  },
+  "85": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:34.14",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:28d0s",
+    "get_previous_month_bill_pk": 84,
+    "get_total_solar_produced": 0.0
+  },
+  "86": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:21.38",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:29d0s",
+    "get_previous_month_bill_pk": 85,
+    "get_total_solar_produced": 0.0
+  },
+  "87": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:20.47",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 88,
+    "get_total_solar_produced": 0.0
+  },
+  "88": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:15.61",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 89,
+    "get_total_solar_produced": 0.0
+  },
+  "89": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:17.03",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 86,
+    "get_total_solar_produced": 0.0
+  },
+  "9": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:15.55",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 8,
+    "get_total_solar_produced": 0.0
+  },
+  "90": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:25.58",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:33d0s",
+    "get_previous_month_bill_pk": 87,
+    "get_total_solar_produced": 0.0
+  },
+  "91": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:25.45",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 92,
+    "get_total_solar_produced": 0.0
+  },
+  "92": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:28.72",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:29d0s",
+    "get_previous_month_bill_pk": 90,
+    "get_total_solar_produced": 0.0
+  },
+  "93": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:15.62",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:29d0s",
+    "get_previous_month_bill_pk": 94,
+    "get_total_solar_produced": 0.0
+  },
+  "94": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:17.45",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:31d0s",
+    "get_previous_month_bill_pk": 91,
+    "get_total_solar_produced": 0.0
+  },
+  "95": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:20.53",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:30d0s",
+    "get_previous_month_bill_pk": 93,
+    "get_total_solar_produced": 0.0
+  },
+  "96": {
+    "bill_is_lacking_rates": true,
+    "get_daily_grid_usage": "Decimal:29.82",
+    "get_daily_solar_send": "Decimal:0.00",
+    "get_number_of_days": "timedelta:33d0s",
+    "get_previous_month_bill_pk": 95,
+    "get_total_solar_produced": 85.094
+  },
+  "97": {
+    "bill_is_lacking_rates": false,
+    "get_daily_grid_usage": "Decimal:21.69",
+    "get_daily_solar_send": "Decimal:4.24",
+    "get_money_saved_by_solar": "Decimal:14.80",
+    "get_number_of_days": "timedelta:29d0s",
+    "get_previous_month_bill_pk": 96,
+    "get_total_solar_produced": 300.502
+  },
+  "98": {
+    "bill_is_lacking_rates": false,
+    "get_daily_grid_usage": "Decimal:10.62",
+    "get_daily_solar_send": "Decimal:18.66",
+    "get_money_saved_by_solar": "Decimal:37.24",
+    "get_number_of_days": "timedelta:29d0s",
+    "get_previous_month_bill_pk": 97,
+    "get_total_solar_produced": 430.952
+  },
+  "99": {
+    "bill_is_lacking_rates": false,
+    "get_daily_grid_usage": "Decimal:12.41",
+    "get_daily_solar_send": "Decimal:19.13",
+    "get_money_saved_by_solar": "Decimal:48.00",
+    "get_number_of_days": "timedelta:32d0s",
+    "get_previous_month_bill_pk": 98,
+    "get_total_solar_produced": 669.341
+  }
+}

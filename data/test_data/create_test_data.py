@@ -35,3 +35,12 @@ def create_test_data_vmt():
     with open("data/test_data/test_data_CarMiles.json") as jsonfile:
         for obj in serializers.deserialize("json", jsonfile):
             obj.save()
+
+
+def create_test_data_solar():
+    # Deterministic daily solar production for 2023 (the period where the
+    # Electricity fixtures start sending solar to the grid). Without this,
+    # all solar aggregation paths are exercised against an empty table.
+    with open("data/test_data/test_data_SolarEnergy.json") as jsonfile:
+        for obj in serializers.deserialize("json", jsonfile):
+            obj.save()

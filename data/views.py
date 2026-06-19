@@ -208,8 +208,13 @@ def car_miles(request):
     # Add the average line
     vmt_avg_line = create_avg_line_data("CarMiles")
 
-    return render(request, "miles.html", {"vmt_data_per_years_given":
-                                              get_measurement_data_from_years("CarMiles", years_range_from_request),
+    # Attach miles-per-month to each row up front so the template doesn't query per row.
+    vmt_rows = list(get_measurement_data_from_years("CarMiles", years_range_from_request) or [])
+    miles_by_pk = CarMiles.get_miles_per_month_map()
+    for row in vmt_rows:
+        row.miles_this_month = miles_by_pk.get(row.pk)
+
+    return render(request, "miles.html", {"vmt_data_per_years_given": vmt_rows,
                                           "years_range": years_range_from_request,
                                           "yearly_datasets": requested_yearly_datasets,
                                           "avg_line": vmt_avg_line,

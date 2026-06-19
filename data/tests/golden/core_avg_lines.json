@@ -1,0 +1,270 @@
+{
+  "CarMiles": {
+    "borderWidth": 5,
+    "color": "rgba(22, 51, 73, 0.1)",
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": 831.0
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": 1143.666667
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": 1138.333333
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": 992.0
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": 1394.333333
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": 1249.0
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": 2121.333333
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": 1288.666667
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": 801.333333
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": 929.666667
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": 1062.0
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": 903.0
+      }
+    ],
+    "label": "Average (2020-2022)"
+  },
+  "Electricity": {
+    "borderWidth": 5,
+    "color": "rgba(22, 51, 73, 0.1)",
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": "Decimal:507.47375"
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": "Decimal:411.42"
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": "Decimal:379.3825"
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": "Decimal:385.215"
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": "Decimal:499.6625"
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": "Decimal:673.50"
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": "Decimal:862.90375"
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": "Decimal:862.08375"
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": "Decimal:702.3275"
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": "Decimal:530.3775"
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": "Decimal:437.9975"
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": "Decimal:488.99375"
+      }
+    ],
+    "label": "Average (2015-2022)"
+  },
+  "Gas": {
+    "borderWidth": 5,
+    "color": "rgba(22, 51, 73, 0.1)",
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": 50.285
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": 30.625
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": 28.695
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": 22.475
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": 27.885
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": 11.705
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": 3.035
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": 3.895
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": 3.185
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": 5.365
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": 17.025
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": 25.595
+      }
+    ],
+    "label": "Average (2020-2021)"
+  },
+  "Water": {
+    "borderWidth": 5,
+    "color": "rgba(22, 51, 73, 0.1)",
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": "Decimal:2028.375"
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": "Decimal:1666.90"
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": "Decimal:2324.6375"
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": "Decimal:1939.7375"
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": "Decimal:2260.625"
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": "Decimal:2239.1625"
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": "Decimal:2167.475"
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": "Decimal:2372.975"
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": "Decimal:2274.4625"
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": "Decimal:2368.2625"
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": "Decimal:2206.2375"
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": "Decimal:2010.35"
+      }
+    ],
+    "label": "Average (2014-2021)"
+  }
+}

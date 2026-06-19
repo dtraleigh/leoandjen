@@ -1,10 +1,10 @@
 import decimal
 import logging
-from datetime import timedelta
+from datetime import timedelta, date
 from decimal import Decimal
 
 from django.db import models, transaction
-from django.db.models import Q, Max
+from django.db.models import Q, Max, Sum
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
@@ -91,10 +91,13 @@ class Electricity(models.Model):
 
     @property
     def get_total_solar_produced(self):
-        solar_days = SolarEnergy.objects.filter(date_of_production__gte=self.service_start_date,
-                                                date_of_production__lte=self.service_end_date)
+        # Aggregate in the DB instead of pulling every row and summing in Python.
+        total_watts = SolarEnergy.objects.filter(
+            date_of_production__gte=self.service_start_date,
+            date_of_production__lte=self.service_end_date,
+        ).aggregate(total=Sum("production"))["total"] or 0
         # return as kilowatts hours
-        return sum([day.production for day in solar_days]) / 1000
+        return total_watts / 1000
 
     # Not all bill's have a bill_date so we use service_start_date
     @property
@@ -155,24 +158,32 @@ class Electricity(models.Model):
 
     @property
     def bill_is_lacking_rates(self):
-        bill_is_lacking_rates = False
-        increment_date = self.service_start_date
-        while increment_date != self.service_end_date + timedelta(days=1):
-            try:
-                if not ElectricRateSchedule.objects.filter(electricity_bills=self).exists():
-                    raise ElectricRateSchedule.DoesNotExist("No energy rate schedule linked to this bill")
-                storm_rec_schedule = ElectricRateSchedule.objects.get(Q(schedule_start_date__lte=increment_date,
-                                                                        schedule_end_date__gte=increment_date,
-                                                                        name__iexact="Storm Recovery Costs") |
-                                                                      Q(schedule_start_date__lte=increment_date,
-                                                                        schedule_end_date_perpetual=True,
-                                                                        name__iexact="Storm Recovery Costs"))
-                increment_date += timedelta(days=1)
-            except Exception as e:
-                bill_is_lacking_rates = True
-                break
+        # Lacking if no rate schedule is linked at all...
+        if not self.electricrateschedule_set.exists():
+            return True
 
-        return bill_is_lacking_rates
+        # ...or if any day in the service period has no Storm Recovery Costs schedule
+        # covering it. Fetch the relevant storm schedules once, then resolve coverage in
+        # memory instead of issuing a query per day.
+        storm_schedules = ElectricRateSchedule.objects.filter(
+            name__iexact="Storm Recovery Costs",
+            schedule_start_date__lte=self.service_end_date,
+        ).filter(
+            Q(schedule_end_date__gte=self.service_start_date) |
+            Q(schedule_end_date_perpetual=True)
+        )
+        covered_intervals = [
+            (s.schedule_start_date, date.max if s.schedule_end_date_perpetual else s.schedule_end_date)
+            for s in storm_schedules
+        ]
+
+        increment_date = self.service_start_date
+        while increment_date <= self.service_end_date:
+            if not any(start <= increment_date <= end for start, end in covered_intervals):
+                return True
+            increment_date += timedelta(days=1)
+
+        return False
 
     def calculate_and_set_money_saved(self):
         try:

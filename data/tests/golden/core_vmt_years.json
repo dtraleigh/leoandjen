@@ -1,0 +1,211 @@
+{
+  "2020": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": 1552
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": 1332
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": 701
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": 113
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": 1545
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": 1900
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": 2352
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": 1151
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": 690
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": 563
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": 836
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": 827
+      }
+    ],
+    "get_total_miles": 13562,
+    "get_ytd_miles": 1552
+  },
+  "2021": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": 550
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": 1203
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": 1722
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": 1864
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": 1808
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": 1302
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": 2499
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": 1461
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": 741
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": 1508
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": 785
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": 1592
+      }
+    ],
+    "get_total_miles": 17035,
+    "get_ytd_miles": 550
+  },
+  "2022": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": 391
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": 896
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": 992
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": 999
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": 830
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": 545
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": 1513
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": 1254
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": 973
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": 718
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": 1565
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": 290
+      }
+    ],
+    "get_total_miles": 10966,
+    "get_ytd_miles": 391
+  },
+  "2023": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": 617
+      }
+    ],
+    "get_total_miles": 617,
+    "get_ytd_miles": 617
+  }
+}

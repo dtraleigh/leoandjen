@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>LeoandJen Data</title>
+    
+    <link rel="shortcut icon" type="image/png" href="/static/img/data_favicon.png">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap4.6.2/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/static/css/data_dashboard.css" rel="stylesheet">
+    <link href="/static/DataTables/datatables.min.css" rel="stylesheet">
+    <style>
+    .card {
+      margin-bottom: 20px;
+    }
+    .card-green {
+      background-color: #d4edda;
+      border-color: #c3e6cb;
+    }
+    .card-gray {
+      background-color: #e2e3e5;
+      border-color: #d6d8db;
+    }
+    .card-red {
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
+    }
+  </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0 text-light" href="/data">Leo and Jen</a>
+      <ul class="d-flex ml-auto mb-0 list-unstyled">
+        <li class="nav-item text-nowrap px-2">
+          <a class="nav-link text-muted" href="/admin/">Login</a>
+        </li>
+        
+      </ul>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+  <div class="sidebar-sticky">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" href="/data">
+          <span data-feather="bar-chart-2"></span>
+          Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data/water">
+          <span data-feather="bar-chart-2"></span>
+          Water
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data/gas">
+          <span data-feather="bar-chart-2"></span>
+          Gas
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data/electricity">
+          <span data-feather="bar-chart-2"></span>
+          Electricity
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data/car_miles">
+          <span data-feather="bar-chart-2"></span>
+          Car Miles
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+        
+  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+      
+        <h1 class="h2">Electricity for 2022</h1>
+      
+      <form action="?" method="get">
+        <label for="years_input">Years:</label>
+        <input id="years_input"
+               type="text"
+               name="years"
+               placeholder="Ex: 2019-2021"
+               value="2022">
+        <input type="submit" value="Submit">
+        <p>Keywords: "all", "year+"</p>
+      </form>
+    </div>
+    <div class="alert alert-warning" role="alert">Some years are lacking energy rates: [Elec dataset for 2022]</div>
+    <canvas class="my-4" id="chart" width="900" height="380"></canvas>
+    <div class="alert alert-primary" role="alert">Data through Aug. 8, 2023</div>
+    <h3>Yearly Totals</h3>
+    <div class="table-responsive">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>Dates</th>
+            <th>Solar Savings</th>
+            <th>Grid Energy Consumed</th>
+            <th>Solar Produced</th>
+            <th>Solar Sent to Grid</th>
+            <th>House Energy Consumed</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>Jan 12, 2022 - Jan 10, 2023</td>
+              <td>$0.00</td>
+              <td>8245</td>
+              <td>85.094</td>
+              <td>0</td>
+              <td>8330.094</td>
+            </tr>
+          
+          <tr style="border: solid;">
+            <td>TOTAL</td>
+            <td>$0.00</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Monthly Data</h3>
+    <div class="table-responsive">
+      <table class="table table-striped table-sm" id="data_table_main">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Kilowatt hours used (Grid)</th>
+            <th>Solar Produced</th>
+            <th>Solar Sent to Grid</th>
+            <th>Total House Consumption</th>
+            <th>Daily Usage</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            
+              <tr>
+                <td>Dec 2022</td>
+                <td>850.10</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>850.10</td>
+                <td>27.42</td>
+              </tr>
+            
+              <tr>
+                <td>Nov 2022</td>
+                <td>576.62</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>576.62</td>
+                <td>19.22</td>
+              </tr>
+            
+              <tr>
+                <td>Oct 2022</td>
+                <td>502.52</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>502.52</td>
+                <td>16.21</td>
+              </tr>
+            
+              <tr>
+                <td>Sept 2022</td>
+                <td>595.50</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>595.50</td>
+                <td>19.85</td>
+              </tr>
+            
+              <tr>
+                <td>Aug 2022</td>
+                <td>818.38</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>818.38</td>
+                <td>26.40</td>
+              </tr>
+            
+              <tr>
+                <td>Jul 2022</td>
+                <td>855.78</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>855.78</td>
+                <td>27.61</td>
+              </tr>
+            
+              <tr>
+                <td>Jun 2022</td>
+                <td>726.52</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>726.52</td>
+                <td>24.22</td>
+              </tr>
+            
+              <tr>
+                <td>May 2022</td>
+                <td>590.83</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>590.83</td>
+                <td>19.06</td>
+              </tr>
+            
+              <tr>
+                <td>Apr 2022</td>
+                <td>479.66</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>479.66</td>
+                <td>15.99</td>
+              </tr>
+            
+              <tr>
+                <td>Mar 2022</td>
+                <td>567.08</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>567.08</td>
+                <td>18.29</td>
+              </tr>
+            
+              <tr>
+                <td>Feb 2022</td>
+                <td>700.72</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>700.72</td>
+                <td>25.03</td>
+              </tr>
+            
+              <tr>
+                <td>Jan 2022</td>
+                <td>937.78</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>937.78</td>
+                <td>30.25</td>
+              </tr>
+            
+          
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+      </div>
+    </div>
+    <!-- Bootstrap -->
+    <script src="/static/js/jquery3.5.1/jquery-3.5.1.slim.min.js"></script>
+    <script src="/static/js/popper1.16.1/popper.min.js"></script>
+    <script src="/static/bootstrap4.6.2/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="/static/DataTables/datatables.min.js"></script>
+    <!-- Icons -->
+    <script src="/static/feather-icons4.29.0/feather.min.js"></script>
+    <script>feather.replace()</script>
+    <!-- Graphs -->
+    <script src="/static/js/chart.js3.7.1/chart.min.js"></script>
+    <script src="/static/js/moment2.29.4/moment%40%5E2.js"></script>
+    <script src="/static/js/moment2.29.4/chartjs-adapter-moment%40%5E1.js"></script>
+    <script type="text/javascript">
+      var chart_data = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+      datasets: [
+        
+        {
+          label: 'Elec - 2022',
+          fill: false,
+          type: 'line',
+          borderColor: 'rgba(0, 86, 71, 0.8)',
+          borderWidth: '2',
+          tension: 0.2,
+          data: [937.78,700.72,567.08,479.66,590.83,726.52,855.78,818.38,595.50,502.52,576.62,850.10]
+        },
+        
+          
+        
+        
+        {
+          label: 'Average (2015-2022)',
+          fill: false,
+          type: "line",
+          borderColor: 'rgba(22, 51, 73, 0.1)',
+          borderWidth: '5',
+          tension: 0.2,
+          data: [507.47375,411.42,379.3825,385.215,499.6625,673.50,862.90375,862.08375,702.3275,530.3775,437.9975,488.99375]
+        }
+      ]
+    }
+    </script>
+    <script src="/static/js/myChart.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.7/sorting/natural.js"></script>
+    <script>
+      $(document).ready(function () {
+        $('#data_table_main').DataTable({
+        "order": [],
+        columnDefs: [
+          { type: 'natural', targets: '_all' }
+        ]
+        });
+        $('.dataTables_length').addClass('bs-select');
+      });
+    </script>
+  </body>
+</html>

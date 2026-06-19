@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from django.db import models
 
 class CarMiles(models.Model):
@@ -37,3 +35,26 @@ class CarMiles(models.Model):
             return next_months_datapoint.odometer_reading - self.odometer_reading
         except CarMiles.DoesNotExist:
             return None
+
+    @classmethod
+    def get_miles_per_month_map(cls):
+        """Return {pk: miles_to_next_calendar_month} for every reading in ONE query.
+
+        Mirrors ``get_miles_per_month`` exactly (None when the next calendar month's
+        reading is missing), but lets callers avoid a per-row query.
+        """
+        readings = list(cls.objects.values("pk", "reading_date", "odometer_reading"))
+        odometer_by_month = {
+            (r["reading_date"].year, r["reading_date"].month): r["odometer_reading"]
+            for r in readings
+        }
+        result = {}
+        for r in readings:
+            year = r["reading_date"].year
+            month = r["reading_date"].month
+            next_key = (year + 1, 1) if month == 12 else (year, month + 1)
+            next_odometer = odometer_by_month.get(next_key)
+            result[r["pk"]] = (
+                next_odometer - r["odometer_reading"] if next_odometer is not None else None
+            )
+        return result

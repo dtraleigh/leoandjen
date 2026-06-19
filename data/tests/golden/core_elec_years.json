@@ -1,0 +1,1186 @@
+{
+  "2015": {
+    "data_points": [
+      {
+        "daily_consumption": "Decimal:14.68",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:455.08",
+        "month_number": 1,
+        "month_str": "Jan",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:455.08"
+      },
+      {
+        "daily_consumption": "Decimal:13.54",
+        "days_in_month": 28,
+        "grid_energy_consumed": "Decimal:379.12",
+        "month_number": 2,
+        "month_str": "Feb",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:379.12"
+      },
+      {
+        "daily_consumption": "Decimal:8.23",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:255.13",
+        "month_number": 3,
+        "month_str": "Mar",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:255.13"
+      },
+      {
+        "daily_consumption": "Decimal:6.73",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:201.90",
+        "month_number": 4,
+        "month_str": "Apr",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:201.90"
+      },
+      {
+        "daily_consumption": "Decimal:12.19",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:377.89",
+        "month_number": 5,
+        "month_str": "May",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:377.89"
+      },
+      {
+        "daily_consumption": "Decimal:22.90",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:687.00",
+        "month_number": 6,
+        "month_str": "Jun",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:687.00"
+      },
+      {
+        "daily_consumption": "Decimal:26.00",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:806.00",
+        "month_number": 7,
+        "month_str": "Jul",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:806.00"
+      },
+      {
+        "daily_consumption": "Decimal:30.42",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:943.02",
+        "month_number": 8,
+        "month_str": "Aug",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:943.02"
+      },
+      {
+        "daily_consumption": "Decimal:22.00",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:660.00",
+        "month_number": 9,
+        "month_str": "Sept",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:660.00"
+      },
+      {
+        "daily_consumption": "Decimal:15.55",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:482.05",
+        "month_number": 10,
+        "month_str": "Oct",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:482.05"
+      },
+      {
+        "daily_consumption": "Decimal:9.90",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:297.00",
+        "month_number": 11,
+        "month_str": "Nov",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:297.00"
+      },
+      {
+        "daily_consumption": "Decimal:14.74",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:456.94",
+        "month_number": 12,
+        "month_str": "Dec",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:456.94"
+      }
+    ],
+    "is_lacking_energy_rates": true,
+    "readings_kwh_total": 6001,
+    "solar_bar_chart_dataset": "",
+    "solar_produced_total": 0.0,
+    "solar_savings_sum": "Decimal:0.00",
+    "solar_savings_table_data": [
+      "Jan 01, 2015 - Dec 31, 2015",
+      "$0.00"
+    ],
+    "solar_sent_to_grid_total": 0,
+    "total_house_consumed": 6001.0,
+    "ytd_total": "Decimal:4105.14"
+  },
+  "2016": {
+    "data_points": [
+      {
+        "daily_consumption": "Decimal:15.35",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:475.85",
+        "month_number": 1,
+        "month_str": "Jan",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:475.85"
+      },
+      {
+        "daily_consumption": "Decimal:13.48",
+        "days_in_month": 29,
+        "grid_energy_consumed": "Decimal:390.92",
+        "month_number": 2,
+        "month_str": "Feb",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:390.92"
+      },
+      {
+        "daily_consumption": "Decimal:13.87",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:429.97",
+        "month_number": 3,
+        "month_str": "Mar",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:429.97"
+      },
+      {
+        "daily_consumption": "Decimal:11.97",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:359.10",
+        "month_number": 4,
+        "month_str": "Apr",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:359.10"
+      },
+      {
+        "daily_consumption": "Decimal:13.48",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:417.88",
+        "month_number": 5,
+        "month_str": "May",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:417.88"
+      },
+      {
+        "daily_consumption": "Decimal:15.87",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:476.10",
+        "month_number": 6,
+        "month_str": "Jun",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:476.10"
+      },
+      {
+        "daily_consumption": "Decimal:24.16",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:748.96",
+        "month_number": 7,
+        "month_str": "Jul",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:748.96"
+      },
+      {
+        "daily_consumption": "Decimal:25.87",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:801.97",
+        "month_number": 8,
+        "month_str": "Aug",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:801.97"
+      },
+      {
+        "daily_consumption": "Decimal:26.83",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:804.90",
+        "month_number": 9,
+        "month_str": "Sept",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:804.90"
+      },
+      {
+        "daily_consumption": "Decimal:18.84",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:584.04",
+        "month_number": 10,
+        "month_str": "Oct",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:584.04"
+      },
+      {
+        "daily_consumption": "Decimal:13.20",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:396.00",
+        "month_number": 11,
+        "month_str": "Nov",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:396.00"
+      },
+      {
+        "daily_consumption": "Decimal:11.26",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:349.06",
+        "month_number": 12,
+        "month_str": "Dec",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:349.06"
+      }
+    ],
+    "is_lacking_energy_rates": true,
+    "readings_kwh_total": 6235,
+    "solar_bar_chart_dataset": "",
+    "solar_produced_total": 0.0,
+    "solar_savings_sum": "Decimal:0.00",
+    "solar_savings_table_data": [
+      "Jan 01, 2016 - Dec 31, 2016",
+      "$0.00"
+    ],
+    "solar_sent_to_grid_total": 0,
+    "total_house_consumed": 6235.0,
+    "ytd_total": "Decimal:4100.75"
+  },
+  "2017": {
+    "data_points": [
+      {
+        "daily_consumption": "Decimal:16.10",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:499.10",
+        "month_number": 1,
+        "month_str": "Jan",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:499.10"
+      },
+      {
+        "daily_consumption": "Decimal:14.89",
+        "days_in_month": 28,
+        "grid_energy_consumed": "Decimal:416.92",
+        "month_number": 2,
+        "month_str": "Feb",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:416.92"
+      },
+      {
+        "daily_consumption": "Decimal:11.55",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:358.05",
+        "month_number": 3,
+        "month_str": "Mar",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:358.05"
+      },
+      {
+        "daily_consumption": "Decimal:15.87",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:476.10",
+        "month_number": 4,
+        "month_str": "Apr",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:476.10"
+      },
+      {
+        "daily_consumption": "Decimal:15.87",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:491.97",
+        "month_number": 5,
+        "month_str": "May",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:491.97"
+      },
+      {
+        "daily_consumption": "Decimal:19.10",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:573.00",
+        "month_number": 6,
+        "month_str": "Jun",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:573.00"
+      },
+      {
+        "daily_consumption": "Decimal:24.74",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:766.94",
+        "month_number": 7,
+        "month_str": "Jul",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:766.94"
+      },
+      {
+        "daily_consumption": "Decimal:23.87",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:739.97",
+        "month_number": 8,
+        "month_str": "Aug",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:739.97"
+      },
+      {
+        "daily_consumption": "Decimal:22.37",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:671.10",
+        "month_number": 9,
+        "month_str": "Sept",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:671.10"
+      },
+      {
+        "daily_consumption": "Decimal:18.29",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:566.99",
+        "month_number": 10,
+        "month_str": "Oct",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:566.99"
+      },
+      {
+        "daily_consumption": "Decimal:14.10",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:423.00",
+        "month_number": 11,
+        "month_str": "Nov",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:423.00"
+      },
+      {
+        "daily_consumption": "Decimal:13.90",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:430.90",
+        "month_number": 12,
+        "month_str": "Dec",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:430.90"
+      }
+    ],
+    "is_lacking_energy_rates": true,
+    "readings_kwh_total": 6414,
+    "solar_bar_chart_dataset": "",
+    "solar_produced_total": 0.0,
+    "solar_savings_sum": "Decimal:0.00",
+    "solar_savings_table_data": [
+      "Jan 01, 2017 - Dec 31, 2017",
+      "$0.00"
+    ],
+    "solar_sent_to_grid_total": 0,
+    "total_house_consumed": 6414.0,
+    "ytd_total": "Decimal:4322.05"
+  },
+  "2018": {
+    "data_points": [
+      {
+        "daily_consumption": "Decimal:17.48",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:541.88",
+        "month_number": 1,
+        "month_str": "Jan",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:541.88"
+      },
+      {
+        "daily_consumption": "Decimal:15.64",
+        "days_in_month": 28,
+        "grid_energy_consumed": "Decimal:437.92",
+        "month_number": 2,
+        "month_str": "Feb",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:437.92"
+      },
+      {
+        "daily_consumption": "Decimal:11.77",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:364.87",
+        "month_number": 3,
+        "month_str": "Mar",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:364.87"
+      },
+      {
+        "daily_consumption": "Decimal:14.63",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:438.90",
+        "month_number": 4,
+        "month_str": "Apr",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:438.90"
+      },
+      {
+        "daily_consumption": "Decimal:11.39",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:353.09",
+        "month_number": 5,
+        "month_str": "May",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:353.09"
+      },
+      {
+        "daily_consumption": "Decimal:21.13",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:633.90",
+        "month_number": 6,
+        "month_str": "Jun",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:633.90"
+      },
+      {
+        "daily_consumption": "Decimal:25.65",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:795.15",
+        "month_number": 7,
+        "month_str": "Jul",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:795.15"
+      },
+      {
+        "daily_consumption": "Decimal:24.61",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:762.91",
+        "month_number": 8,
+        "month_str": "Aug",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:762.91"
+      },
+      {
+        "daily_consumption": "Decimal:27.47",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:824.10",
+        "month_number": 9,
+        "month_str": "Sept",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:824.10"
+      },
+      {
+        "daily_consumption": "Decimal:21.81",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:676.11",
+        "month_number": 10,
+        "month_str": "Oct",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:676.11"
+      },
+      {
+        "daily_consumption": "Decimal:13.17",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:395.10",
+        "month_number": 11,
+        "month_str": "Nov",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:395.10"
+      },
+      {
+        "daily_consumption": "Decimal:13.84",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:429.04",
+        "month_number": 12,
+        "month_str": "Dec",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:429.04"
+      }
+    ],
+    "is_lacking_energy_rates": true,
+    "readings_kwh_total": 6653,
+    "solar_bar_chart_dataset": "",
+    "solar_produced_total": 0.0,
+    "solar_savings_sum": "Decimal:0.00",
+    "solar_savings_table_data": [
+      "Jan 01, 2018 - Dec 31, 2018",
+      "$0.00"
+    ],
+    "solar_sent_to_grid_total": 0,
+    "total_house_consumed": 6653.0,
+    "ytd_total": "Decimal:4328.62"
+  },
+  "2019": {
+    "data_points": [
+      {
+        "daily_consumption": "Decimal:16.42",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:509.02",
+        "month_number": 1,
+        "month_str": "Jan",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:509.02"
+      },
+      {
+        "daily_consumption": "Decimal:15.68",
+        "days_in_month": 28,
+        "grid_energy_consumed": "Decimal:439.04",
+        "month_number": 2,
+        "month_str": "Feb",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:439.04"
+      },
+      {
+        "daily_consumption": "Decimal:15.55",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:482.05",
+        "month_number": 3,
+        "month_str": "Mar",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:482.05"
+      },
+      {
+        "daily_consumption": "Decimal:16.97",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:509.10",
+        "month_number": 4,
+        "month_str": "Apr",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:509.10"
+      },
+      {
+        "daily_consumption": "Decimal:25.23",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:782.13",
+        "month_number": 5,
+        "month_str": "May",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:782.13"
+      },
+      {
+        "daily_consumption": "Decimal:27.50",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:825.00",
+        "month_number": 6,
+        "month_str": "Jun",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:825.00"
+      },
+      {
+        "daily_consumption": "Decimal:32.39",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:1004.09",
+        "month_number": 7,
+        "month_str": "Jul",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:1004.09"
+      },
+      {
+        "daily_consumption": "Decimal:33.06",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:1024.86",
+        "month_number": 8,
+        "month_str": "Aug",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:1024.86"
+      },
+      {
+        "daily_consumption": "Decimal:26.23",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:786.90",
+        "month_number": 9,
+        "month_str": "Sept",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:786.90"
+      },
+      {
+        "daily_consumption": "Decimal:10.29",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:318.99",
+        "month_number": 10,
+        "month_str": "Oct",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:318.99"
+      },
+      {
+        "daily_consumption": "Decimal:16.53",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:495.90",
+        "month_number": 11,
+        "month_str": "Nov",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:495.90"
+      },
+      {
+        "daily_consumption": "Decimal:15.71",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:487.01",
+        "month_number": 12,
+        "month_str": "Dec",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:487.01"
+      }
+    ],
+    "is_lacking_energy_rates": true,
+    "readings_kwh_total": 7664,
+    "solar_bar_chart_dataset": "",
+    "solar_produced_total": 0.0,
+    "solar_savings_sum": "Decimal:0.00",
+    "solar_savings_table_data": [
+      "Jan 01, 2019 - Dec 31, 2019",
+      "$0.00"
+    ],
+    "solar_sent_to_grid_total": 0,
+    "total_house_consumed": 7664.0,
+    "ytd_total": "Decimal:5575.29"
+  },
+  "2020": {
+    "data_points": [
+      {
+        "daily_consumption": "Decimal:17.74",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:549.94",
+        "month_number": 1,
+        "month_str": "Jan",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:549.94"
+      },
+      {
+        "daily_consumption": "Decimal:16.28",
+        "days_in_month": 29,
+        "grid_energy_consumed": "Decimal:472.12",
+        "month_number": 2,
+        "month_str": "Feb",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:472.12"
+      },
+      {
+        "daily_consumption": "Decimal:16.16",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:500.96",
+        "month_number": 3,
+        "month_str": "Mar",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:500.96"
+      },
+      {
+        "daily_consumption": "Decimal:17.00",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:510.00",
+        "month_number": 4,
+        "month_str": "Apr",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:510.00"
+      },
+      {
+        "daily_consumption": "Decimal:24.10",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:747.10",
+        "month_number": 5,
+        "month_str": "May",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:747.10"
+      },
+      {
+        "daily_consumption": "Decimal:27.60",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:828.00",
+        "month_number": 6,
+        "month_str": "Jun",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:828.00"
+      },
+      {
+        "daily_consumption": "Decimal:36.45",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:1129.95",
+        "month_number": 7,
+        "month_str": "Jul",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:1129.95"
+      },
+      {
+        "daily_consumption": "Decimal:26.74",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:828.94",
+        "month_number": 8,
+        "month_str": "Aug",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:828.94"
+      },
+      {
+        "daily_consumption": "Decimal:19.33",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:579.90",
+        "month_number": 9,
+        "month_str": "Sept",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:579.90"
+      },
+      {
+        "daily_consumption": "Decimal:20.58",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:637.98",
+        "month_number": 10,
+        "month_str": "Oct",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:637.98"
+      },
+      {
+        "daily_consumption": "Decimal:16.17",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:485.10",
+        "month_number": 11,
+        "month_str": "Nov",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:485.10"
+      },
+      {
+        "daily_consumption": "Decimal:8.32",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:257.92",
+        "month_number": 12,
+        "month_str": "Dec",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:257.92"
+      }
+    ],
+    "is_lacking_energy_rates": true,
+    "readings_kwh_total": 7528,
+    "solar_bar_chart_dataset": "",
+    "solar_produced_total": 0.0,
+    "solar_savings_sum": "Decimal:0.00",
+    "solar_savings_table_data": [
+      "Jan 01, 2020 - Dec 31, 2020",
+      "$0.00"
+    ],
+    "solar_sent_to_grid_total": 0,
+    "total_house_consumed": 7528.0,
+    "ytd_total": "Decimal:5567.01"
+  },
+  "2021": {
+    "data_points": [
+      {
+        "daily_consumption": "Decimal:2.94",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:91.14",
+        "month_number": 1,
+        "month_str": "Jan",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:91.14"
+      },
+      {
+        "daily_consumption": "Decimal:1.95",
+        "days_in_month": 28,
+        "grid_energy_consumed": "Decimal:54.60",
+        "month_number": 2,
+        "month_str": "Feb",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:54.60"
+      },
+      {
+        "daily_consumption": "Decimal:2.48",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:76.95",
+        "month_number": 3,
+        "month_str": "Mar",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:76.95"
+      },
+      {
+        "daily_consumption": "Decimal:3.57",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:106.96",
+        "month_number": 4,
+        "month_str": "Apr",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:106.96"
+      },
+      {
+        "daily_consumption": "Decimal:7.63",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:236.41",
+        "month_number": 5,
+        "month_str": "May",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:236.41"
+      },
+      {
+        "daily_consumption": "Decimal:21.28",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:638.48",
+        "month_number": 6,
+        "month_str": "Jun",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:638.48"
+      },
+      {
+        "daily_consumption": "Decimal:25.69",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:796.36",
+        "month_number": 7,
+        "month_str": "Jul",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:796.36"
+      },
+      {
+        "daily_consumption": "Decimal:31.50",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:976.62",
+        "month_number": 8,
+        "month_str": "Aug",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:976.62"
+      },
+      {
+        "daily_consumption": "Decimal:23.21",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:696.22",
+        "month_number": 9,
+        "month_str": "Sept",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:696.22"
+      },
+      {
+        "daily_consumption": "Decimal:15.30",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:474.34",
+        "month_number": 10,
+        "month_str": "Oct",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:474.34"
+      },
+      {
+        "daily_consumption": "Decimal:14.51",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:435.26",
+        "month_number": 11,
+        "month_str": "Nov",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:435.26"
+      },
+      {
+        "daily_consumption": "Decimal:21.00",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:650.98",
+        "month_number": 12,
+        "month_str": "Dec",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:650.98"
+      }
+    ],
+    "is_lacking_energy_rates": true,
+    "readings_kwh_total": 5489,
+    "solar_bar_chart_dataset": "",
+    "solar_produced_total": 0.0,
+    "solar_savings_sum": "Decimal:0.00",
+    "solar_savings_table_data": [
+      "Jan 01, 2021 - Jan 11, 2022",
+      "$0.00"
+    ],
+    "solar_sent_to_grid_total": 0,
+    "total_house_consumed": 5489.0,
+    "ytd_total": "Decimal:2977.52"
+  },
+  "2022": {
+    "data_points": [
+      {
+        "daily_consumption": "Decimal:30.25",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:937.78",
+        "month_number": 1,
+        "month_str": "Jan",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:937.78"
+      },
+      {
+        "daily_consumption": "Decimal:25.03",
+        "days_in_month": 28,
+        "grid_energy_consumed": "Decimal:700.72",
+        "month_number": 2,
+        "month_str": "Feb",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:700.72"
+      },
+      {
+        "daily_consumption": "Decimal:18.29",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:567.08",
+        "month_number": 3,
+        "month_str": "Mar",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:567.08"
+      },
+      {
+        "daily_consumption": "Decimal:15.99",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:479.66",
+        "month_number": 4,
+        "month_str": "Apr",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:479.66"
+      },
+      {
+        "daily_consumption": "Decimal:19.06",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:590.83",
+        "month_number": 5,
+        "month_str": "May",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:590.83"
+      },
+      {
+        "daily_consumption": "Decimal:24.22",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:726.52",
+        "month_number": 6,
+        "month_str": "Jun",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:726.52"
+      },
+      {
+        "daily_consumption": "Decimal:27.61",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:855.78",
+        "month_number": 7,
+        "month_str": "Jul",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:855.78"
+      },
+      {
+        "daily_consumption": "Decimal:26.40",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:818.38",
+        "month_number": 8,
+        "month_str": "Aug",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:818.38"
+      },
+      {
+        "daily_consumption": "Decimal:19.85",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:595.50",
+        "month_number": 9,
+        "month_str": "Sept",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:595.50"
+      },
+      {
+        "daily_consumption": "Decimal:16.21",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:502.52",
+        "month_number": 10,
+        "month_str": "Oct",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:502.52"
+      },
+      {
+        "daily_consumption": "Decimal:19.22",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:576.62",
+        "month_number": 11,
+        "month_str": "Nov",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:576.62"
+      },
+      {
+        "daily_consumption": "Decimal:27.42",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:850.10",
+        "month_number": 12,
+        "month_str": "Dec",
+        "solar_produced": "Decimal:0.00",
+        "solar_sent_to_grid": "Decimal:0.00",
+        "value": "Decimal:850.10"
+      }
+    ],
+    "is_lacking_energy_rates": true,
+    "readings_kwh_total": 8245,
+    "solar_bar_chart_dataset": "",
+    "solar_produced_total": 85.094,
+    "solar_savings_sum": "Decimal:0.00",
+    "solar_savings_table_data": [
+      "Jan 12, 2022 - Jan 10, 2023",
+      "$0.00"
+    ],
+    "solar_sent_to_grid_total": 0,
+    "total_house_consumed": 8330.094,
+    "ytd_total": "Decimal:5676.75"
+  },
+  "2023": {
+    "data_points": [
+      {
+        "daily_consumption": "Decimal:30.86",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:753.69",
+        "month_number": 1,
+        "month_str": "Jan",
+        "solar_produced": "Decimal:292.10",
+        "solar_sent_to_grid": "Decimal:89.04",
+        "value": "Decimal:956.75"
+      },
+      {
+        "daily_consumption": "Decimal:12.59",
+        "days_in_month": 28,
+        "grid_energy_consumed": "Decimal:385.92",
+        "month_number": 2,
+        "month_str": "Feb",
+        "solar_produced": "Decimal:373.79",
+        "solar_sent_to_grid": "Decimal:407.12",
+        "value": "Decimal:352.59"
+      },
+      {
+        "daily_consumption": "Decimal:11.88",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:368.60",
+        "month_number": 3,
+        "month_str": "Mar",
+        "solar_produced": "Decimal:588.40",
+        "solar_sent_to_grid": "Decimal:588.80",
+        "value": "Decimal:368.20"
+      },
+      {
+        "daily_consumption": "Decimal:13.28",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:282.70",
+        "month_number": 4,
+        "month_str": "Apr",
+        "solar_produced": "Decimal:751.31",
+        "solar_sent_to_grid": "Decimal:635.50",
+        "value": "Decimal:398.51"
+      },
+      {
+        "daily_consumption": "Decimal:20.93",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:265.15",
+        "month_number": 5,
+        "month_str": "May",
+        "solar_produced": "Decimal:921.98",
+        "solar_sent_to_grid": "Decimal:538.32",
+        "value": "Decimal:648.81"
+      },
+      {
+        "daily_consumption": "Decimal:30.17",
+        "days_in_month": 30,
+        "grid_energy_consumed": "Decimal:376.18",
+        "month_number": 6,
+        "month_str": "Jun",
+        "solar_produced": "Decimal:954.83",
+        "solar_sent_to_grid": "Decimal:425.96",
+        "value": "Decimal:905.05"
+      },
+      {
+        "daily_consumption": "Decimal:32.54",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:483.71",
+        "month_number": 7,
+        "month_str": "Jul",
+        "solar_produced": "Decimal:952.08",
+        "solar_sent_to_grid": "Decimal:427.03",
+        "value": "Decimal:1008.76"
+      },
+      {
+        "daily_consumption": "Decimal:27.30",
+        "days_in_month": 31,
+        "grid_energy_consumed": "Decimal:131.28",
+        "month_number": 8,
+        "month_str": "Aug",
+        "solar_produced": "Decimal:825.71",
+        "solar_sent_to_grid": "Decimal:110.64",
+        "value": "Decimal:846.35"
+      }
+    ],
+    "is_lacking_energy_rates": false,
+    "readings_kwh_total": 2749,
+    "solar_bar_chart_dataset": "{label:'Solar - 2023',type:'bar',borderColor:'',borderWidth:'2',data:[292.1, 373.79, 588.4, 751.31, 921.98, 954.83, 952.08, 825.71]},",
+    "solar_produced_total": 4977.657,
+    "solar_savings_sum": "Decimal:267.06",
+    "solar_savings_table_data": [
+      "Jan 11, 2023 - Aug 08, 2023",
+      "$267.06"
+    ],
+    "solar_sent_to_grid_total": 3222,
+    "total_house_consumed": 4504.657,
+    "ytd_total": "Decimal:5485.02"
+  }
+}

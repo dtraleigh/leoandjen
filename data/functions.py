@@ -7,7 +7,7 @@ from functools import reduce
 
 from django.apps import apps
 from django.core.exceptions import FieldError, MultipleObjectsReturned
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 
 from data.models import *
 from data.year_elec import ElecYear
@@ -30,24 +30,33 @@ def get_years_list_from_data(object_data):
     """Returns a sorted list of years. Given input as some queryset of data, give me
     all the years across the data points.
     """
-    if object_data:
-        data_type = type(object_data[0]).__name__
-        dataset_years = []
-
-        for datapoint in object_data:
-            if data_type != "CarMiles":
-                dataset_years.append(datapoint.service_start_date.year)
-                dataset_years.append(datapoint.service_end_date.year)
-            else:
-                dataset_years.append(datapoint.reading_date.year)
-                dataset_years.append(datapoint.reading_date.year)
-
-        dataset_years = list(set(dataset_years))
-        dataset_years.sort()
-
-        return dataset_years
-    else:
+    if object_data is None:
         return None
+
+    if isinstance(object_data, QuerySet):
+        # Detect the model without hitting the DB, then pull only the year column(s)
+        # in a single query instead of loading every full row.
+        if object_data.model.__name__ == "CarMiles":
+            dataset_years = set(object_data.values_list("reading_date__year", flat=True))
+        else:
+            dataset_years = set()
+            for start_year, end_year in object_data.values_list(
+                    "service_start_date__year", "service_end_date__year"):
+                dataset_years.add(start_year)
+                dataset_years.add(end_year)
+        return sorted(dataset_years) if dataset_years else None
+
+    # Fallback for plain iterables of model instances.
+    if not object_data:
+        return None
+    data_type = type(object_data[0]).__name__
+    date_field_names = (["reading_date"] if data_type == "CarMiles"
+                        else ["service_start_date", "service_end_date"])
+    dataset_years = set()
+    for datapoint in object_data:
+        for field_name in date_field_names:
+            dataset_years.add(getattr(datapoint, field_name).year)
+    return sorted(dataset_years) if dataset_years else None
 
 
 def get_midpoint_of_dates(date1, date2):
@@ -176,30 +185,32 @@ def create_avg_line_data(class_name):
         elif class_name == "Electricity":
             yearly_objects = [ElecYear(year, "") for year in years]
 
+        # data_points is cached on each year object; index it by month instead of
+        # re-running get_data_points() (a full query set) 12 times per year.
+        month_values_by_year = [
+            {m["month_number"]: m["value"] for m in year.data_points}
+            for year in yearly_objects
+        ]
         for month in range(1, 13):
-            data_point = {}
-            month_data = []
-            for year in yearly_objects:
-                datapoints = year.get_data_points()
-                month_data.append([m["value"] for m in datapoints if m["month_number"] == month][0])
-
-            data_point["month_number"] = month
-            data_point["month_str"] = month_strings_abbr[int(data_point["month_number"]) - 1]
-            data_point["value"] = get_average(month_data)
+            month_data = [values[month] for values in month_values_by_year]
+            data_point = {"month_number": month,
+                          "month_str": month_strings_abbr[month - 1],
+                          "value": get_average(month_data)}
             avg_years_line_data["data_points"].append(data_point)
 
         return avg_years_line_data
     else:
         # Data from first_year to recent_year - 1
-        all_data_for_avg_line = data_class.objects.filter(reading_date__year__gte=first_year,
-                                                          reading_date__year__lt=recent_year)
+        all_data_for_avg_line = list(data_class.objects.filter(reading_date__year__gte=first_year,
+                                                               reading_date__year__lt=recent_year))
+        miles_by_pk = CarMiles.get_miles_per_month_map()
 
         # Go through each month of each year
         for month in range(1, 13):
             data_point = {}
 
             month_data_objects = [x for x in all_data_for_avg_line if x.reading_date.month == month]
-            month_data = [y.get_miles_per_month for y in month_data_objects]
+            month_data = [miles_by_pk[x.pk] for x in month_data_objects]
             avg = get_average(month_data)
             # 1 to 12
             data_point["month_number"] = month
@@ -251,10 +262,9 @@ def get_gas_dashboard_data(current_date=datetime.now()):
         "measurement": None
     }
 
-    start = list(set([g.service_start_date.year for g in Gas.objects.all()]))
-    end = list(set([g.service_end_date.year for g in Gas.objects.all()]))
-    all_gas_years = list(set(start + end + [current_date.year]))
-    all_gas_years.sort()
+    start = Gas.objects.values_list("service_start_date__year", flat=True).distinct()
+    end = Gas.objects.values_list("service_end_date__year", flat=True).distinct()
+    all_gas_years = sorted(set(start) | set(end) | {current_date.year})
     gas_year_objects = [GasYear(year, "") for year in all_gas_years]
 
     data["title"] = "Natural Gas"
@@ -281,10 +291,9 @@ def get_water_dashboard_data(current_date=datetime.now()):
         "measurement": None
     }
 
-    start = list(set([w.service_start_date.year for w in Water.objects.all()]))
-    end = list(set([w.service_end_date.year for w in Water.objects.all()]))
-    all_water_years = list(set(start + end + [current_date.year]))
-    all_water_years.sort()
+    start = Water.objects.values_list("service_start_date__year", flat=True).distinct()
+    end = Water.objects.values_list("service_end_date__year", flat=True).distinct()
+    all_water_years = sorted(set(start) | set(end) | {current_date.year})
     water_year_objects = [WaterYear(year, "") for year in all_water_years]
 
     data["title"] = "Water"
@@ -312,12 +321,11 @@ def get_elec_dashboard_data(current_date=datetime.now()):
     }
 
     # Get a list of years that spans all elec data
-    start = list(set([e.service_start_date.year for e in Electricity.objects.all()]))
-    end = list(set([e.service_end_date.year for e in Electricity.objects.all()]))
     # We need a class for the current year even if we don't have any data for it
     # This breaks if you go an entire year without entering data but just don't do that. :)
-    all_elec_years = list(set(start + end + [current_date.year]))
-    all_elec_years.sort()
+    start = Electricity.objects.values_list("service_start_date__year", flat=True).distinct()
+    end = Electricity.objects.values_list("service_end_date__year", flat=True).distinct()
+    all_elec_years = sorted(set(start) | set(end) | {current_date.year})
     # Ex: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
 
     # For each year, create an ElecYear class

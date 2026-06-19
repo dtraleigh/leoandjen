@@ -13,6 +13,8 @@ class VehicleMilesTraveledYear:
         self.borderWidth = 2
         self.latest_data_point = CarMiles.objects.latest("reading_date")
         self.readings = get_measurement_data_from_years("CarMiles", str(year))
+        # Miles-to-next-month for every reading, computed once instead of per row.
+        self.miles_by_pk = CarMiles.get_miles_per_month_map()
         self.data_points = self.get_data_points()
 
     def __repr__(self):
@@ -20,26 +22,29 @@ class VehicleMilesTraveledYear:
 
     def get_data_points(self):
         data_points = []
-        all_vmt_data = CarMiles.objects.all()
+        all_vmt_data = list(CarMiles.objects.order_by("reading_date"))
+        if not all_vmt_data:
+            return data_points
+        # We must skip the most recent datapoint as you can't calculate the VMT miles from it
+        most_recent = all_vmt_data[-1]
 
         for reading in all_vmt_data:
-            data_point = {}
-            if reading.reading_date.year == int(self.year):
-                # 1 to 12
-                data_point["month_number"] = reading.reading_date.month
-                data_point["month_str"] = month_strings_abbr[int(data_point["month_number"]) - 1]
-                data_point["value"] = reading.get_miles_per_month
-
-                # We must skip the most recent datapoint as you can't calculate the VMT miles from it
-                if reading != all_vmt_data.order_by("reading_date").last():
-                    data_points.append(data_point)
+            if reading.reading_date.year != int(self.year):
+                continue
+            if reading == most_recent:
+                continue
+            data_points.append({
+                "month_number": reading.reading_date.month,
+                "month_str": month_strings_abbr[reading.reading_date.month - 1],
+                "value": self.miles_by_pk[reading.pk],
+            })
 
         return data_points
 
     @property
     def get_total_miles(self):
-        return sum([datapoint.get_miles_per_month for datapoint in self.readings if
-                    datapoint.get_miles_per_month is not None])
+        return sum(miles for reading in self.readings
+                   if (miles := self.miles_by_pk.get(reading.pk)) is not None)
 
     def get_ytd_miles(self, custom_most_recent=None):
         """Since data is put in manually, "date" in YTD is the most recent datapoint.

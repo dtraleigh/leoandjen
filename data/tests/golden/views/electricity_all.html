@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>LeoandJen Data</title>
+    
+    <link rel="shortcut icon" type="image/png" href="/static/img/data_favicon.png">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap4.6.2/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/static/css/data_dashboard.css" rel="stylesheet">
+    <link href="/static/DataTables/datatables.min.css" rel="stylesheet">
+    <style>
+    .card {
+      margin-bottom: 20px;
+    }
+    .card-green {
+      background-color: #d4edda;
+      border-color: #c3e6cb;
+    }
+    .card-gray {
+      background-color: #e2e3e5;
+      border-color: #d6d8db;
+    }
+    .card-red {
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
+    }
+  </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0 text-light" href="/data">Leo and Jen</a>
+      <ul class="d-flex ml-auto mb-0 list-unstyled">
+        <li class="nav-item text-nowrap px-2">
+          <a class="nav-link text-muted" href="/admin/">Login</a>
+        </li>
+        
+      </ul>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+  <div class="sidebar-sticky">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" href="/data">
+          <span data-feather="bar-chart-2"></span>
+          Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data/water">
+          <span data-feather="bar-chart-2"></span>
+          Water
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data/gas">
+          <span data-feather="bar-chart-2"></span>
+          Gas
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data/electricity">
+          <span data-feather="bar-chart-2"></span>
+          Electricity
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data/car_miles">
+          <span data-feather="bar-chart-2"></span>
+          Car Miles
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+        
+  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+      
+        <h1 class="h2">Electricity for 2015-2023</h1>
+      
+      <form action="?" method="get">
+        <label for="years_input">Years:</label>
+        <input id="years_input"
+               type="text"
+               name="years"
+               placeholder="Ex: 2019-2021"
+               value="2015-2023">
+        <input type="submit" value="Submit">
+        <p>Keywords: "all", "year+"</p>
+      </form>
+    </div>
+    <div class="alert alert-warning" role="alert">Some years are lacking energy rates: [Elec dataset for 2016, Elec dataset for 2017, Elec dataset for 2018, Elec dataset for 2019, Elec dataset for 2020, Elec dataset for 2021, Elec dataset for 2022]</div>
+    <canvas class="my-4" id="chart" width="900" height="380"></canvas>
+    <div class="alert alert-primary" role="alert">Data through Aug. 8, 2023</div>
+    <h3>Yearly Totals</h3>
+    <div class="table-responsive">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>Dates</th>
+            <th>Solar Savings</th>
+            <th>Grid Energy Consumed</th>
+            <th>Solar Produced</th>
+            <th>Solar Sent to Grid</th>
+            <th>House Energy Consumed</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>Jan 11, 2023 - Aug 08, 2023</td>
+              <td>$267.06</td>
+              <td>2749</td>
+              <td>4977.657</td>
+              <td>3222</td>
+              <td>4504.657</td>
+            </tr>
+          
+            <tr>
+              <td>Jan 12, 2022 - Jan 10, 2023</td>
+              <td>$0.00</td>
+              <td>8245</td>
+              <td>85.094</td>
+              <td>0</td>
+              <td>8330.094</td>
+            </tr>
+          
+            <tr>
+              <td>Jan 01, 2021 - Jan 11, 2022</td>
+              <td>$0.00</td>
+              <td>5489</td>
+              <td>0.0</td>
+              <td>0</td>
+              <td>5489.0</td>
+            </tr>
+          
+            <tr>
+              <td>Jan 01, 2020 - Dec 31, 2020</td>
+              <td>$0.00</td>
+              <td>7528</td>
+              <td>0.0</td>
+              <td>0</td>
+              <td>7528.0</td>
+            </tr>
+          
+            <tr>
+              <td>Jan 01, 2019 - Dec 31, 2019</td>
+              <td>$0.00</td>
+              <td>7664</td>
+              <td>0.0</td>
+              <td>0</td>
+              <td>7664.0</td>
+            </tr>
+          
+            <tr>
+              <td>Jan 01, 2018 - Dec 31, 2018</td>
+              <td>$0.00</td>
+              <td>6653</td>
+              <td>0.0</td>
+              <td>0</td>
+              <td>6653.0</td>
+            </tr>
+          
+            <tr>
+              <td>Jan 01, 2017 - Dec 31, 2017</td>
+              <td>$0.00</td>
+              <td>6414</td>
+              <td>0.0</td>
+              <td>0</td>
+              <td>6414.0</td>
+            </tr>
+          
+            <tr>
+              <td>Jan 01, 2016 - Dec 31, 2016</td>
+              <td>$0.00</td>
+              <td>6235</td>
+              <td>0.0</td>
+              <td>0</td>
+              <td>6235.0</td>
+            </tr>
+          
+          <tr style="border: solid;">
+            <td>TOTAL</td>
+            <td>$267.06</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Monthly Data</h3>
+    <div class="table-responsive">
+      <table class="table table-striped table-sm" id="data_table_main">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Kilowatt hours used (Grid)</th>
+            <th>Solar Produced</th>
+            <th>Solar Sent to Grid</th>
+            <th>Total House Consumption</th>
+            <th>Daily Usage</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            
+              <tr>
+                <td>Aug 2023</td>
+                <td>131.28</td>
+                <td>825.71</td>
+                <td>110.64</td>
+                <td>846.35</td>
+                <td>27.30</td>
+              </tr>
+            
+              <tr>
+                <td>Jul 2023</td>
+                <td>483.71</td>
+                <td>952.08</td>
+                <td>427.03</td>
+                <td>1008.76</td>
+                <td>32.54</td>
+              </tr>
+            
+              <tr>
+                <td>Jun 2023</td>
+                <td>376.18</td>
+                <td>954.83</td>
+                <td>425.96</td>
+                <td>905.05</td>
+                <td>30.17</td>
+              </tr>
+            
+              <tr>
+                <td>May 2023</td>
+                <td>265.15</td>
+                <td>921.98</td>
+                <td>538.32</td>
+                <td>648.81</td>
+                <td>20.93</td>
+              </tr>
+            
+              <tr>
+                <td>Apr 2023</td>
+                <td>282.70</td>
+                <td>751.31</td>
+                <td>635.50</td>
+                <td>398.51</td>
+                <td>13.28</td>
+              </tr>
+            
+              <tr>
+                <td>Mar 2023</td>
+                <td>368.60</td>
+                <td>588.40</td>
+                <td>588.80</td>
+                <td>368.20</td>
+                <td>11.88</td>
+              </tr>
+            
+              <tr>
+                <td>Feb 2023</td>
+                <td>385.92</td>
+                <td>373.79</td>
+                <td>407.12</td>
+                <td>352.59</td>
+                <td>12.59</td>
+              </tr>
+            
+              <tr>
+                <td>Jan 2023</td>
+                <td>753.69</td>
+                <td>292.10</td>
+                <td>89.04</td>
+                <td>956.75</td>
+                <td>30.86</td>
+              </tr>
+            
+          
+            
+              <tr>
+                <td>Dec 2022</td>
+                <td>850.10</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>850.10</td>
+                <td>27.42</td>
+              </tr>
+            
+              <tr>
+                <td>Nov 2022</td>
+                <td>576.62</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>576.62</td>
+                <td>19.22</td>
+              </tr>
+            
+              <tr>
+                <td>Oct 2022</td>
+                <td>502.52</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>502.52</td>
+                <td>16.21</td>
+              </tr>
+            
+              <tr>
+                <td>Sept 2022</td>
+                <td>595.50</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>595.50</td>
+                <td>19.85</td>
+              </tr>
+            
+              <tr>
+                <td>Aug 2022</td>
+                <td>818.38</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>818.38</td>
+                <td>26.40</td>
+              </tr>
+            
+              <tr>
+                <td>Jul 2022</td>
+                <td>855.78</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>855.78</td>
+                <td>27.61</td>
+              </tr>
+            
+              <tr>
+                <td>Jun 2022</td>
+                <td>726.52</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>726.52</td>
+                <td>24.22</td>
+              </tr>
+            
+              <tr>
+                <td>May 2022</td>
+                <td>590.83</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>590.83</td>
+                <td>19.06</td>
+              </tr>
+            
+              <tr>
+                <td>Apr 2022</td>
+                <td>479.66</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>479.66</td>
+                <td>15.99</td>
+              </tr>
+            
+              <tr>
+                <td>Mar 2022</td>
+                <td>567.08</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>567.08</td>
+                <td>18.29</td>
+              </tr>
+            
+              <tr>
+                <td>Feb 2022</td>
+                <td>700.72</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>700.72</td>
+                <td>25.03</td>
+              </tr>
+            
+              <tr>
+                <td>Jan 2022</td>
+                <td>937.78</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>937.78</td>
+                <td>30.25</td>
+              </tr>
+            
+          
+            
+              <tr>
+                <td>Dec 2021</td>
+                <td>650.98</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>650.98</td>
+                <td>21.00</td>
+              </tr>
+            
+              <tr>
+                <td>Nov 2021</td>
+                <td>435.26</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>435.26</td>
+                <td>14.51</td>
+              </tr>
+            
+              <tr>
+                <td>Oct 2021</td>
+                <td>474.34</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>474.34</td>
+                <td>15.30</td>
+              </tr>
+            
+              <tr>
+                <td>Sept 2021</td>
+                <td>696.22</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>696.22</td>
+                <td>23.21</td>
+              </tr>
+            
+              <tr>
+                <td>Aug 2021</td>
+                <td>976.62</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>976.62</td>
+                <td>31.50</td>
+              </tr>
+            
+              <tr>
+                <td>Jul 2021</td>
+                <td>796.36</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>796.36</td>
+                <td>25.69</td>
+              </tr>
+            
+              <tr>
+                <td>Jun 2021</td>
+                <td>638.48</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>638.48</td>
+                <td>21.28</td>
+              </tr>
+            
+              <tr>
+                <td>May 2021</td>
+                <td>236.41</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>236.41</td>
+                <td>7.63</td>
+              </tr>
+            
+              <tr>
+                <td>Apr 2021</td>
+                <td>106.96</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>106.96</td>
+                <td>3.57</td>
+              </tr>
+            
+              <tr>
+                <td>Mar 2021</td>
+                <td>76.95</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>76.95</td>
+                <td>2.48</td>
+              </tr>
+            
+              <tr>
+                <td>Feb 2021</td>
+                <td>54.60</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>54.60</td>
+                <td>1.95</td>
+              </tr>
+            
+              <tr>
+                <td>Jan 2021</td>
+                <td>91.14</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>91.14</td>
+                <td>2.94</td>
+              </tr>
+            
+          
+            
+              <tr>
+                <td>Dec 2020</td>
+                <td>257.92</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>257.92</td>
+                <td>8.32</td>
+              </tr>
+            
+              <tr>
+                <td>Nov 2020</td>
+                <td>485.10</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>485.10</td>
+                <td>16.17</td>
+              </tr>
+            
+              <tr>
+                <td>Oct 2020</td>
+                <td>637.98</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>637.98</td>
+                <td>20.58</td>
+              </tr>
+            
+              <tr>
+                <td>Sept 2020</td>
+                <td>579.90</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>579.90</td>
+                <td>19.33</td>
+              </tr>
+            
+              <tr>
+                <td>Aug 2020</td>
+                <td>828.94</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>828.94</td>
+                <td>26.74</td>
+              </tr>
+            
+              <tr>
+                <td>Jul 2020</td>
+                <td>1129.95</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>1129.95</td>
+                <td>36.45</td>
+              </tr>
+            
+              <tr>
+                <td>Jun 2020</td>
+                <td>828.00</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>828.00</td>
+                <td>27.60</td>
+              </tr>
+            
+              <tr>
+                <td>May 2020</td>
+                <td>747.10</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>747.10</td>
+                <td>24.10</td>
+              </tr>
+            
+              <tr>
+                <td>Apr 2020</td>
+                <td>510.00</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>510.00</td>
+                <td>17.00</td>
+              </tr>
+            
+              <tr>
+                <td>Mar 2020</td>
+                <td>500.96</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>500.96</td>
+                <td>16.16</td>
+              </tr>
+            
+              <tr>
+                <td>Feb 2020</td>
+                <td>472.12</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>472.12</td>
+                <td>16.28</td>
+              </tr>
+            
+              <tr>
+                <td>Jan 2020</td>
+                <td>549.94</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>549.94</td>
+                <td>17.74</td>
+              </tr>
+            
+          
+            
+              <tr>
+                <td>Dec 2019</td>
+                <td>487.01</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>487.01</td>
+                <td>15.71</td>
+              </tr>
+            
+              <tr>
+                <td>Nov 2019</td>
+                <td>495.90</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>495.90</td>
+                <td>16.53</td>
+              </tr>
+            
+              <tr>
+                <td>Oct 2019</td>
+                <td>318.99</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>318.99</td>
+                <td>10.29</td>
+              </tr>
+            
+              <tr>
+                <td>Sept 2019</td>
+                <td>786.90</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>786.90</td>
+                <td>26.23</td>
+              </tr>
+            
+              <tr>
+                <td>Aug 2019</td>
+                <td>1024.86</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>1024.86</td>
+                <td>33.06</td>
+              </tr>
+            
+              <tr>
+                <td>Jul 2019</td>
+                <td>1004.09</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>1004.09</td>
+                <td>32.39</td>
+              </tr>
+            
+              <tr>
+                <td>Jun 2019</td>
+                <td>825.00</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>825.00</td>
+                <td>27.50</td>
+              </tr>
+            
+              <tr>
+                <td>May 2019</td>
+                <td>782.13</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>782.13</td>
+                <td>25.23</td>
+              </tr>
+            
+              <tr>
+                <td>Apr 2019</td>
+                <td>509.10</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>509.10</td>
+                <td>16.97</td>
+              </tr>
+            
+              <tr>
+                <td>Mar 2019</td>
+                <td>482.05</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>482.05</td>
+                <td>15.55</td>
+              </tr>
+            
+              <tr>
+                <td>Feb 2019</td>
+                <td>439.04</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>439.04</td>
+                <td>15.68</td>
+              </tr>
+            
+              <tr>
+                <td>Jan 2019</td>
+                <td>509.02</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>509.02</td>
+                <td>16.42</td>
+              </tr>
+            
+          
+            
+              <tr>
+                <td>Dec 2018</td>
+                <td>429.04</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>429.04</td>
+                <td>13.84</td>
+              </tr>
+            
+              <tr>
+                <td>Nov 2018</td>
+                <td>395.10</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>395.10</td>
+                <td>13.17</td>
+              </tr>
+            
+              <tr>
+                <td>Oct 2018</td>
+                <td>676.11</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>676.11</td>
+                <td>21.81</td>
+              </tr>
+            
+              <tr>
+                <td>Sept 2018</td>
+                <td>824.10</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>824.10</td>
+                <td>27.47</td>
+              </tr>
+            
+              <tr>
+                <td>Aug 2018</td>
+                <td>762.91</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>762.91</td>
+                <td>24.61</td>
+              </tr>
+            
+              <tr>
+                <td>Jul 2018</td>
+                <td>795.15</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>795.15</td>
+                <td>25.65</td>
+              </tr>
+            
+              <tr>
+                <td>Jun 2018</td>
+                <td>633.90</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>633.90</td>
+                <td>21.13</td>
+              </tr>
+            
+              <tr>
+                <td>May 2018</td>
+                <td>353.09</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>353.09</td>
+                <td>11.39</td>
+              </tr>
+            
+              <tr>
+                <td>Apr 2018</td>
+                <td>438.90</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>438.90</td>
+                <td>14.63</td>
+              </tr>
+            
+              <tr>
+                <td>Mar 2018</td>
+                <td>364.87</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>364.87</td>
+                <td>11.77</td>
+              </tr>
+            
+              <tr>
+                <td>Feb 2018</td>
+                <td>437.92</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>437.92</td>
+                <td>15.64</td>
+              </tr>
+            
+              <tr>
+                <td>Jan 2018</td>
+                <td>541.88</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>541.88</td>
+                <td>17.48</td>
+              </tr>
+            
+          
+            
+              <tr>
+                <td>Dec 2017</td>
+                <td>430.90</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>430.90</td>
+                <td>13.90</td>
+              </tr>
+            
+              <tr>
+                <td>Nov 2017</td>
+                <td>423.00</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>423.00</td>
+                <td>14.10</td>
+              </tr>
+            
+              <tr>
+                <td>Oct 2017</td>
+                <td>566.99</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>566.99</td>
+                <td>18.29</td>
+              </tr>
+            
+              <tr>
+                <td>Sept 2017</td>
+                <td>671.10</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>671.10</td>
+                <td>22.37</td>
+              </tr>
+            
+              <tr>
+                <td>Aug 2017</td>
+                <td>739.97</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>739.97</td>
+                <td>23.87</td>
+              </tr>
+            
+              <tr>
+                <td>Jul 2017</td>
+                <td>766.94</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>766.94</td>
+                <td>24.74</td>
+              </tr>
+            
+              <tr>
+                <td>Jun 2017</td>
+                <td>573.00</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>573.00</td>
+                <td>19.10</td>
+              </tr>
+            
+              <tr>
+                <td>May 2017</td>
+                <td>491.97</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>491.97</td>
+                <td>15.87</td>
+              </tr>
+            
+              <tr>
+                <td>Apr 2017</td>
+                <td>476.10</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>476.10</td>
+                <td>15.87</td>
+              </tr>
+            
+              <tr>
+                <td>Mar 2017</td>
+                <td>358.05</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>358.05</td>
+                <td>11.55</td>
+              </tr>
+            
+              <tr>
+                <td>Feb 2017</td>
+                <td>416.92</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>416.92</td>
+                <td>14.89</td>
+              </tr>
+            
+              <tr>
+                <td>Jan 2017</td>
+                <td>499.10</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>499.10</td>
+                <td>16.10</td>
+              </tr>
+            
+          
+            
+              <tr>
+                <td>Dec 2016</td>
+                <td>349.06</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>349.06</td>
+                <td>11.26</td>
+              </tr>
+            
+              <tr>
+                <td>Nov 2016</td>
+                <td>396.00</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>396.00</td>
+                <td>13.20</td>
+              </tr>
+            
+              <tr>
+                <td>Oct 2016</td>
+                <td>584.04</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>584.04</td>
+                <td>18.84</td>
+              </tr>
+            
+              <tr>
+                <td>Sept 2016</td>
+                <td>804.90</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>804.90</td>
+                <td>26.83</td>
+              </tr>
+            
+              <tr>
+                <td>Aug 2016</td>
+                <td>801.97</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>801.97</td>
+                <td>25.87</td>
+              </tr>
+            
+              <tr>
+                <td>Jul 2016</td>
+                <td>748.96</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>748.96</td>
+                <td>24.16</td>
+              </tr>
+            
+              <tr>
+                <td>Jun 2016</td>
+                <td>476.10</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>476.10</td>
+                <td>15.87</td>
+              </tr>
+            
+              <tr>
+                <td>May 2016</td>
+                <td>417.88</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>417.88</td>
+                <td>13.48</td>
+              </tr>
+            
+              <tr>
+                <td>Apr 2016</td>
+                <td>359.10</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>359.10</td>
+                <td>11.97</td>
+              </tr>
+            
+              <tr>
+                <td>Mar 2016</td>
+                <td>429.97</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>429.97</td>
+                <td>13.87</td>
+              </tr>
+            
+              <tr>
+                <td>Feb 2016</td>
+                <td>390.92</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>390.92</td>
+                <td>13.48</td>
+              </tr>
+            
+              <tr>
+                <td>Jan 2016</td>
+                <td>475.85</td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>475.85</td>
+                <td>15.35</td>
+              </tr>
+            
+          
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+      </div>
+    </div>
+    <!-- Bootstrap -->
+    <script src="/static/js/jquery3.5.1/jquery-3.5.1.slim.min.js"></script>
+    <script src="/static/js/popper1.16.1/popper.min.js"></script>
+    <script src="/static/bootstrap4.6.2/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="/static/DataTables/datatables.min.js"></script>
+    <!-- Icons -->
+    <script src="/static/feather-icons4.29.0/feather.min.js"></script>
+    <script>feather.replace()</script>
+    <!-- Graphs -->
+    <script src="/static/js/chart.js3.7.1/chart.min.js"></script>
+    <script src="/static/js/moment2.29.4/moment%40%5E2.js"></script>
+    <script src="/static/js/moment2.29.4/chartjs-adapter-moment%40%5E1.js"></script>
+    <script type="text/javascript">
+      var chart_data = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+      datasets: [
+        
+        {
+          label: 'Elec - 2016',
+          fill: false,
+          type: 'line',
+          borderColor: 'rgba(0, 86, 71, 0.8)',
+          borderWidth: '2',
+          tension: 0.2,
+          data: [475.85,390.92,429.97,359.10,417.88,476.10,748.96,801.97,804.90,584.04,396.00,349.06]
+        },
+        
+          
+        
+        
+        {
+          label: 'Elec - 2017',
+          fill: false,
+          type: 'line',
+          borderColor: 'rgba(56, 85, 178, 0.8)',
+          borderWidth: '2',
+          tension: 0.2,
+          data: [499.10,416.92,358.05,476.10,491.97,573.00,766.94,739.97,671.10,566.99,423.00,430.90]
+        },
+        
+          
+        
+        
+        {
+          label: 'Elec - 2018',
+          fill: false,
+          type: 'line',
+          borderColor: 'rgba(224, 20, 144, 0.8)',
+          borderWidth: '2',
+          tension: 0.2,
+          data: [541.88,437.92,364.87,438.90,353.09,633.90,795.15,762.91,824.10,676.11,395.10,429.04]
+        },
+        
+          
+        
+        
+        {
+          label: 'Elec - 2019',
+          fill: false,
+          type: 'line',
+          borderColor: 'rgba(95, 11, 76, 0.8)',
+          borderWidth: '2',
+          tension: 0.2,
+          data: [509.02,439.04,482.05,509.10,782.13,825.00,1004.09,1024.86,786.90,318.99,495.90,487.01]
+        },
+        
+          
+        
+        
+        {
+          label: 'Elec - 2020',
+          fill: false,
+          type: 'line',
+          borderColor: 'rgba(18, 195, 197, 0.8)',
+          borderWidth: '2',
+          tension: 0.2,
+          data: [549.94,472.12,500.96,510.00,747.10,828.00,1129.95,828.94,579.90,637.98,485.10,257.92]
+        },
+        
+          
+        
+        
+        {
+          label: 'Elec - 2021',
+          fill: false,
+          type: 'line',
+          borderColor: 'rgba(205, 185, 51, 0.8)',
+          borderWidth: '2',
+          tension: 0.2,
+          data: [91.14,54.60,76.95,106.96,236.41,638.48,796.36,976.62,696.22,474.34,435.26,650.98]
+        },
+        
+          
+        
+        
+        {
+          label: 'Elec - 2022',
+          fill: false,
+          type: 'line',
+          borderColor: 'rgba(16, 58, 102, 0.8)',
+          borderWidth: '2',
+          tension: 0.2,
+          data: [937.78,700.72,567.08,479.66,590.83,726.52,855.78,818.38,595.50,502.52,576.62,850.10]
+        },
+        
+          
+        
+        
+        {
+          label: 'Elec - 2023',
+          fill: false,
+          type: 'line',
+          borderColor: 'rgba(59, 212, 217, 0.8)',
+          borderWidth: '2',
+          tension: 0.2,
+          data: [956.75,352.59,368.20,398.51,648.81,905.05,1008.76,846.35]
+        },
+        
+          {label:'Solar - 2023',type:'bar',borderColor:'rgba(59, 212, 217, 0.5)',borderWidth:'2',data:[292.1, 373.79, 588.4, 751.31, 921.98, 954.83, 952.08, 825.71]},
+        
+        
+        {
+          label: 'Average (2015-2022)',
+          fill: false,
+          type: "line",
+          borderColor: 'rgba(22, 51, 73, 0.1)',
+          borderWidth: '5',
+          tension: 0.2,
+          data: [507.47375,411.42,379.3825,385.215,499.6625,673.50,862.90375,862.08375,702.3275,530.3775,437.9975,488.99375]
+        }
+      ]
+    }
+    </script>
+    <script src="/static/js/myChart.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.7/sorting/natural.js"></script>
+    <script>
+      $(document).ready(function () {
+        $('#data_table_main').DataTable({
+        "order": [],
+        columnDefs: [
+          { type: 'natural', targets: '_all' }
+        ]
+        });
+        $('.dataTables_length').addClass('bs-select');
+      });
+    </script>
+  </body>
+</html>

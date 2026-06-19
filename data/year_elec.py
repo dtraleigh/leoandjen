@@ -22,8 +22,12 @@ class ElecYear:
         # A reading is a model object from the database
         # Get bills with a service_start_date in this year
         self.readings = get_measurement_data_from_years("Electricity", str(year))
+        # Lazily-computed caches (see get_solar_produced_total / is_lacking_energy_rates).
+        # is_lacking is intentionally NOT computed here so the dashboard, which only needs
+        # YTD totals, doesn't pay for it on every year.
+        self._solar_produced_total = None
+        self._lacking_energy_rates = None
         self.data_points = self.get_data_points()
-        self.lacking_energy_rates = self.is_lacking_energy_rates()
 
     def __repr__(self):
         return f"Elec dataset for {self.year}"
@@ -89,7 +93,7 @@ class ElecYear:
         # YTD should be total between Jan 1 and first of the current month
         # - Since we get data in chunks (the bills), not worrying about YTD daily values
         # - Therefore, YTD range is from Jan 1 up to current_month or the latest bill we have
-        datapoints = self.get_data_points()
+        datapoints = self.data_points
 
         ytd_total = Decimal("0.0")
         for datapoint in datapoints:
@@ -146,9 +150,18 @@ class ElecYear:
         return None
 
     def get_solar_produced_total(self):
-        if self.readings:
-            return round(sum([t.get_total_solar_produced for t in self.readings]), 3)
-        return None
+        if not self.readings:
+            return None
+        if self._solar_produced_total is None:
+            # One query covering every reading's service period instead of one per bill.
+            period_filter = Q()
+            for reading in self.readings:
+                period_filter |= Q(date_of_production__gte=reading.service_start_date,
+                                   date_of_production__lte=reading.service_end_date)
+            total_watts = SolarEnergy.objects.filter(period_filter).aggregate(
+                total=Sum("production"))["total"] or 0
+            self._solar_produced_total = round(total_watts / 1000, 3)
+        return self._solar_produced_total
 
     def get_solar_sent_to_grid_total(self):
         if self.readings:
@@ -164,7 +177,7 @@ class ElecYear:
         return None
 
     def get_solar_bar_chart_dataset(self):
-        solar_data_for_this_year = [float(x['solar_produced']) for x in self.get_data_points()]
+        solar_data_for_this_year = [float(x['solar_produced']) for x in self.data_points]
 
         if list(set(solar_data_for_this_year)) == [0.0]:
             return ""
@@ -178,7 +191,7 @@ class ElecYear:
         return solar_bar_dataset
 
     def is_lacking_energy_rates(self):
-        for reading in self.readings:
-            if reading.bill_is_lacking_rates:
-                return True
-        return False
+        if self._lacking_energy_rates is None:
+            self._lacking_energy_rates = any(
+                reading.bill_is_lacking_rates for reading in self.readings)
+        return self._lacking_energy_rates

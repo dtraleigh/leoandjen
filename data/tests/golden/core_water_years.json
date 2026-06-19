@@ -1,0 +1,587 @@
+{
+  "2014": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": "Decimal:1440.00"
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": "Decimal:1263.60"
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": "Decimal:1404.00"
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": "Decimal:1548.60"
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": "Decimal:1449.00"
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": "Decimal:1447.10"
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": "Decimal:1359.00"
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": "Decimal:2244.00"
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": "Decimal:1313.70"
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": "Decimal:1602.00"
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": "Decimal:1447.10"
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": "Decimal:1359.00"
+      }
+    ],
+    "ytd_total": "Decimal:17877.10"
+  },
+  "2015": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": "Decimal:2103.00"
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": "Decimal:1393.20"
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": "Decimal:2322.00"
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": "Decimal:2711.50"
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": "Decimal:3741.00"
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": "Decimal:2244.60"
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": "Decimal:2721.00"
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": "Decimal:2322.00"
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": "Decimal:2891.30"
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": "Decimal:3207.00"
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": "Decimal:2032.90"
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": "Decimal:2322.00"
+      }
+    ],
+    "ytd_total": "Decimal:30011.50"
+  },
+  "2016": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": "Decimal:2991.00"
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": "Decimal:2618.00"
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": "Decimal:3618.00"
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": "Decimal:3390.10"
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": "Decimal:2322.00"
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": "Decimal:2891.30"
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": "Decimal:2172.00"
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": "Decimal:2322.00"
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": "Decimal:2099.60"
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": "Decimal:2895.00"
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": "Decimal:2169.20"
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": "Decimal:1548.00"
+      }
+    ],
+    "ytd_total": "Decimal:31036.20"
+  },
+  "2017": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": "Decimal:2805.00"
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": "Decimal:1954.80"
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": "Decimal:2103.00"
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": "Decimal:2169.20"
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": "Decimal:2991.00"
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": "Decimal:1400.70"
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": "Decimal:2172.00"
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": "Decimal:2322.00"
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": "Decimal:1357.20"
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": "Decimal:2322.00"
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": "Decimal:2169.20"
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": "Decimal:2721.00"
+      }
+    ],
+    "ytd_total": "Decimal:26487.10"
+  },
+  "2018": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": "Decimal:2322.00"
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": "Decimal:1393.20"
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": "Decimal:2805.00"
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": "Decimal:1496.40"
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": "Decimal:2322.00"
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": "Decimal:2032.90"
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": "Decimal:2172.00"
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": "Decimal:2322.00"
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": "Decimal:2032.90"
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": "Decimal:2403.00"
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": "Decimal:2169.20"
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": "Decimal:2805.00"
+      }
+    ],
+    "ytd_total": "Decimal:26275.60"
+  },
+  "2019": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": "Decimal:2322.00"
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": "Decimal:2094.40"
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": "Decimal:2607.10"
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": "Decimal:2032.90"
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": "Decimal:1546.90"
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": "Decimal:2811.30"
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": "Decimal:2322.00"
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": "Decimal:2172.00"
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": "Decimal:2711.50"
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": "Decimal:1449.00"
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": "Decimal:2711.50"
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": "Decimal:1602.00"
+      }
+    ],
+    "ytd_total": "Decimal:26382.60"
+  },
+  "2020": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": "Decimal:2244.00"
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": "Decimal:2618.00"
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": "Decimal:2991.00"
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": "Decimal:2169.20"
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": "Decimal:2991.00"
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": "Decimal:2891.30"
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": "Decimal:2244.00"
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": "Decimal:2895.00"
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": "Decimal:2798.50"
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": "Decimal:2895.00"
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": "Decimal:2711.50"
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": "Decimal:1548.00"
+      }
+    ],
+    "ytd_total": "Decimal:30996.50"
+  },
+  "2021": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": "Decimal:0.00"
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": "Decimal:0.00"
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": "Decimal:747.00"
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": "Decimal:0.00"
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": "Decimal:722.10"
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": "Decimal:2194.10"
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": "Decimal:2177.80"
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": "Decimal:2384.80"
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": "Decimal:2991.00"
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": "Decimal:2173.10"
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": "Decimal:2239.30"
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": "Decimal:2177.80"
+      }
+    ],
+    "ytd_total": "Decimal:17807.00"
+  },
+  "2022": {
+    "data_points": [
+      {
+        "month_number": 1,
+        "month_str": "Jan",
+        "value": "Decimal:2384.80"
+      },
+      {
+        "month_number": 2,
+        "month_str": "Feb",
+        "value": "Decimal:1444.80"
+      },
+      {
+        "month_number": 3,
+        "month_str": "Mar",
+        "value": "Decimal:2366.30"
+      },
+      {
+        "month_number": 4,
+        "month_str": "Apr",
+        "value": "Decimal:2103.00"
+      },
+      {
+        "month_number": 5,
+        "month_str": "May",
+        "value": "Decimal:1567.10"
+      },
+      {
+        "month_number": 6,
+        "month_str": "Jun",
+        "value": "Decimal:2244.00"
+      },
+      {
+        "month_number": 7,
+        "month_str": "Jul",
+        "value": "Decimal:2244.40"
+      },
+      {
+        "month_number": 8,
+        "month_str": "Aug",
+        "value": "Decimal:1571.80"
+      },
+      {
+        "month_number": 9,
+        "month_str": "Sept",
+        "value": "Decimal:2239.30"
+      },
+      {
+        "month_number": 10,
+        "month_str": "Oct",
+        "value": "Decimal:2173.10"
+      },
+      {
+        "month_number": 11,
+        "month_str": "Nov",
+        "value": "Decimal:2172.00"
+      },
+      {
+        "month_number": 12,
+        "month_str": "Dec",
+        "value": "Decimal:72.40"
+      }
+    ],
+    "ytd_total": "Decimal:22583.00"
+  }
+}
