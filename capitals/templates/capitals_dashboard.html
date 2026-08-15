@@ -54,13 +54,19 @@
 
     <!-- States List Section -->
     <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">State Capitals</h4>
+      <div class="panel-heading clearfix">
+        <h4 class="panel-title pull-left">State Capitals</h4>
+        <a href="#" id="capitals-sort-toggle" class="pull-right small" role="button">
+          <span class="glyphicon glyphicon-sort"></span> Sort by visit order
+        </a>
       </div>
       <div class="panel-body">
-        <div class="row">
+        <div class="row" id="state-capitals-grid">
           {% for capital_city in us_states_list %}
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin-bottom: 8px;">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                 style="margin-bottom: 8px;"
+                 data-default-index="{{ forloop.counter0 }}"
+                 {% if capital_city.visited %}data-visited-order="{{ capital_city.visited_order_position }}"{% endif %}>
               {% if capital_city.visited %}
                 <a class="btn btn-success btn-block btn-sm"
                    href="/capitals/capital/{{ capital_city.name }}"
@@ -127,3 +133,75 @@
   margin-right: 8px;
 }
 </style>
+
+<script>
+(function () {
+    "use strict";
+
+    function init() {
+        var grid = document.getElementById("state-capitals-grid");
+        var toggle = document.getElementById("capitals-sort-toggle");
+        if (!grid || !toggle) {
+            return;
+        }
+
+        var items = Array.prototype.slice.call(grid.children);
+        var sortedByVisit = false;
+
+        function defaultIndex(item) {
+            return parseInt(item.dataset.defaultIndex, 10);
+        }
+
+        function visitOrder(item) {
+            // Only visited capitals carry this attribute, and it renders as a string.
+            return item.dataset.visitedOrder ? parseInt(item.dataset.visitedOrder, 10) : null;
+        }
+
+        function byDefaultOrder() {
+            return items.slice().sort(function (a, b) {
+                return defaultIndex(a) - defaultIndex(b);
+            });
+        }
+
+        function byVisitOrder() {
+            var visited = [];
+            var unvisited = [];
+
+            byDefaultOrder().forEach(function (item) {
+                if (visitOrder(item) === null) {
+                    unvisited.push(item);
+                } else {
+                    visited.push(item);
+                }
+            });
+
+            visited.sort(function (a, b) {
+                return visitOrder(a) - visitOrder(b);
+            });
+
+            // Unvisited keep their default (by state) order behind the visited ones.
+            return visited.concat(unvisited);
+        }
+
+        toggle.addEventListener("click", function (event) {
+            event.preventDefault();
+            sortedByVisit = !sortedByVisit;
+
+            var ordered = sortedByVisit ? byVisitOrder() : byDefaultOrder();
+            ordered.forEach(function (item) {
+                grid.appendChild(item);
+            });
+
+            toggle.innerHTML = sortedByVisit
+                ? '<span class="glyphicon glyphicon-sort"></span> Sort by state'
+                : '<span class="glyphicon glyphicon-sort"></span> Sort by visit order';
+        });
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+})();
+</script>
