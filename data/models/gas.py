@@ -10,7 +10,7 @@ class Gas(models.Model):
     bill_date = models.DateField(blank=True, null=True)
     service_start_date = models.DateField()
     service_end_date = models.DateField()
-    therms_usage = models.IntegerField()
+    therms_usage = models.DecimalField(max_digits=7, decimal_places=1)
     uploaded_pdf = models.FileField(
         upload_to="gas_pdfs/",
         blank=True,
@@ -35,7 +35,7 @@ class Gas(models.Model):
 
     @property
     def get_daily_gas_usage(self):
-        return round(self.therms_usage / self.get_number_of_days.days, 2)
+        return round(float(self.therms_usage) / self.get_number_of_days.days, 2)
 
     def get_number_of_days_in_month(self, month, year):
         year = int(year)

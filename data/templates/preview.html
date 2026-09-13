@@ -82,7 +82,7 @@
                     <dt class="col-sm-5">Bill Date</dt><dd class="col-sm-7">{{ duplicate.bill_date|date:"Y-m-d"|default:"Not set" }}</dd>
                     <dt class="col-sm-5">Service Start</dt><dd class="col-sm-7">{{ duplicate.service_start_date|date:"Y-m-d" }}</dd>
                     <dt class="col-sm-5">Service End</dt><dd class="col-sm-7">{{ duplicate.service_end_date|date:"Y-m-d" }}</dd>
-                    <dt class="col-sm-5">Therms Usage</dt><dd class="col-sm-7">{{ duplicate.therms_usage }}</dd>
+                    <dt class="col-sm-5">Therms Usage</dt><dd class="col-sm-7">{{ duplicate.therms_usage|floatformat }}</dd>
                   </dl>
                 {% elif data.bill_type == "Water" %}
                   <dl class="row small">

@@ -1,17 +1,19 @@
 import logging
-from datetime import datetime
+from datetime import date, datetime
+from decimal import Decimal
 from data.pdf_utils import (
     extract_elec_billing_date,
     extract_elec_service_dates, extract_elec_energy_used, extract_elec_actual_reading, extract_elec_previous_reading,
     extract_energy_delivered_to_grid, extract_delivered_actual_reading, extract_delivered_previous_reading,
     extract_carried_forward_balance, get_text_from_pdf, get_bill_type, extract_gas_billing_date,
     extract_gas_service_dates, extract_gas_therms_usage, extract_water_billing_date, extract_water_service_dates,
-    extract_water_avg_gallons_per_day
+    extract_water_avg_gallons_per_day, detect_gas_format, GAS_FORMAT_LEGACY, GAS_FORMAT_2026
 )
 
 from django.test import TestCase
 
 from data.functions import convert_years_string_to_years_list
+from data.models import Gas
 from data.test_data.create_test_data import *
 
 # Suppress pdfminer warnings
@@ -166,6 +168,22 @@ class DataTestCase(TestCase):
                 "service_start": "2025-04-07",
                 "service_end": "2025-05-07",
                 "therms_usage": 10,
+            },
+            "data/test_data/GasBill_Enbridge_08-11-2026.pdf": {
+                "bill_type": "Gas",
+                "billing_date": "2026-08-11",
+                "billing_year": 2026,
+                "service_start": "2026-07-10",
+                "service_end": "2026-08-11",
+                "therms_usage": 6.2,
+            },
+            "data/test_data/GasBill_Enbridge_09-10-2026.pdf": {
+                "bill_type": "Gas",
+                "billing_date": "2026-09-10",
+                "billing_year": 2026,
+                "service_start": "2026-08-12",
+                "service_end": "2026-09-09",
+                "therms_usage": 4.2,
             }
         }
         cls.expected_water_data = {
@@ -345,6 +363,52 @@ class DataTestCase(TestCase):
             result = extract_gas_therms_usage(text)
             self.assertEqual(result, data["therms_usage"], msg=f"{filename} failed")
 
+    def test_detect_gas_format(self):
+        # The 2024-25 layout is anchored by its meter table and statement header
+        self.assertEqual(detect_gas_format("METER NO. BILLING PERIOD DAYS CURRENT PREVIOUS"),
+                         GAS_FORMAT_LEGACY)
+        self.assertEqual(detect_gas_format("STATEMENT DATE DATE DUE AMOUNT DUE"),
+                         GAS_FORMAT_LEGACY)
+
+        # The 2026 redesign shares none of those anchors
+        self.assertEqual(detect_gas_format("Account Summary as of 08/11/2026"), GAS_FORMAT_2026)
+
+        self.assertIsNone(detect_gas_format("Some unrelated utility bill"))
+        self.assertIsNone(detect_gas_format(""))
+
+    def test_gas_extractors_fall_back_to_legacy_on_unknown_text(self):
+        # Unrecognized text takes the legacy path, which reports "not found" rather than raising
+        unknown = "Some unrelated utility bill with no recognizable anchors"
+        self.assertIsNone(extract_gas_billing_date(unknown))
+        self.assertEqual(extract_gas_service_dates(unknown, 2026), (None, None))
+        self.assertIsNone(extract_gas_therms_usage(unknown))
+
+    def test_gas_therms_usage_stores_fractional_values(self):
+        # The 2026 Enbridge layout bills fractional therms; an IntegerField would truncate 4.2 to 4
+        bill = Gas.objects.create(
+            bill_date=date(2026, 9, 10),
+            service_start_date=date(2026, 8, 12),
+            service_end_date=date(2026, 9, 9),
+            therms_usage=4.2,
+        )
+        bill.refresh_from_db()
+        self.assertEqual(bill.therms_usage, Decimal("4.2"))
+
+    def test_get_daily_gas_usage_returns_float(self):
+        # year_gas.py accumulates this into the chart data points, so a Decimal here would
+        # change every value in the golden snapshots
+        bill = Gas.objects.create(
+            bill_date=date(2026, 9, 10),
+            service_start_date=date(2026, 8, 12),
+            service_end_date=date(2026, 9, 9),
+            therms_usage=4.2,
+        )
+        # Must come back from the DB as a Decimal, or the coercion under test is not exercised
+        bill.refresh_from_db()
+        self.assertIsInstance(bill.get_daily_gas_usage, float)
+        # 4.2 therms over 29 days, counting both the first and last day of service
+        self.assertEqual(bill.get_daily_gas_usage, 0.14)
+
     def test_extract_water_avg_gallons_per_day(self):
         for filename, data in self.expected_water_data.items():
             text = get_text_from_pdf(filename)
@@ -383,6 +447,7 @@ class DataTestCase(TestCase):
             "enbridge gas north carolina is your gas provider.",
             "Your gas bill is from enbridge gas north carolina",
             "Bill statement from: ENBRIDGE GAS NORTH CAROLINA. Thank you.",
+            "Service Agreement: 6170052338 Rate - 101 - Gas- Residential",
             """
             Natural Gas Utility Bill
             Provider: Enbridge Gas North Carolina

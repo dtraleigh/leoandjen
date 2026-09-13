@@ -19,6 +19,9 @@ logging.getLogger("pdfminer").setLevel(logging.ERROR)
 def parse_month_day(month_str, day_str, year):
     return datetime(year, MONTHS[month_str], int(day_str)).date()
 
+def parse_numeric_date(month, day, year):
+    return datetime(int(year), int(month), int(day)).date()
+
 def extract_elec_billing_date(text):
     match = re.search(r'Bill date\s+([A-Za-z]{3}) (\d{1,2}), (\d{4})', text)
     if match:
@@ -107,7 +110,20 @@ def extract_carried_forward_balance(text):
     return 0
 
 
-def extract_gas_billing_date(text):
+GAS_FORMAT_LEGACY = "legacy"
+GAS_FORMAT_2026 = "2026"
+
+
+def detect_gas_format(text):
+    """Enbridge Gas NC redesigned the bill in 2026 and the two layouts share no anchors."""
+    if "Account Summary as of" in text:
+        return GAS_FORMAT_2026
+    if "STATEMENT DATE" in text or "BILLING PERIOD" in text:
+        return GAS_FORMAT_LEGACY
+    return None
+
+
+def _extract_gas_billing_date_legacy(text):
     # Look for the statement date in the table format
     # STATEMENT DATE DATE DUE AMOUNT DUE
     # May 8 2025 Jun 6 2025 $22.33
@@ -118,7 +134,22 @@ def extract_gas_billing_date(text):
     return None
 
 
-def extract_gas_service_dates(text, year):
+def _extract_gas_billing_date_2026(text):
+    # Account Summary as of 08/11/2026
+    match = re.search(r'Account Summary as of\s+(\d{1,2})/(\d{1,2})/(\d{4})', text)
+    if match:
+        month, day, year = match.groups()
+        return parse_numeric_date(month, day, year)
+    return None
+
+
+def extract_gas_billing_date(text):
+    if detect_gas_format(text) == GAS_FORMAT_2026:
+        return _extract_gas_billing_date_2026(text)
+    return _extract_gas_billing_date_legacy(text)
+
+
+def _extract_gas_service_dates_legacy(text):
     # Look for the billing period in the meter table
     # Format: 04/07/25-05/07/25
     match = re.search(r'BILLING PERIOD.*?(\d{2})/(\d{2})/(\d{2})-(\d{2})/(\d{2})/(\d{2})', text, re.DOTALL)
@@ -126,24 +157,35 @@ def extract_gas_service_dates(text, year):
         start_month, start_day, start_year, end_month, end_day, end_year = match.groups()
 
         # Convert 2-digit years to 4-digit (assuming 20xx)
-        start_year_full = 2000 + int(start_year)
-        end_year_full = 2000 + int(end_year)
-
-        # Convert month numbers to month names for parse_month_day
-        month_names = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun',
-                       7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
-
-        start_month_name = month_names[int(start_month)]
-        end_month_name = month_names[int(end_month)]
-
-        start_date = parse_month_day(start_month_name, start_day, start_year_full)
-        end_date = parse_month_day(end_month_name, end_day, end_year_full)
+        start_date = parse_numeric_date(start_month, start_day, 2000 + int(start_year))
+        end_date = parse_numeric_date(end_month, end_day, 2000 + int(end_year))
 
         return start_date, end_date
     return None, None
 
 
-def extract_gas_therms_usage(text):
+def _extract_gas_service_dates_2026(text):
+    # Service from 7/10/2026 - 8/11/2026 (months and days are not zero-padded)
+    match = re.search(
+        r'Service from\s+(\d{1,2})/(\d{1,2})/(\d{4})\s*-\s*(\d{1,2})/(\d{1,2})/(\d{4})', text)
+    if match:
+        start_month, start_day, start_year, end_month, end_day, end_year = match.groups()
+
+        start_date = parse_numeric_date(start_month, start_day, start_year)
+        end_date = parse_numeric_date(end_month, end_day, end_year)
+
+        return start_date, end_date
+    return None, None
+
+
+def extract_gas_service_dates(text, year):
+    # `year` is unused - both gas layouts spell the year out in the date range itself
+    if detect_gas_format(text) == GAS_FORMAT_2026:
+        return _extract_gas_service_dates_2026(text)
+    return _extract_gas_service_dates_legacy(text)
+
+
+def _extract_gas_therms_usage_legacy(text):
     # Look for the therms value in the meter table
     # The pattern shows: THERMS column with value like "= 10"
     match = re.search(r'THERMS.*?=\s*(\d+(?:\.\d+)?)', text, re.DOTALL)
@@ -156,6 +198,23 @@ def extract_gas_therms_usage(text):
         return float(match.group(1))
 
     return None
+
+
+def _extract_gas_therms_usage_2026(text):
+    # Last column ("Billed TH") of the meter table row:
+    # 000655398 08/11/2026 2918 07/09/2026 2912 33 6 CCF 1.040447 6.2
+    # Preferred over the "6.242681 Therms X $1.3503" line item, which splits into
+    # several lines when a rate change lands mid-cycle.
+    match = re.search(r'CCF\s+\d+\.\d+\s+(\d+(?:\.\d+)?)', text)
+    if match:
+        return float(match.group(1))
+    return None
+
+
+def extract_gas_therms_usage(text):
+    if detect_gas_format(text) == GAS_FORMAT_2026:
+        return _extract_gas_therms_usage_2026(text)
+    return _extract_gas_therms_usage_legacy(text)
 
 
 def extract_water_billing_date(text):
@@ -284,11 +343,18 @@ def get_text_from_pdf(source):
             return "\n".join(page.extract_text() for page in pdf.pages if page.extract_text())
 
 
+# The rate-code line is the only issuer marker shared by every Enbridge NC layout;
+# the 2026 redesign carries the brand name as an image only.
+GAS_RATE_CODE_MARKER = "101 - gas- residential"
+
+
 def get_bill_type(text):
     text_lower = text.lower()
     if "duke-energy" in text_lower or "duke energy" in text_lower:
         return "Electricity"
-    elif "enbridge gas north carolina" in text_lower or "dominion energy" in text_lower:
+    elif ("enbridge gas north carolina" in text_lower
+          or "dominion energy" in text_lower
+          or GAS_RATE_CODE_MARKER in text_lower):
         return "Gas"
     elif "city of raleigh" in text_lower and "water" in text_lower:
         return "Water"
