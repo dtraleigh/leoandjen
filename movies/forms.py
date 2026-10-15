@@ -16,13 +16,16 @@ class AddMovieForm(forms.Form):
 
 
 class EditMovieForm(forms.Form):
-    imdb_id = forms.CharField(label="IMDB ID", max_length=100, required=True)
-    formats = forms.MultipleChoiceField(label="Formats", choices=[], widget=forms.CheckboxSelectMultiple(),
-                                        required=False)
-    letterboxd_slug = forms.CharField(label="Letterboxd slug", max_length=200, required=False)
-    sort_title = forms.CharField(label="Sort Title", max_length=50, required=False)
-    collections = forms.MultipleChoiceField(label="Collections", choices=[], widget=forms.CheckboxSelectMultiple(),
-                                            required=False)
+    imdb_id = forms.CharField(label="IMDB ID", max_length=100, required=True,
+                              widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "tt0000000"}))
+    formats = forms.MultipleChoiceField(label="Formats", choices=[], required=False,
+                                        widget=forms.CheckboxSelectMultiple(attrs={"class": "custom-control-input"}))
+    letterboxd_slug = forms.CharField(label="Letterboxd slug", max_length=200, required=False,
+                                      widget=forms.TextInput(attrs={"class": "form-control"}))
+    sort_title = forms.CharField(label="Sort Title", max_length=50, required=False,
+                                 widget=forms.TextInput(attrs={"class": "form-control"}))
+    collections = forms.MultipleChoiceField(label="Collections", choices=[], required=False,
+                                            widget=forms.CheckboxSelectMultiple(attrs={"class": "custom-control-input"}))
 
     def __init__(self, *args, **kwargs):
         movie_instance = kwargs.pop('instance', None)

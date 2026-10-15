@@ -1,58 +1,195 @@
 {% extends "index.html" %}
 {% block content %}
+  <style>
+    .edit-movie-card {
+      margin-bottom: 2rem;
+      /* Purple matches the rgba(86, 61, 124) column tint used on the movie pages */
+      background-color: #3d2c58;
+      color: #f1edf7;
+      border-color: #563d7c;
+    }
+    .edit-movie-card .card-header,
+    .edit-movie-card .card-footer {
+      background-color: #2e2143;
+      border-color: #563d7c;
+    }
+    .edit-movie-card .text-muted {
+      color: #c9bfdb !important;
+    }
+    .edit-movie-card hr {
+      border-top-color: rgba(201, 191, 219, 0.25);
+    }
+    .edit-movie-card a:not(.btn) {
+      color: #7fdcea;
+    }
+    .edit-movie-card code {
+      color: #e6c6ff;
+    }
+    .edit-movie-card .form-control {
+      background-color: #2a1f3d;
+      border-color: #6f5a93;
+      color: #f8f9fa;
+    }
+    .edit-movie-card .form-control:focus {
+      background-color: #2a1f3d;
+      color: #f8f9fa;
+      border-color: #17a2b8;
+      box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.35);
+    }
+    .edit-movie-card .form-control::placeholder {
+      color: #8f7fab;
+    }
+    .edit-movie-card .custom-control-input:not(:checked) ~ .custom-control-label::before {
+      background-color: #2a1f3d;
+      border-color: #8f7fab;
+    }
+    /* Teal accent matches the btn-info genre buttons on the movie pages */
+    .edit-movie-card .custom-control-input:checked ~ .custom-control-label::before {
+      background-color: #17a2b8;
+      border-color: #17a2b8;
+    }
+    .edit-movie-card .custom-control-input:focus ~ .custom-control-label::before {
+      box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.35);
+    }
+    .edit-movie-poster {
+      width: 72px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .edit-movie-card .form-control {
+      width: 100%;
+    }
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.5rem 1rem;
+    }
+    .edit-movie-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+  </style>
+
   <div class="row">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <a href="/movies">Home</a>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">Edit Movie</li>
+        <li class="breadcrumb-item">
+          <a href="/movies/movie/{{ movie.themoviedb_id }}/">{{ movie.title }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
       </ol>
     </nav>
   </div>
-  <div class="jumbotron jumbotron-fluid">
-    <div class="container">
+
+  <div class="card shadow-sm edit-movie-card">
+    <div class="card-header d-flex align-items-center" style="gap: 1rem;">
+      {% if movie.poster_path %}
+        <img src="https://image.tmdb.org/t/p/w92{{ movie.poster_path }}"
+             class="edit-movie-poster"
+             alt="poster for {{ movie.title }}">
+      {% endif %}
+      <div>
+        <h4 class="mb-0 mt-0">{{ movie.title }}</h4>
+        <span class="text-muted">{{ movie.primary_release_year }}</span>
+      </div>
+    </div>
+
+    <div class="card-body">
       {% if messages %}
         <div class="alert alert-success" role="alert">
           {% for message in messages %}
-            <p {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            <p class="mb-0 {{ message.tags }}">{{ message }}</p>
           {% endfor %}
         </div>
       {% endif %}
-      <form action="/movies/edit-movie/{{ movie.id}}" method="post">
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+      {% endif %}
+
+      <form id="edit-movie-form" action="/movies/edit-movie/{{ movie.id }}" method="post">
         {% csrf_token %}
-        {{ form.non_field_errors }}
-        <div class="fieldWrapper">
-          {{ form.imdb_id.errors }}
-          <label for="{{ form.imdb_id.id_for_label }}">IMDB ID:</label>
+
+        <h6 class="text-uppercase text-muted small font-weight-bold mb-3">Details</h6>
+
+        <div class="form-group">
+          <label for="{{ form.imdb_id.id_for_label }}">IMDB ID</label>
           {{ form.imdb_id }}
+          {% for error in form.imdb_id.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+          {% endfor %}
         </div>
-        <div class="fieldWrapper">
-          {{ form.letterboxd_slug.errors }}
-          <label for="{{ form.letterboxd_slug.id_for_label }}">Letterboxd slug:</label>
+
+        <div class="form-group">
+          <label for="{{ form.letterboxd_slug.id_for_label }}">Letterboxd slug</label>
           {{ form.letterboxd_slug }}
+          {% for error in form.letterboxd_slug.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+          {% endfor %}
+          <small class="form-text text-muted">
+            The part after <code>letterboxd.com/film/</code>.
+            <a href="https://letterboxd.com/search/{{ movie.title|urlencode }}/" target="_blank" rel="noopener">Search Letterboxd</a>
+          </small>
         </div>
-        <div class="fieldWrapper">
-          {{ form.sort_title.errors }}
-          <label for="{{ form.sort_title.id_for_label }}">Sort Title:</label>
+
+        <div class="form-group">
+          <label for="{{ form.sort_title.id_for_label }}">Sort title</label>
           {{ form.sort_title }}
+          {% for error in form.sort_title.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+          {% endfor %}
+          <small class="form-text text-muted">Leave blank to sort by the movie's title.</small>
         </div>
-        <div class="fieldWrapper">
-          {{ form.formats.errors }}
-          <label for="{{ form.formats.id_for_label }}">Formats:</label>
-          {{ form.formats }}
-        </div>
-        <div class="fieldWrapper">
-          {{ form.collections.errors }}
-          <label for="{{ form.collections.id_for_label }}">Collections:</label>
-          {{ form.collections }}
-        </div>
-        <input type="submit" value="Save Changes">
+
+        <hr class="my-4">
+
+        <fieldset class="form-group">
+          <legend class="text-uppercase text-muted small font-weight-bold mb-3">Formats</legend>
+          <div class="checkbox-grid">
+            {% for checkbox in form.formats %}
+              <div class="custom-control custom-checkbox">
+                {{ checkbox.tag }}
+                <label class="custom-control-label" for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+              </div>
+            {% endfor %}
+          </div>
+          {% for error in form.formats.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+          {% endfor %}
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend class="text-uppercase text-muted small font-weight-bold mb-3">Collections</legend>
+          <div class="checkbox-grid">
+            {% for checkbox in form.collections %}
+              <div class="custom-control custom-checkbox">
+                {{ checkbox.tag }}
+                <label class="custom-control-label" for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+              </div>
+            {% empty %}
+              <span class="text-muted">No collections yet.</span>
+            {% endfor %}
+          </div>
+          {% for error in form.collections.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+          {% endfor %}
+        </fieldset>
       </form>
-      <form action="{% url "movies:delete_movie" movie.id %}" method="post" class="mt-3">
+
+      <form id="delete-movie-form" action="{% url "movies:delete_movie" movie.id %}" method="post">
         {% csrf_token %}
-        <input type="submit" value="Delete Movie" class="btn btn-danger">
       </form>
+    </div>
+
+    <div class="card-footer edit-movie-actions">
+      <button type="submit" form="edit-movie-form" class="btn btn-info">Save Changes</button>
+      <a href="/movies/movie/{{ movie.themoviedb_id }}/" class="btn btn-outline-light">Cancel</a>
+      <button type="submit" form="delete-movie-form" class="btn btn-danger ml-auto">Delete Movie</button>
     </div>
   </div>
 {% endblock %}
