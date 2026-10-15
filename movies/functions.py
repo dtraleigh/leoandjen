@@ -189,15 +189,13 @@ def update_characters(movie):
     cast_list = get_cast_by_tmdb_id(movie.themoviedb_id)
 
     for person in cast_list[:36]:
-        credit_id = person["credit_id"]
-        if not Character.objects.filter(credit_id=credit_id).exists():
-            new_character = Character.objects.create(themoviedb_actor_id=person["id"],
-                                                     character_name=person["character"],
-                                                     profile_path=person["profile_path"],
-                                                     actor_name=person["name"],
-                                                     credit_id=person["credit_id"],
-                                                     order=person["order"])
-            movie.characters.add(new_character)
+        character, _ = Character.objects.get_or_create(credit_id=person["credit_id"],
+                                                       defaults={"themoviedb_actor_id": person["id"],
+                                                                 "character_name": person["character"],
+                                                                 "profile_path": person["profile_path"],
+                                                                 "actor_name": person["name"],
+                                                                 "order": person["order"]})
+        movie.characters.add(character)
 
 
 def get_physical_movies(movie_list):
