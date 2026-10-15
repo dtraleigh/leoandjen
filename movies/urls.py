@@ -21,4 +21,5 @@ urlpatterns = [
     path("search-movie/", views.search_movie, name="search_movie"),
     path("movie-imdb/<int:tmdb_id>/", views.get_movie_imdb, name="get_movie_imdb"),
     path("edit-movie/<int:movie_id>", views.edit_movie, name="edit_movie"),
+    path("delete-movie/<int:movie_id>", views.delete_movie, name="delete_movie"),
 ]

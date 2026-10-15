@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 from movies.add_movie import add_movie_from_form
 from movies.api import *
@@ -391,3 +392,11 @@ def edit_movie(request, movie_id):
         form = EditMovieForm(instance=movie)
 
     return render(request, "edit_movie.html", {"form": form, "movie": movie})
+
+
+@login_required(login_url="/admin")
+@require_POST
+def delete_movie(request, movie_id):
+    movie = get_object_or_404(Movie, id=movie_id)
+    movie.delete()
+    return redirect("movies:home")
