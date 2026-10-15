@@ -136,6 +136,16 @@ ADMINS = (
     ("Leo", "leo@dtraleigh.com"),
 )
 
+EMAIL_BACKEND = env("DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
+EMAIL_HOST = env("EMAIL_HOST", default="")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_TIMEOUT = 10
+SERVER_EMAIL = env("SERVER_EMAIL", default="leo@cophead567.opalstacked.com")
+EMAIL_SUBJECT_PREFIX = "[leoandjen] "
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
