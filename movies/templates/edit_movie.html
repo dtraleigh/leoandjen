@@ -3,53 +3,51 @@
   <style>
     .edit-movie-card {
       margin-bottom: 2rem;
-      /* Purple matches the rgba(86, 61, 124) column tint used on the movie pages */
-      background-color: #3d2c58;
-      color: #f1edf7;
-      border-color: #563d7c;
+      background-color: #1e3a5f;
+      color: #eef4fb;
+      border-color: #2c5282;
     }
     .edit-movie-card .card-header,
     .edit-movie-card .card-footer {
-      background-color: #2e2143;
-      border-color: #563d7c;
+      background-color: #13263f;
+      border-color: #2c5282;
     }
     .edit-movie-card .text-muted {
-      color: #c9bfdb !important;
+      color: #b4c8e0 !important;
     }
     .edit-movie-card hr {
-      border-top-color: rgba(201, 191, 219, 0.25);
+      border-top-color: rgba(180, 200, 224, 0.25);
     }
     .edit-movie-card a:not(.btn) {
-      color: #7fdcea;
+      color: #8ec5ff;
     }
     .edit-movie-card code {
-      color: #e6c6ff;
+      color: #a8d4ff;
     }
     .edit-movie-card .form-control {
-      background-color: #2a1f3d;
-      border-color: #6f5a93;
+      background-color: #0f2035;
+      border-color: #3a5f8a;
       color: #f8f9fa;
     }
     .edit-movie-card .form-control:focus {
-      background-color: #2a1f3d;
+      background-color: #0f2035;
       color: #f8f9fa;
-      border-color: #17a2b8;
-      box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.35);
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.35);
     }
     .edit-movie-card .form-control::placeholder {
-      color: #8f7fab;
+      color: #7f9bbd;
     }
     .edit-movie-card .custom-control-input:not(:checked) ~ .custom-control-label::before {
-      background-color: #2a1f3d;
-      border-color: #8f7fab;
+      background-color: #0f2035;
+      border-color: #7f9bbd;
     }
-    /* Teal accent matches the btn-info genre buttons on the movie pages */
     .edit-movie-card .custom-control-input:checked ~ .custom-control-label::before {
-      background-color: #17a2b8;
-      border-color: #17a2b8;
+      background-color: #3b82f6;
+      border-color: #3b82f6;
     }
     .edit-movie-card .custom-control-input:focus ~ .custom-control-label::before {
-      box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.35);
+      box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.35);
     }
     .edit-movie-poster {
       width: 72px;
@@ -187,7 +185,7 @@
     </div>
 
     <div class="card-footer edit-movie-actions">
-      <button type="submit" form="edit-movie-form" class="btn btn-info">Save Changes</button>
+      <button type="submit" form="edit-movie-form" class="btn btn-primary">Save Changes</button>
       <a href="/movies/movie/{{ movie.themoviedb_id }}/" class="btn btn-outline-light">Cancel</a>
       <button type="submit" form="delete-movie-form" class="btn btn-danger ml-auto">Delete Movie</button>
     </div>
