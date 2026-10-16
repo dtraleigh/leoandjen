@@ -12,8 +12,37 @@
     <link href="{% static "boostrap4.6.2/bootstrap.min.css" %}" rel="stylesheet">
     <!-- Custom styles for this template -->
     <style>
+        /* Blue theme, shared by every page in the movies app */
+        :root {
+          --mv-bg: #0b1a2c;
+          --mv-surface: #1e3a5f;
+          --mv-surface-dark: #13263f;
+          --mv-input: #0f2035;
+          --mv-border: #2c5282;
+          --mv-border-input: #3a5f8a;
+          --mv-text: #eef4fb;
+          --mv-muted: #b4c8e0;
+          --mv-placeholder: #7f9bbd;
+          --mv-link: #8ec5ff;
+          --mv-accent: #3b82f6;
+          --mv-focus: rgba(59, 130, 246, 0.35);
+        }
         body {
           padding-bottom: 2rem;
+          background-color: var(--mv-bg);
+          color: var(--mv-text);
+        }
+        a {
+          color: var(--mv-link);
+        }
+        a:hover {
+          color: #c2dfff;
+        }
+        .text-muted {
+          color: var(--mv-muted) !important;
+        }
+        code {
+          color: #a8d4ff;
         }
         h3 {
           margin-top: 2rem;
@@ -21,14 +50,19 @@
         .jumbotron {
           position:relative;
           overflow:hidden;
+          background-color: var(--mv-surface-dark);
         }
         .jumbotron .container {
           position:relative;
           z-index:2;
-          background:rgba(0,0,0,0.2);
+          background:rgba(11, 26, 44, 0.55);
           padding:2rem;
-          border:1px solid rgba(0,0,0,0.1);
+          border:1px solid var(--mv-border);
           border-radius:3px;
+        }
+        .jumbotron-heading a {
+          color: var(--mv-text);
+          text-decoration: none;
         }
         .jumbotron-background {
           object-fit:cover;
@@ -38,7 +72,7 @@
           z-index:1;
           width:100%;
           height:100%;
-          opacity:0.5;
+          opacity:0.35;
         }
         img.blur {
           -webkit-filter: blur(2px);
@@ -58,12 +92,32 @@
         [class*="col-"] {
           padding-top: 1rem;
           padding-bottom: 1rem;
-          background-color: rgba(86, 61, 124, .15);
-          border: 1px solid rgba(86, 61, 124, .2);
+          background-color: rgba(30, 58, 95, 0.45);
+          border: 1px solid rgba(44, 82, 130, 0.6);
         }
         hr {
           margin-top: 2rem;
           margin-bottom: 2rem;
+          border-top-color: rgba(180, 200, 224, 0.25);
+        }
+        .breadcrumb {
+          background-color: var(--mv-surface-dark);
+          border: 1px solid var(--mv-border);
+        }
+        .breadcrumb-item,
+        .breadcrumb-item.active,
+        .breadcrumb-item + .breadcrumb-item::before {
+          color: var(--mv-muted);
+        }
+        .card {
+          background-color: var(--mv-surface);
+          border-color: var(--mv-border);
+          color: var(--mv-text);
+        }
+        .card-header,
+        .card-footer {
+          background-color: var(--mv-surface-dark);
+          border-color: var(--mv-border);
         }
         .card-custom{
           height: 380px;
@@ -78,6 +132,42 @@
         }
         .formats{
           padding-top: 0px;
+        }
+        .list-group-item {
+          background-color: var(--mv-surface);
+          border-color: var(--mv-border);
+          color: var(--mv-text);
+        }
+        .form-control,
+        .form-control:focus {
+          background-color: var(--mv-input);
+          border-color: var(--mv-border-input);
+          color: #f8f9fa;
+        }
+        .form-control:focus {
+          border-color: var(--mv-accent);
+          box-shadow: 0 0 0 0.2rem var(--mv-focus);
+        }
+        .form-control::placeholder {
+          color: var(--mv-placeholder);
+        }
+        .custom-control-input:not(:checked) ~ .custom-control-label::before {
+          background-color: var(--mv-input);
+          border-color: var(--mv-placeholder);
+        }
+        .custom-control-input:checked ~ .custom-control-label::before {
+          background-color: var(--mv-accent);
+          border-color: var(--mv-accent);
+        }
+        .custom-control-input:focus ~ .custom-control-label::before {
+          box-shadow: 0 0 0 0.2rem var(--mv-focus);
+        }
+        .site-nav {
+          background-color: var(--mv-surface-dark);
+          border-bottom: 1px solid var(--mv-border);
+        }
+        .site-nav a {
+          color: var(--mv-text);
         }
         .search{
           margin-bottom:10px;

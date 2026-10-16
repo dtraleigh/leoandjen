@@ -2,11 +2,14 @@ from django import forms
 from movies.models import Format, Collection
 
 class AddMovieForm(forms.Form):
-    imdb_id = forms.CharField(label="IMDB ID", max_length=100)
+    imdb_id = forms.CharField(label="IMDB ID", max_length=100,
+                              widget=forms.TextInput(attrs={"class": "form-control"}))
     formats = forms.MultipleChoiceField(label="Formats", choices=[], widget=forms.CheckboxSelectMultiple())
     is_tv_movie = forms.BooleanField(label="TV Movie?", required=False)
-    letterboxd_slug = forms.CharField(label="Letterboxd slug", max_length=200)
-    sort_title = forms.CharField(label="Sort Title", max_length=50, required=False)
+    letterboxd_slug = forms.CharField(label="Letterboxd slug", max_length=200,
+                                      widget=forms.TextInput(attrs={"class": "form-control"}))
+    sort_title = forms.CharField(label="Sort Title", max_length=50, required=False,
+                                 widget=forms.TextInput(attrs={"class": "form-control"}))
     collections = forms.MultipleChoiceField(label="Collections", choices=[], required=False, widget=forms.CheckboxSelectMultiple())
 
     def __init__(self, *args, **kwargs):
