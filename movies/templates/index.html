@@ -119,8 +119,9 @@
           background-color: var(--mv-surface-dark);
           border-color: var(--mv-border);
         }
-        .card-custom{
-          height: 380px;
+        /* Columns in a row stretch to the tallest one; make cards fill them so a row lines up evenly */
+        [class*="col-"] > .card {
+          height: 100%;
         }
         .card-title{
           max-width: 100%;
